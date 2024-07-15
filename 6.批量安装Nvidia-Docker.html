@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"Searching...","empty":"We didn't find any results for the search: ${query}","hits_time":"${hits} results found in ${time} ms","hits":"${hits} results found"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="安装Nvidia-docker1. 单机安装命令123456789distribution&#x3D;$(. &#x2F;etc&#x2F;os-release;echo $ID$VERSION_ID) \&amp;&amp; curl -s -L https:&#x2F;&#x2F;nvidia.github.io&#x2F;nvidia-docker&#x2F;gpgkey | sudo apt-key add - \&amp;&amp; curl -s -L">
+<meta property="og:type" content="website">
+<meta property="og:title" content="潘秉宏的博客">
+<meta property="og:url" content="http://example.com/6.%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker.html">
+<meta property="og:site_name" content="潘秉宏的博客">
+<meta property="og:description" content="安装Nvidia-docker1. 单机安装命令123456789distribution&#x3D;$(. &#x2F;etc&#x2F;os-release;echo $ID$VERSION_ID) \&amp;&amp; curl -s -L https:&#x2F;&#x2F;nvidia.github.io&#x2F;nvidia-docker&#x2F;gpgkey | sudo apt-key add - \&amp;&amp; curl -s -L">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-07-11T06:21:52.777Z">
+<meta property="article:modified_time" content="2024-07-11T03:03:14.014Z">
+<meta property="article:author" content="潘秉宏">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/6.%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"en","comments":true,"permalink":"http://example.com/6.%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker.html","path":"6.批量安装Nvidia-Docker.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title> | 潘秉宏的博客
+</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">潘秉宏的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="Search" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85Nvidia-docker"><span class="nav-number">1.</span> <span class="nav-text">安装Nvidia-docker</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4"><span class="nav-number">1.1.</span> <span class="nav-text">1. 单机安装命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"><span class="nav-number">1.2.</span> <span class="nav-text">2. 批量安装脚本</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">潘秉宏</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">1</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner page posts-expand">
+
+
+    
+    
+    
+    <div class="post-block" lang="en"><header class="post-header">
+
+<h1 class="post-title" itemprop="name headline">
+</h1>
+
+<div class="post-meta-container">
+</div>
+
+</header>
+
+      
+      
+      
+      <div class="post-body">
+          <h1 id="安装Nvidia-docker"><a href="#安装Nvidia-docker" class="headerlink" title="安装Nvidia-docker"></a>安装Nvidia-docker</h1><h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>将以上保存到一个文件中, 命名<code>installNGC</code></li>
+</ul>
+<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">&quot;nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;&quot;</span>;<span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>这条命令是在Linux系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
+<ul>
+<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号(SIGHUP)，这意味着即使用户退出当前终端会话，由<code>nohup</code>启动的进程仍然会继续运行。</p>
+</li>
+<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code>脚本或程序将会被运行，它位于<code>/mnt/hcufs/tools</code>目录下。</p>
+</li>
+<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到<code>/dev/null</code>设备文件。<code>/dev/null</code>是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让<code>installNGC</code>程序的输出显示在终端上。</p>
+</li>
+<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果<code>installNGC</code>程序产生任何错误输出，也将被重定向到<code>/dev/null</code>，同样不会在终端上显示。</p>
+</li>
+<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的shell提示符，而不需要等待<code>installNGC</code>完成执行。</p>
+</li>
+</ul>
+<p>综上所述，这条命令的意思是：在后台运行<code>/mnt/hcufs/tools/installNGC</code>程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a target="_blank" rel="noopener" href="https://a19909442097.rth5.com/markdown_text/1-1.html">1.服务器免密配置教程-1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a target="_blank" rel="noopener" href="https://a19909442097.rth5.com/markdown_text/1-2.html">2.服务器免密配置教程-2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a target="_blank" rel="noopener" href="https://a19909442097.rth5.com/markdown_text/3.html">3.服务器修改host和hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a target="_blank" rel="noopener" href="https://a19909442097.rth5.com/markdown_text/4.html">4.服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a target="_blank" rel="noopener" href="https://a19909442097.rth5.com/markdown_text/5.html">5.批量加载docker镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a target="_blank" rel="noopener" href="https://a19909442097.rth5.com/markdown_text/6.html">6.安装Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+
+      </div>
+      
+      
+      
+    </div>
+
+    
+    
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">潘秉宏</span>
+  </div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="Back to top">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
