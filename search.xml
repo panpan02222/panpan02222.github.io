@@ -143,26 +143,12 @@
 ]]></content>
   </entry>
   <entry>
-    <title>服务器挂载外部存储卷</title>
-    <url>/2024/07/15/4.%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
-    <content><![CDATA[<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
-<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
-</li>
-<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
-</li>
-<li><p>批量发送脚本为:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+    <title>多机配置 hosts 及 hostname</title>
+    <url>/2024/07/15/3.%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
+    <content><![CDATA[<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
+<li>把 <code>ip</code> 复制到文本内</li>
 </ul>
-<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
-<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
-</li>
-<li><p>批量挂脚本：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
+<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -190,12 +176,26 @@
 ]]></content>
   </entry>
   <entry>
-    <title>多机配置 hosts 及 hostname</title>
-    <url>/2024/07/15/3.%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
-    <content><![CDATA[<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
-<li>把 <code>ip</code> 复制到文本内</li>
+    <title>服务器挂载外部存储卷</title>
+    <url>/2024/07/15/4.%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
+    <content><![CDATA[<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
+<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
+</li>
+<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
+</li>
+<li><p>批量发送脚本为:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
-<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
+<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
+</li>
+<li><p>批量挂脚本：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -458,6 +458,39 @@ Domains=domain.com
     <content><![CDATA[<h3 id="配置proxychains4-pip源-linux挂载外接硬盘-服务器静态地址-nginx发布服务等使用流程。"><a href="#配置proxychains4-pip源-linux挂载外接硬盘-服务器静态地址-nginx发布服务等使用流程。" class="headerlink" title="配置proxychains4, pip源, linux挂载外接硬盘, 服务器静态地址, nginx发布服务等使用流程。"></a>配置 proxychains4, pip 源，linux 挂载外接硬盘，服务器静态地址，nginx 发布服务等使用流程。</h3>]]></content>
   </entry>
   <entry>
+    <title>搭建基于 Hexo 架构的个人博客</title>
+    <url>/2024/07/18/%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
+<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
+<span id="more"></span>
+
+
+<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
+<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
+<ul>
+<li>升级 npm：<code>npm install -g npm</code></li>
+</ul>
+<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
+<ul>
+<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
+</ul>
+<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
+<li><p>检查 node.js 版本：</p>
+<p>  <code>node -v</code></p>
+</li>
+<li><p>检查 npm 版本：</p>
+<p>  <code>npm -v</code></p>
+</li>
+<li><p>检查 cnpm 版本：</p>
+<p>  <code>cnpm -v</code></p>
+</li>
+</ul>
+<div class="note warning"><p>这里是警告。</p></div>]]></content>
+      <tags>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>配置 VNC 教程</title>
     <url>/2024/07/17/%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<h1 id="配置VNC教程"><a href="#配置VNC教程" class="headerlink" title="配置VNC教程"></a>配置 VNC 教程</h1><hr>
@@ -497,38 +530,5 @@ Domains=domain.com
 <p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
 </blockquote>
 ]]></content>
-  </entry>
-  <entry>
-    <title>搭建基于 Hexo 架构的个人博客</title>
-    <url>/2024/07/18/%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
-<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
-<span id="more"></span>
-
-
-<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
-<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
-<ul>
-<li>升级 npm：<code>npm install -g npm</code></li>
-</ul>
-<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
-<ul>
-<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
-</ul>
-<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
-<li><p>检查 node.js 版本：</p>
-<p>  <code>node -v</code></p>
-</li>
-<li><p>检查 npm 版本：</p>
-<p>  <code>npm -v</code></p>
-</li>
-<li><p>检查 cnpm 版本：</p>
-<p>  <code>cnpm -v</code></p>
-</li>
-</ul>
-<div class="note warning"><p>这里是警告。</p></div>]]></content>
-      <tags>
-        <tag>blog</tag>
-      </tags>
   </entry>
 </search>
