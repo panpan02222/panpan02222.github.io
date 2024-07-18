@@ -1,29 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>服务器免密配置教程 - 2</title>
-    <url>/2024/07/15/2.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
-    <content><![CDATA[<h1 id="服务器免密配置教程-2"><a href="#服务器免密配置教程-2" class="headerlink" title="服务器免密配置教程-2"></a>服务器免密配置教程 - 2</h1><blockquote>
+    <title>服务器免密配置教程 - 1</title>
+    <url>/2024/07/15/1.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
+    <content><![CDATA[<blockquote>
 <p>[!NOTE]</p>
-<p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
+<p>该手册一共 2 个版本，此文档为第一版。</p>
 </blockquote>
-<h2 id="1-准备ip文件"><a href="#1-准备ip文件" class="headerlink" title="1. 准备ip文件"></a>1. 准备 ip 文件</h2><ul>
+<h2 id="1-获取密钥"><a href="#1-获取密钥" class="headerlink" title="1. 获取密钥"></a>1. 获取密钥</h2>   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -f /root/.ssh/rsa</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2-验证"><a href="#2-验证" class="headerlink" title="2. 验证"></a>2. 验证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> id_rsa.pub authorized_keys</span><br><span class="line"><span class="comment"># authorized_keys是用于 SSH 服务器验证远程用户身份</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-配置StrictHostKeyChecking"><a href="#3-配置StrictHostKeyChecking" class="headerlink" title="3. 配置StrictHostKeyChecking"></a>3. 配置 <code>StrictHostKeyChecking</code></h2><ul>
+<li>创建 config 文件 <code>vim config</code></li>
+</ul>
+<figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">StrictHostKeyChecking no</span><br><span class="line"><span class="params">#</span> 设置 StrictHostKeyChecking no 意味着SSH客户端在连接到远程主机时不会检查该主机的公钥，也不会将新的主机密钥添加到已知主机列表中。这意味着所有远程主机的密钥将被自动接受，而不会进行任何验证。</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="4-准备ip文件"><a href="#4-准备ip文件" class="headerlink" title="4. 准备ip文件"></a>4. 准备 ip 文件</h2><ul>
 <li><p>创建 ip.txt <code>vim ip.txt</code></p>
 </li>
 <li><p>将需要免密的机器 <code>ip</code> 写入</p>
-<img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738" style="zoom:50%;"></li>
+<p><img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738"></p>
+</li>
 </ul>
-<h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
-<li><code>vim set_key.sh</code></li>
+<h2 id="5-创建脚本"><a href="#5-创建脚本" class="headerlink" title="5. 创建脚本"></a>5. 创建脚本</h2><ul>
+<li>需要手动写登录密码 <code>password</code></li>
+<li>前提安装 <code>expect</code></li>
 </ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否已经生成了SSH密钥对</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f ~/.ssh/id_rsa.pub ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Generating SSH key pair..."</span></span><br><span class="line">  ssh-keygen -t rsa -N <span class="string">""</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公钥复制到每台目标机器</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> -r ip; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Configuring SSH key authentication for <span class="variable">$ip</span>..."</span></span><br><span class="line">  ssh-copy-id root@<span class="variable">$ip</span></span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"><span class="built_in">echo</span> </span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 IP 地址列表</span></span><br><span class="line">servers=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    servers+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地 .ssh 目录路径</span></span><br><span class="line">ssh_dir=<span class="string">"<span class="variable">$HOME</span>/.ssh"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 expect 进行 scp 并自动输入密码</span></span><br><span class="line"><span class="keyword">for</span> server <span class="keyword">in</span> <span class="string">"<span class="variable">${servers[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Copying SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    expect &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">spawn scp -r $ssh_dir root@$server:/root/</span></span><br><span class="line"><span class="string">expect {</span></span><br><span class="line"><span class="string">    "password:" {</span></span><br><span class="line"><span class="string">        send "your password\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    "yes/no" {</span></span><br><span class="line"><span class="string">        send "yes\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    eof {</span></span><br><span class="line"><span class="string">        exit</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">}</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">    <span class="keyword">if</span> [ $? -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Successfully copied SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Failed to copy SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"All servers have been updated with SSH keys."</span></span><br></pre></td></tr></tbody></table></figure>
 
-<ul>
-<li><p><code>chmod +x set_key.sh</code></p>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<p>补充安装 expect 包教程</p>
+<h3 id="在Ubuntu上安装Expect"><a href="#在Ubuntu上安装Expect" class="headerlink" title="在Ubuntu上安装Expect"></a>在 Ubuntu 上安装 Expect</h3><ol>
+<li><p><strong>更新包列表</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></tbody></table></figure>
 </li>
-<li><p><code>./set_key.sh</code></p>
+<li><p><strong>安装 Expect</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install expect</span><br></pre></td></tr></tbody></table></figure>
 </li>
-</ul>
+<li><p><strong>验证安装</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这将显示已安装的 <code>expect</code> 版本。</p>
+</li>
+</ol>
+<h3 id="在CentOS上安装Expect"><a href="#在CentOS上安装Expect" class="headerlink" title="在CentOS上安装Expect"></a>在 CentOS 上安装 Expect</h3><ol>
+<li><p><strong>更新包列表</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>安装 Expect</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install expect</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>验证安装</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这将显示已安装的 <code>expect</code> 版本。</p>
+<hr>
+<p>完成这些步骤后，你的系统上就会安装 Expect 工具。Expect 是一种用于自动化交互任务的工具，常用于自动化 SSH 登录、FTP 等需要用户交互的任务。</p>
+</li>
+</ol>
+</blockquote>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -51,12 +93,29 @@
 ]]></content>
   </entry>
   <entry>
-    <title>多机配置 hosts 及 hostname</title>
-    <url>/2024/07/15/3.%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
-    <content><![CDATA[<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
-<li>把 <code>ip</code> 复制到文本内</li>
+    <title>服务器免密配置教程 - 2</title>
+    <url>/2024/07/15/2.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
+    <content><![CDATA[<h1 id="服务器免密配置教程-2"><a href="#服务器免密配置教程-2" class="headerlink" title="服务器免密配置教程-2"></a>服务器免密配置教程 - 2</h1><blockquote>
+<p>[!NOTE]</p>
+<p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
+</blockquote>
+<h2 id="1-准备ip文件"><a href="#1-准备ip文件" class="headerlink" title="1. 准备ip文件"></a>1. 准备 ip 文件</h2><ul>
+<li><p>创建 ip.txt <code>vim ip.txt</code></p>
+</li>
+<li><p>将需要免密的机器 <code>ip</code> 写入</p>
+<img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738" style="zoom:50%;"></li>
 </ul>
-<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
+<li><code>vim set_key.sh</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否已经生成了SSH密钥对</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f ~/.ssh/id_rsa.pub ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Generating SSH key pair..."</span></span><br><span class="line">  ssh-keygen -t rsa -N <span class="string">""</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公钥复制到每台目标机器</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> -r ip; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Configuring SSH key authentication for <span class="variable">$ip</span>..."</span></span><br><span class="line">  ssh-copy-id root@<span class="variable">$ip</span></span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"><span class="built_in">echo</span> </span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p><code>chmod +x set_key.sh</code></p>
+</li>
+<li><p><code>./set_key.sh</code></p>
+</li>
+</ul>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -131,71 +190,12 @@
 ]]></content>
   </entry>
   <entry>
-    <title>服务器免密配置教程 - 1</title>
-    <url>/2024/07/15/1.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
-    <content><![CDATA[<blockquote>
-<p>[!NOTE]</p>
-<p>该手册一共 2 个版本，此文档为第一版。</p>
-</blockquote>
-<h2 id="1-获取密钥"><a href="#1-获取密钥" class="headerlink" title="1. 获取密钥"></a>1. 获取密钥</h2>   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -f /root/.ssh/rsa</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="2-验证"><a href="#2-验证" class="headerlink" title="2. 验证"></a>2. 验证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> id_rsa.pub authorized_keys</span><br><span class="line"><span class="comment"># authorized_keys是用于 SSH 服务器验证远程用户身份</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-配置StrictHostKeyChecking"><a href="#3-配置StrictHostKeyChecking" class="headerlink" title="3. 配置StrictHostKeyChecking"></a>3. 配置 <code>StrictHostKeyChecking</code></h2><ul>
-<li>创建 config 文件 <code>vim config</code></li>
+    <title>多机配置 hosts 及 hostname</title>
+    <url>/2024/07/15/3.%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
+    <content><![CDATA[<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
+<li>把 <code>ip</code> 复制到文本内</li>
 </ul>
-<figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">StrictHostKeyChecking no</span><br><span class="line"><span class="params">#</span> 设置 StrictHostKeyChecking no 意味着SSH客户端在连接到远程主机时不会检查该主机的公钥，也不会将新的主机密钥添加到已知主机列表中。这意味着所有远程主机的密钥将被自动接受，而不会进行任何验证。</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="4-准备ip文件"><a href="#4-准备ip文件" class="headerlink" title="4. 准备ip文件"></a>4. 准备 ip 文件</h2><ul>
-<li><p>创建 ip.txt <code>vim ip.txt</code></p>
-</li>
-<li><p>将需要免密的机器 <code>ip</code> 写入</p>
-<p><img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738"></p>
-</li>
-</ul>
-<h2 id="5-创建脚本"><a href="#5-创建脚本" class="headerlink" title="5. 创建脚本"></a>5. 创建脚本</h2><ul>
-<li>需要手动写登录密码 <code>password</code></li>
-<li>前提安装 <code>expect</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 IP 地址列表</span></span><br><span class="line">servers=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    servers+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地 .ssh 目录路径</span></span><br><span class="line">ssh_dir=<span class="string">"<span class="variable">$HOME</span>/.ssh"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 expect 进行 scp 并自动输入密码</span></span><br><span class="line"><span class="keyword">for</span> server <span class="keyword">in</span> <span class="string">"<span class="variable">${servers[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Copying SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    expect &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">spawn scp -r $ssh_dir root@$server:/root/</span></span><br><span class="line"><span class="string">expect {</span></span><br><span class="line"><span class="string">    "password:" {</span></span><br><span class="line"><span class="string">        send "your password\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    "yes/no" {</span></span><br><span class="line"><span class="string">        send "yes\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    eof {</span></span><br><span class="line"><span class="string">        exit</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">}</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">    <span class="keyword">if</span> [ $? -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Successfully copied SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Failed to copy SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"All servers have been updated with SSH keys."</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<p>补充安装 expect 包教程</p>
-<h3 id="在Ubuntu上安装Expect"><a href="#在Ubuntu上安装Expect" class="headerlink" title="在Ubuntu上安装Expect"></a>在 Ubuntu 上安装 Expect</h3><ol>
-<li><p><strong>更新包列表</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>安装 Expect</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install expect</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证安装</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这将显示已安装的 <code>expect</code> 版本。</p>
-</li>
-</ol>
-<h3 id="在CentOS上安装Expect"><a href="#在CentOS上安装Expect" class="headerlink" title="在CentOS上安装Expect"></a>在 CentOS 上安装 Expect</h3><ol>
-<li><p><strong>更新包列表</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>安装 Expect</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install expect</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证安装</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这将显示已安装的 <code>expect</code> 版本。</p>
-<hr>
-<p>完成这些步骤后，你的系统上就会安装 Expect 工具。Expect 是一种用于自动化交互任务的工具，常用于自动化 SSH 登录、FTP 等需要用户交互的任务。</p>
-</li>
-</ol>
-</blockquote>
+<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -362,5 +362,173 @@ Domains=domain.com
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
 ]]></content>
+  </entry>
+  <entry>
+    <title>k8s</title>
+    <url>/2024/07/17/k8s/</url>
+    <content><![CDATA[<h4 id="1-重启运行在节点上的kubelet服务"><a href="#1-重启运行在节点上的kubelet服务" class="headerlink" title="1.重启运行在节点上的kubelet服务"></a>1. 重启运行在节点上的 <code>kubelet</code> 服务</h4><p><code>systemctl restart  kubelet</code></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>linux 快捷指令</title>
+    <url>/2024/07/17/linux%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
+    <content><![CDATA[<ul>
+<li><p>查看当前目录下的文件占用内存</p>
+<p>  <code>du -sh</code></p>
+</li>
+<li><p>查看文件系统磁盘占用情况</p>
+<p>  <code>df -h $home</code></p>
+</li>
+<li><p>计算文件数</p>
+<p>  <code>ls | wc -l</code></p>
+</li>
+<li><p>查看当前文件夹下每个文件的大小</p>
+<p>  <code>ls -lh</code></p>
+</li>
+<li><p>暂停进程 18000 秒</p>
+<p>  <code>sh -c | sleep 18000</code></p>
+</li>
+</ul>
+<blockquote>
+<h2 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h2></blockquote>
+<ul>
+<li><p><strong> 解压</strong> tar.gz file</p>
+<p>  <code>tar -zxvf folder.tar.gz folder</code></p>
+</li>
+<li><p><strong>解压</strong> tar file</p>
+<p>  <code>tar -xvf folder.tar</code></p>
+</li>
+</ul>
+<blockquote>
+<h2 id="unrar"><a href="#unrar" class="headerlink" title="unrar"></a>unrar</h2></blockquote>
+<ul>
+<li><p> 解压 rar file</p>
+<p>  <code>unrar x example.rar</code></p>
+</li>
+</ul>
+<blockquote>
+<h2 id="unzip"><a href="#unzip" class="headerlink" title="unzip"></a>unzip</h2></blockquote>
+<ul>
+<li><p><strong> 解压</strong> zip file</p>
+<p><code>unzip -l example.zip</code></p>
+</li>
+</ul>
+<p>远程发送文件<br>scp folder_path root@ip:folder_path<br>远程链接服务器<br>ssh username@remote_server_ip</p>
+<p>手动挂载 U 盘<br>mkdir /mnt/usb 			# 新建文件夹<br>fdisk -l			# 查看 u 盘名称<br>mount /dev/sdb1 /mnt/usb	# 将 u 盘挂载到文件夹<br>umount /mnt/usb			# 使用完，退出挂载</p>
+<p>批量安装 rpm 包<br>rpm -ivh *.rpm</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>nginx </title>
+    <url>/2024/07/17/nginx%20/</url>
+    <content><![CDATA[<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a><b>Nginx</b></h1><h2 id="Nginx的设计理念注重性能、并发性和可扩展性，使其成为处理高并发、大规模访问的理想服务器和代理工具。"><a href="#Nginx的设计理念注重性能、并发性和可扩展性，使其成为处理高并发、大规模访问的理想服务器和代理工具。" class="headerlink" title="Nginx的设计理念注重性能、并发性和可扩展性，使其成为处理高并发、大规模访问的理想服务器和代理工具。"></a><b>Nginx</b> 的设计理念注重性能、并发性和可扩展性，使其成为处理高并发、大规模访问的理想服务器和代理工具。<br></h2><h2 id="openresty-OpenResty-又称：ngx-openresty-是一个基于-NGINX-的可伸缩的-Web-平台，由中国人章亦春发起，提供了很多高质量的第三方模块。"><a href="#openresty-OpenResty-又称：ngx-openresty-是一个基于-NGINX-的可伸缩的-Web-平台，由中国人章亦春发起，提供了很多高质量的第三方模块。" class="headerlink" title="openresty : OpenResty(又称：ngx_openresty) 是一个基于 NGINX 的可伸缩的 Web 平台，由中国人章亦春发起，提供了很多高质量的第三方模块。"></a>openresty : OpenResty (又称：ngx_openresty) 是一个基于 NGINX 的可伸缩的 Web 平台，由中国人章亦春发起，提供了很多高质量的第三方模块。</h2><h2 id="Tengine-Tengine是由淘宝网发起的Web服务器项目。它在Nginx的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。它的目的是打造一个高效、安全的Web平台"><a href="#Tengine-Tengine是由淘宝网发起的Web服务器项目。它在Nginx的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。它的目的是打造一个高效、安全的Web平台" class="headerlink" title="Tengine : Tengine是由淘宝网发起的Web服务器项目。它在Nginx的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。它的目的是打造一个高效、安全的Web平台"></a>Tengine : Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。它的目的是打造一个高效、安全的 Web 平台</h2><hr>
+<h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><ul>
+<li>启动命令 <code>sudo nginx</code><br></li>
+<li>关闭命令 <code>sudo nginx -s stop</code><br></li>
+<li>重启加载 <code>sudo ngingx -s reload</code><br></li>
+<li>查看进程 <code>ps aux | grep nginx</code><br></li>
+<li>查看状态 <code>sudo nginx -t</code><br></li>
+</ul>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">#user  nobody;</span><br><span class="line"></span><br><span class="line">events {</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http {</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    </span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line">    </span><br><span class="line">    server {</span><br><span class="line">    	listen  18080;</span><br><span class="line">    	server_name		localhost;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">​		</span><br><span class="line">		location /chat/knowledge_base_chat/ {</span><br><span class="line">			proxy_pass      http://127.0.0.1:17861/chat/knowledge_base_chat;</span><br><span class="line">		}</span><br><span class="line">		location /chat/chat/ {</span><br><span class="line">			proxy_pass      http://127.0.0.1:17861/chat/chat;</span><br><span class="line">		}</span><br><span class="line">		</span><br><span class="line">		location /knowledge_base/list_knowledge_bases/</span><br><span class="line">		{</span><br><span class="line">			proxy_pass      http://127.0.0.1:17861/knowledge_base/list_knowledge_bases;</span><br><span class="line">		}</span><br><span class="line">		</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>]]></content>
+  </entry>
+  <entry>
+    <title>proxychains install</title>
+    <url>/2024/07/17/proxychains%20install/</url>
+    <content><![CDATA[<h1 id="proxychains安装"><a href="#proxychains安装" class="headerlink" title="proxychains安装"></a>proxychains 安装</h1><ul>
+<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
+</li>
+<li><p>进入解压后的目录，执行 <code>./configure</code></p>
+</li>
+<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
+</li>
+<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
+</li>
+</ul>
+<blockquote>
+<p> cd /usr/local/etc/proxychains.conf</p>
+</blockquote>
+<blockquote>
+<p> 最后一行处修改 <b> socks5 xxxxxx </b></p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>readme</title>
+    <url>/2024/07/17/readme/</url>
+    <content><![CDATA[<h3 id="配置proxychains4-pip源-linux挂载外接硬盘-服务器静态地址-nginx发布服务等使用流程。"><a href="#配置proxychains4-pip源-linux挂载外接硬盘-服务器静态地址-nginx发布服务等使用流程。" class="headerlink" title="配置proxychains4, pip源, linux挂载外接硬盘, 服务器静态地址, nginx发布服务等使用流程。"></a>配置 proxychains4, pip 源，linux 挂载外接硬盘，服务器静态地址，nginx 发布服务等使用流程。</h3>]]></content>
+  </entry>
+  <entry>
+    <title>配置 VNC 教程</title>
+    <url>/2024/07/17/%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<h1 id="配置VNC教程"><a href="#配置VNC教程" class="headerlink" title="配置VNC教程"></a>配置 VNC 教程</h1><hr>
+<ol>
+<li><h2 id="两台-windows电脑内下载并安装"><a href="#两台-windows电脑内下载并安装" class="headerlink" title="两台 windows电脑内下载并安装"></a><strong>两台</strong> windows 电脑内下载并安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">TightVNC官网地址</span><br><span class="line">https://www.tightvnc.com/download.php</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-26-43-1718673923532.jpg" alt="" width="563" data-align="center">
+
+<hr>
+<ol start="2">
+<li><h2 id="TightVNC-服务端-被连接端-配置"><a href="#TightVNC-服务端-被连接端-配置" class="headerlink" title="TightVNC 服务端(被连接端) 配置"></a>TightVNC <strong>服务端</strong> (被连接端) 配置</h2><ul>
+<li><p>默认端口号 5900</p>
+</li>
+<li><p>注意自己设置连接密码</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-36-02-image.png" alt="" width="337" data-align="left">
+
+<p><strong>如果找不到配置界面，在任务栏右下角图标内右键 或点击 ‘开始菜单’-‘所有应用’-‘TightVNC’-‘Run TightVNC Service’</strong></p>
+<hr>
+</li>
+</ul>
+</li>
+<li><h2 id="TightVNC-客户端-连接端-配置"><a href="#TightVNC-客户端-连接端-配置" class="headerlink" title="TightVNC 客户端(连接端) 配置"></a>TightVNC <strong>客户端</strong> (连接端) 配置</h2><ul>
+<li>进入方式：开始菜单 - 所有应用 - TightVNC-TightVNC Viewer</li>
+</ul>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-48-42-image.png" alt="" width="341" data-align="left">
+
+<ul>
+<li><p> 输入服务器的 <strong>ip 地址</strong>和<strong>端口</strong> , 并连接</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-57-49-image.png" alt="" width="412"></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p> <a href="https://cloud.baidu.com/article/3002603">参考博客 - 1</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
+</blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>搭建基于 Hexo 架构的个人博客</title>
+    <url>/2024/07/18/%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
+<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
+<span id="more"></span>
+
+
+<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
+<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
+<ul>
+<li>升级 npm：<code>npm install -g npm</code></li>
+</ul>
+<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
+<ul>
+<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
+</ul>
+<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
+<li><p>检查 node.js 版本：</p>
+<p>  <code>node -v</code></p>
+</li>
+<li><p>检查 npm 版本：</p>
+<p>  <code>npm -v</code></p>
+</li>
+<li><p>检查 cnpm 版本：</p>
+<p>  <code>cnpm -v</code></p>
+</li>
+</ul>
+<div class="note warning"><p>这里是警告。</p></div>]]></content>
+      <tags>
+        <tag>blog</tag>
+      </tags>
   </entry>
 </search>
