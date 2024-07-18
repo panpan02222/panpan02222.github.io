@@ -143,12 +143,26 @@
 ]]></content>
   </entry>
   <entry>
-    <title>多机配置 hosts 及 hostname</title>
-    <url>/2024/07/15/3.%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
-    <content><![CDATA[<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
-<li>把 <code>ip</code> 复制到文本内</li>
+    <title>服务器挂载外部存储卷</title>
+    <url>/2024/07/15/4.%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
+    <content><![CDATA[<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
+<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
+</li>
+<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
+</li>
+<li><p>批量发送脚本为:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
-<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
+<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
+</li>
+<li><p>批量挂脚本：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -176,26 +190,32 @@
 ]]></content>
   </entry>
   <entry>
-    <title>服务器挂载外部存储卷</title>
-    <url>/2024/07/15/4.%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
-    <content><![CDATA[<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
-<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
+    <title>服务器配置永久修改 DNS</title>
+    <url>/2024/07/15/7.%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
+    <content><![CDATA[<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
+<ol start="2">
+<li><pre><code class="tex">DNS=114.114.114.114 8.8.8.8 8.8.4.4
+FallbackDNs=8.8.8.8
+Domains=domain.com
+</code></pre>
 </li>
-<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
+<li><pre><code class="bash">sudo systemctl restart systemd-resolved
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
+</code></pre>
 </li>
-<li><p>批量发送脚本为:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
+</code></pre>
+</li>
+</ol>
+]]></content>
+  </entry>
+  <entry>
+    <title>多机配置 hosts 及 hostname</title>
+    <url>/2024/07/15/3.%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
+    <content><![CDATA[<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
+<li>把 <code>ip</code> 复制到文本内</li>
 </ul>
-<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
-<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
-</li>
-<li><p>批量挂脚本：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
+<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -326,26 +346,6 @@
 ]]></content>
   </entry>
   <entry>
-    <title>服务器配置永久修改 DNS</title>
-    <url>/2024/07/15/7.%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
-    <content><![CDATA[<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
-<ol start="2">
-<li><pre><code class="tex">DNS=114.114.114.114 8.8.8.8 8.8.4.4
-FallbackDNs=8.8.8.8
-Domains=domain.com
-</code></pre>
-</li>
-<li><pre><code class="bash">sudo systemctl restart systemd-resolved
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
-</code></pre>
-</li>
-<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
-</code></pre>
-</li>
-</ol>
-]]></content>
-  </entry>
-  <entry>
     <title>Hello World</title>
     <url>/2024/07/15/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -361,12 +361,6 @@ Domains=domain.com
 <h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
 
 <p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
-  </entry>
-  <entry>
-    <title>k8s</title>
-    <url>/2024/07/17/k8s/</url>
-    <content><![CDATA[<h4 id="1-重启运行在节点上的kubelet服务"><a href="#1-重启运行在节点上的kubelet服务" class="headerlink" title="1.重启运行在节点上的kubelet服务"></a>1. 重启运行在节点上的 <code>kubelet</code> 服务</h4><p><code>systemctl restart  kubelet</code></p>
 ]]></content>
   </entry>
   <entry>
@@ -419,19 +413,6 @@ Domains=domain.com
 ]]></content>
   </entry>
   <entry>
-    <title>nginx </title>
-    <url>/2024/07/17/nginx%20/</url>
-    <content><![CDATA[<h1 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a><b>Nginx</b></h1><h2 id="Nginx的设计理念注重性能、并发性和可扩展性，使其成为处理高并发、大规模访问的理想服务器和代理工具。"><a href="#Nginx的设计理念注重性能、并发性和可扩展性，使其成为处理高并发、大规模访问的理想服务器和代理工具。" class="headerlink" title="Nginx的设计理念注重性能、并发性和可扩展性，使其成为处理高并发、大规模访问的理想服务器和代理工具。"></a><b>Nginx</b> 的设计理念注重性能、并发性和可扩展性，使其成为处理高并发、大规模访问的理想服务器和代理工具。<br></h2><h2 id="openresty-OpenResty-又称：ngx-openresty-是一个基于-NGINX-的可伸缩的-Web-平台，由中国人章亦春发起，提供了很多高质量的第三方模块。"><a href="#openresty-OpenResty-又称：ngx-openresty-是一个基于-NGINX-的可伸缩的-Web-平台，由中国人章亦春发起，提供了很多高质量的第三方模块。" class="headerlink" title="openresty : OpenResty(又称：ngx_openresty) 是一个基于 NGINX 的可伸缩的 Web 平台，由中国人章亦春发起，提供了很多高质量的第三方模块。"></a>openresty : OpenResty (又称：ngx_openresty) 是一个基于 NGINX 的可伸缩的 Web 平台，由中国人章亦春发起，提供了很多高质量的第三方模块。</h2><h2 id="Tengine-Tengine是由淘宝网发起的Web服务器项目。它在Nginx的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。它的目的是打造一个高效、安全的Web平台"><a href="#Tengine-Tengine是由淘宝网发起的Web服务器项目。它在Nginx的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。它的目的是打造一个高效、安全的Web平台" class="headerlink" title="Tengine : Tengine是由淘宝网发起的Web服务器项目。它在Nginx的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。它的目的是打造一个高效、安全的Web平台"></a>Tengine : Tengine 是由淘宝网发起的 Web 服务器项目。它在 Nginx 的基础上，针对大访问量网站的需求，添加了很多高级功能和特性。它的目的是打造一个高效、安全的 Web 平台</h2><hr>
-<h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><ul>
-<li>启动命令 <code>sudo nginx</code><br></li>
-<li>关闭命令 <code>sudo nginx -s stop</code><br></li>
-<li>重启加载 <code>sudo ngingx -s reload</code><br></li>
-<li>查看进程 <code>ps aux | grep nginx</code><br></li>
-<li>查看状态 <code>sudo nginx -t</code><br></li>
-</ul>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">#user  nobody;</span><br><span class="line"></span><br><span class="line">events {</span><br><span class="line">    worker_connections  1024;</span><br><span class="line">}</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">http {</span><br><span class="line">    include       mime.types;</span><br><span class="line">    default_type  application/octet-stream;</span><br><span class="line"></span><br><span class="line">    sendfile        on;</span><br><span class="line">    </span><br><span class="line">    keepalive_timeout  65;</span><br><span class="line">    </span><br><span class="line">    server {</span><br><span class="line">    	listen  18080;</span><br><span class="line">    	server_name		localhost;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">​		</span><br><span class="line">		location /chat/knowledge_base_chat/ {</span><br><span class="line">			proxy_pass      http://127.0.0.1:17861/chat/knowledge_base_chat;</span><br><span class="line">		}</span><br><span class="line">		location /chat/chat/ {</span><br><span class="line">			proxy_pass      http://127.0.0.1:17861/chat/chat;</span><br><span class="line">		}</span><br><span class="line">		</span><br><span class="line">		location /knowledge_base/list_knowledge_bases/</span><br><span class="line">		{</span><br><span class="line">			proxy_pass      http://127.0.0.1:17861/knowledge_base/list_knowledge_bases;</span><br><span class="line">		}</span><br><span class="line">		</span><br><span class="line">	}</span><br><span class="line"></span><br><span class="line">}</span><br></pre></td></tr></tbody></table></figure>]]></content>
-  </entry>
-  <entry>
     <title>proxychains install</title>
     <url>/2024/07/17/proxychains%20install/</url>
     <content><![CDATA[<h1 id="proxychains安装"><a href="#proxychains安装" class="headerlink" title="proxychains安装"></a>proxychains 安装</h1><ul>
@@ -450,6 +431,12 @@ Domains=domain.com
 <blockquote>
 <p> 最后一行处修改 <b> socks5 xxxxxx </b></p>
 </blockquote>
+]]></content>
+  </entry>
+  <entry>
+    <title>k8s</title>
+    <url>/2024/07/17/k8s/</url>
+    <content><![CDATA[<h4 id="1-重启运行在节点上的kubelet服务"><a href="#1-重启运行在节点上的kubelet服务" class="headerlink" title="1.重启运行在节点上的kubelet服务"></a>1. 重启运行在节点上的 <code>kubelet</code> 服务</h4><p><code>systemctl restart  kubelet</code></p>
 ]]></content>
   </entry>
   <entry>
