@@ -13,6 +13,30 @@
       </tags>
   </entry>
   <entry>
+    <title>修改远程桌面端口步骤</title>
+    <url>/2021/01/11/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4%20/</url>
+    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
+<span id="more"></span>
+
+
+<ol>
+<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
+</li>
+<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
+</li>
+<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
+</li>
+<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
+</li>
+<li><p>重启电脑</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>work</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>本人工作中常用的 Docker 命令</title>
     <url>/2021/01/11/20220105_Docker%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>常用的 docker 命令</p>
@@ -104,30 +128,6 @@
 ]]></content>
       <tags>
         <tag>docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>修改远程桌面端口步骤</title>
-    <url>/2021/01/11/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4%20/</url>
-    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
-<span id="more"></span>
-
-
-<ol>
-<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
-</li>
-<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
-</li>
-<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
-</li>
-<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
-</li>
-<li><p>重启电脑</p>
-</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>work</tag>
       </tags>
   </entry>
   <entry>
@@ -303,26 +303,99 @@
       </tags>
   </entry>
   <entry>
-    <title>服务器配置永久修改 DNS</title>
-    <url>/2024/07/15/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
-    <content><![CDATA[<p>服务器内配置 DNS</p>
+    <title>服务器免密配置教程 - 1</title>
+    <url>/2024/07/15/20240701_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
+    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
+<p><img src="/../img/image-20240710103927738.png" alt="show ip"></p>
 <span id="more"></span>
 
-<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
-<ol start="2">
-<li><pre><code class="tex">DNS=114.114.114.114 8.8.8.8 8.8.4.4
-FallbackDNs=8.8.8.8
-Domains=domain.com
-</code></pre>
+<blockquote>
+<p>[!NOTE]</p>
+<p>该手册一共 2 个版本，此文档为第一版。</p>
+</blockquote>
+<h2 id="1-获取密钥"><a href="#1-获取密钥" class="headerlink" title="1. 获取密钥"></a>1. 获取密钥</h2>   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -f /root/.ssh/rsa</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2-验证"><a href="#2-验证" class="headerlink" title="2. 验证"></a>2. 验证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> id_rsa.pub authorized_keys</span><br><span class="line"><span class="comment"># authorized_keys是用于 SSH 服务器验证远程用户身份</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-配置StrictHostKeyChecking"><a href="#3-配置StrictHostKeyChecking" class="headerlink" title="3. 配置StrictHostKeyChecking"></a>3. 配置 <code>StrictHostKeyChecking</code></h2><ul>
+<li>创建 config 文件 <code>vim config</code></li>
+</ul>
+<figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">StrictHostKeyChecking no</span><br><span class="line"><span class="params">#</span> 设置 StrictHostKeyChecking no 意味着SSH客户端在连接到远程主机时不会检查该主机的公钥，也不会将新的主机密钥添加到已知主机列表中。这意味着所有远程主机的密钥将被自动接受，而不会进行任何验证。</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="4-准备ip文件"><a href="#4-准备ip文件" class="headerlink" title="4. 准备ip文件"></a>4. 准备 ip 文件</h2><ul>
+<li><p>创建 ip.txt <code>vim ip.txt</code></p>
 </li>
-<li><pre><code class="bash">sudo systemctl restart systemd-resolved
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
-</code></pre>
+<li><p>将需要免密的机器 <code>ip</code> 写入</p>
+<p><img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738"></p>
 </li>
-<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
-</code></pre>
+</ul>
+<h2 id="5-创建脚本"><a href="#5-创建脚本" class="headerlink" title="5. 创建脚本"></a>5. 创建脚本</h2><ul>
+<li>需要手动写登录密码 <code>password</code></li>
+<li>前提安装 <code>expect</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 IP 地址列表</span></span><br><span class="line">servers=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    servers+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地 .ssh 目录路径</span></span><br><span class="line">ssh_dir=<span class="string">"<span class="variable">$HOME</span>/.ssh"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 expect 进行 scp 并自动输入密码</span></span><br><span class="line"><span class="keyword">for</span> server <span class="keyword">in</span> <span class="string">"<span class="variable">${servers[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Copying SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    expect &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">spawn scp -r $ssh_dir root@$server:/root/</span></span><br><span class="line"><span class="string">expect {</span></span><br><span class="line"><span class="string">    "password:" {</span></span><br><span class="line"><span class="string">        send "your password\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    "yes/no" {</span></span><br><span class="line"><span class="string">        send "yes\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    eof {</span></span><br><span class="line"><span class="string">        exit</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">}</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">    <span class="keyword">if</span> [ $? -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Successfully copied SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Failed to copy SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"All servers have been updated with SSH keys."</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<p>补充安装 expect 包教程</p>
+<h3 id="在Ubuntu上安装Expect"><a href="#在Ubuntu上安装Expect" class="headerlink" title="在Ubuntu上安装Expect"></a>在 Ubuntu 上安装 Expect</h3><ol>
+<li><p><strong>更新包列表</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>安装 Expect</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install expect</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>验证安装</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这将显示已安装的 <code>expect</code> 版本。</p>
 </li>
 </ol>
+<h3 id="在CentOS上安装Expect"><a href="#在CentOS上安装Expect" class="headerlink" title="在CentOS上安装Expect"></a>在 CentOS 上安装 Expect</h3><ol>
+<li><p><strong>更新包列表</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>安装 Expect</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install expect</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>验证安装</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这将显示已安装的 <code>expect</code> 版本。</p>
+<hr>
+<p>完成这些步骤后，你的系统上就会安装 Expect 工具。Expect 是一种用于自动化交互任务的工具，常用于自动化 SSH 登录、FTP 等需要用户交互的任务。</p>
+</li>
+</ol>
+</blockquote>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
 ]]></content>
       <tags>
         <tag>Ops</tag>
@@ -381,6 +454,32 @@ Domains=domain.com
 </li>
 </ul>
 </blockquote>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器配置永久修改 DNS</title>
+    <url>/2024/07/15/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
+    <content><![CDATA[<p>服务器内配置 DNS</p>
+<span id="more"></span>
+
+<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
+<ol start="2">
+<li><pre><code class="tex">DNS=114.114.114.114 8.8.8.8 8.8.4.4
+FallbackDNs=8.8.8.8
+Domains=domain.com
+</code></pre>
+</li>
+<li><pre><code class="bash">sudo systemctl restart systemd-resolved
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
+</code></pre>
+</li>
+<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
+</code></pre>
+</li>
+</ol>
 ]]></content>
       <tags>
         <tag>Ops</tag>
@@ -501,15 +600,29 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>多机配置 hosts 及 hostname</title>
-    <url>/2024/07/15/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
-    <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
-<span id="more"></span>
+    <title>服务器挂载外部存储卷</title>
+    <url>/2024/07/15/20240712_%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
+    <content><![CDATA[<p>多服务器之间共享文件，需要挂载外部存储卷。从保存数据的服务器上，将共享目录挂载到其他服务器上。</p>
+<!---more-->
 
-<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
-<li>把 <code>ip</code> 复制到文本内</li>
+<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
+<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
+</li>
+<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
+</li>
+<li><p>批量发送脚本为:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
-<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
+<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
+</li>
+<li><p>批量挂脚本：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -573,29 +686,15 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>服务器挂载外部存储卷</title>
-    <url>/2024/07/15/20240712_%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
-    <content><![CDATA[<p>多服务器之间共享文件，需要挂载外部存储卷。从保存数据的服务器上，将共享目录挂载到其他服务器上。</p>
-<!---more-->
+    <title>多机配置 hosts 及 hostname</title>
+    <url>/2024/07/15/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
+    <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
+<span id="more"></span>
 
-<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
-<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
-</li>
-<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
-</li>
-<li><p>批量发送脚本为:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
+<li>把 <code>ip</code> 复制到文本内</li>
 </ul>
-<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
-<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
-</li>
-<li><p>批量挂脚本：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
+<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -917,103 +1016,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>基于 Openai API 进行接口移植</title>
-    <url>/2024/07/24/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<p>记录一下 基于 Openai API 进行接口移植的过程，从引用 api 到测试到最后转接口使用</p>
-<span id="more"></span>
-
-
-
-<blockquote>
-<h3 id="注册Openai-API账号"><a href="#注册Openai-API账号" class="headerlink" title="注册Openai API账号"></a>注册 Openai API 账号</h3><ul>
-<li>老生常谈的问题 ，首先我们需要注册一个 Openai API 账号，并申请一个 API key，或者购买一个 API_KEY。</li>
-<li><strong>申请点击此链接:<a href="https://platform.openai.com/login?launch">openai API 官网链接</a></strong></li>
-</ul>
-</blockquote>
-<hr>
-<h3 id="1-调用openai的GPT-4o模型接口"><a href="#1-调用openai的GPT-4o模型接口" class="headerlink" title="1.调用openai的GPT-4o模型接口"></a>1. 调用 openai 的 GPT-4o 模型接口</h3><ul>
-<li><p>OK 还是最常见的 chat_generate，这里直接放代码了</p>
- <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">client = OpenAI(</span><br><span class="line">    api_key=<span class="comment">#这里就放入刚刚购买到的key就可以啦</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> opneai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gpt_generate_text</span>(<span class="params">prompt, messages_list</span>):</span><br><span class="line">    messages = <span class="string">''</span></span><br><span class="line">    <span class="keyword">if</span> messages_list:</span><br><span class="line">        messages = <span class="string">'以下是你和用户的当前会话消息：\n\n'</span> + <span class="string">'\n'</span>.join(messages_list)</span><br><span class="line">    stream = client.chat.completions.create(</span><br><span class="line">        <span class="comment"># model="gpt-4-turbo-preview",</span></span><br><span class="line">        model=<span class="string">"gpt-4o"</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: messages},</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: prompt},</span><br><span class="line">        ],</span><br><span class="line">        stream=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line">    text = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> stream:</span><br><span class="line">        <span class="keyword">if</span> chunk.choices[<span class="number">0</span>].delta.content <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(chunk.choices[<span class="number">0</span>].delta.content, end=<span class="string">""</span>)</span><br><span class="line">            text += chunk.choices[<span class="number">0</span>].delta.content</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>这里是<strong>路由函数</strong>的撰写</p>
-<ul>
-<li><p>可以看到这里可以通过 GET 和 POST （GET 不可以用哦）, 这里调用我们的 gpt_generate_text 函数，传入 prompt 和 messages_list，然后返回生成的文本。</p>
-  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/chatgpt"</span>, methods=[<span class="string">'GET'</span>, <span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">chat_with_gpt</span>():</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'chatgpt GET 请求'</span></span><br><span class="line">    <span class="keyword">elif</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        data = request.json</span><br><span class="line">        prompt = data[<span class="string">'prompt'</span>]</span><br><span class="line">        messages_list = data.get(<span class="string">'messages'</span>, [])</span><br><span class="line">        text = gpt_generate_text(prompt, messages_list)</span><br><span class="line"></span><br><span class="line">        timestamp = <span class="built_in">str</span>(time.time()).split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> text:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成成功'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: text}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">2</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成失败'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: <span class="literal">None</span>}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">return</span> jsonify(response_data)</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="2-调用Openai的whisper-1模型接口"><a href="#2-调用Openai的whisper-1模型接口" class="headerlink" title="2.调用Openai的whisper-1模型接口"></a>2. 调用 Openai 的 whisper-1 模型接口</h2><ul>
-<li>2.1 同理这里是调用的 openai 的 <strong>whisper-1</strong> 模型进行音频转文本的函数撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_audio</span>(<span class="params">audio_file</span>):</span><br><span class="line">    audio=<span class="built_in">open</span>(audio_file, <span class="string">"rb"</span>)</span><br><span class="line">    transcription = client.audio.transcriptions.create(model=<span class="string">"whisper-1"</span>,file=audio)</span><br><span class="line">    text = transcription.text</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
-<li>2.2 这里是最后<strong>路由函数</strong>的撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/transcribe"</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'file'</span> <span class="keyword">not</span> <span class="keyword">in</span> request.files:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No file part"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    audio_file = request.files[<span class="string">'file'</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file.filename == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No selected file"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file:</span><br><span class="line">        <span class="comment"># 保存文件到临时位置</span></span><br><span class="line">        temp_file_path = os.path.join(<span class="string">"temp"</span>, audio_file.filename)</span><br><span class="line">        audio_file.save(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 调用转录函数</span></span><br><span class="line">        transcription_text = transcribe_audio(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除临时文件</span></span><br><span class="line">        os.remove(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"text"</span>: transcription_text})</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<blockquote>
-<ul>
-<li>首先我们要确定返回的请求中是否包含文件和文件名，如果没有，则返回错误信息和 400，</li>
-<li>其次，我们需要保存文件到临时位置，然后调用我们写好的转录函数进行转录，最后删除临时文件。</li>
-<li>最后返回转录后的文本给客户端 供使用。</li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="3-调用Openai的TTS-1模型接口"><a href="#3-调用Openai的TTS-1模型接口" class="headerlink" title="3.调用Openai的TTS-1模型接口"></a>3. 调用 Openai 的 TTS-1 模型接口</h2><ul>
-<li>3.1 调用 openai 的 API，将文本转换为语音 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">def text_to_speech(text, vocie, model, path):</span><br><span class="line">    </span><br><span class="line">    response = client.audio.speech.create(</span><br><span class="line">        model=model,</span><br><span class="line">        voice=vocie,</span><br><span class="line">        input=text</span><br><span class="line">    )</span><br><span class="line">    speech_file_path = Path(path)</span><br><span class="line">    with open(speech_file_path, 'wb') as file:</span><br><span class="line">        file.write(response.content)</span><br><span class="line"></span><br><span class="line">    print(f'文件已保存到: {speech_file_path}')</span><br><span class="line">    return speech_file_path</span><br></pre></td></tr></tbody></table></figure></li>
-<li>3.2 文本转语音 text-to-speech 路由撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line">server_ip = <span class="string">""</span>  <span class="comment"># 替换为你的服务器IP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">'/text-to-speech'</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_to_speech_endpoint</span>():</span><br><span class="line">    data = request.json</span><br><span class="line">    text = data.get(<span class="string">'text'</span>)</span><br><span class="line">    voice = data.get(<span class="string">'voice'</span>)</span><br><span class="line">    model = data.get(<span class="string">'model'</span>)</span><br><span class="line">    output_path = <span class="string">'./output.mp3'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text <span class="keyword">or</span> <span class="keyword">not</span> voice <span class="keyword">or</span> <span class="keyword">not</span> model:</span><br><span class="line">        <span class="keyword">return</span> {<span class="string">'error'</span>: <span class="string">'Missing required parameters'</span>}, <span class="number">400</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Define the directory where you want to save the files</span></span><br><span class="line">        output_dir = Path(<span class="string">'./audio_files'</span>)</span><br><span class="line">        output_dir.mkdir(exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate a unique filename using UUID</span></span><br><span class="line">        unique_filename = <span class="string">f"<span class="subst">{uuid.uuid4()}</span>.mp3"</span></span><br><span class="line">        output_path = output_dir / unique_filename</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate the speech and save the file</span></span><br><span class="line">        speech_file_path = text_to_speech(text, voice, model, output_path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Create the file URL</span></span><br><span class="line">        file_url = <span class="string">f"http://<span class="subst">{server_ip}</span>/root/xxx/<span class="subst">{speech_file_path}</span>"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Return the file URL as a response</span></span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'file_url'</span>: file_url}), <span class="number">200</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'error'</span>: <span class="built_in">str</span>(e)}), <span class="number">500</span></span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<ul>
-<li>首先我们要在后端代码中写入 我们的服务器 ip 地址</li>
-<li>我们要确保我们的 json 数据存在 四个键 text ， voice ， model ， output_path ，</li>
-<li>其次我们调用 text_to_speech 函数，传入 text，voice，model，output_path，</li>
-<li>然后我们生成一个唯一的 filename，保存到 output_dir 目录下</li>
-<li>最后我们生成一个 file_url，然后返回给客户端。</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<hr>
-<h2 id="4-测试使用"><a href="#4-测试使用" class="headerlink" title="4.测试使用"></a>4. 测试使用</h2><ul>
-<li>4.1 我们可以使用以下方式，这种方式在我们的 py 脚本下直接测试，传参切记</li>
-</ul>
-<p>​	 <code>if __name__ == "__main__":</code><br>​	    	<code>main()</code></p>
-<ul>
-<li><p>4.2 使用 命令行在我们的服务器上测试 GET <a href="http://xxxx/">http://xxxx</a> {“xx”:”xx”}</p>
-</li>
-<li><p>4.3 使用 postman 、apifox 等等工具测试</p>
-</li>
-</ul>
-<p>​	本人这里使用的是第三种方法 apifox 这个工具，本人良心推荐大家使用，附<a href="https://apifox.com/help/">官方文档链接</a></p>
-<ul>
-<li><p> 4.4 测试截图及测试数据</p>
-<h3 id="测试用例一-chatgpt"><a href="#测试用例一-chatgpt" class="headerlink" title="测试用例一: /chatgpt"></a>测试用例一: /chatgpt</h3><ul>
-<li>测试数据 </li>
-</ul>
-  <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"code"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"data"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span> <span class="string">"你好！我是一个由人工智能驱动的助手，设计用于帮助回答问题、提供信息以及协助完成各种任务。有什么我可以帮你的吗？"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"message"</span><span class="punctuation">:</span> <span class="string">"内容生成成功"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"time"</span><span class="punctuation">:</span> <span class="string">"1721808765"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>响应截图</li>
-</ul>
-<p>  <img src="/../img/api-1.jpg" alt="gpt4o"></p>
-<hr>
-<h3 id="测试用例二-transcribe"><a href="#测试用例二-transcribe" class="headerlink" title="测试用例二: /transcribe"></a>测试用例二: /transcribe</h3><pre><code> - 测试数据
-</code></pre>
-<p>  <img src="/../img/api-2-1.jpg" alt="音频文件截图"></p>
-<pre><code> - 响应截图
-</code></pre>
-<p>  <img src="/../img/api-2.jpg" alt="gpt4o"></p>
-<hr>
-<h3 id="测试用例三-transcribe"><a href="#测试用例三-transcribe" class="headerlink" title="测试用例三: /transcribe"></a>测试用例三: /transcribe</h3><pre><code> - 测试数据
-
-   <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"model"</span><span class="punctuation">:</span><span class="string">"tts-1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"voice"</span><span class="punctuation">:</span><span class="string">"echo"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span><span class="string">"今天中午吃什么?"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-- 响应截图
-</code></pre>
-<p>  <img src="/../img/api-3.jpg" alt="gpt4o"></p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>LLM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>K8s 常用命令</title>
     <url>/2024/07/17/Kubenets%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
@@ -1100,49 +1102,6 @@ python dbgpt/app/dbgpt_server.py
       <tags>
         <tag>Jupyter Notebook</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>Proxychains install</title>
-    <url>/2024/07/17/Proxychains%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
-<span id="more"></span>
-
-
-<ul>
-<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
-</li>
-<li><p>进入解压后的目录，执行 <code>./configure</code></p>
-</li>
-<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
-</li>
-<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
-</li>
-</ul>
-<blockquote>
-<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2024/07/15/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
   </entry>
   <entry>
     <title>Linux 快捷指令</title>
@@ -1239,102 +1198,146 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>服务器免密配置教程 - 1</title>
-    <url>/2024/07/15/20240701_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
-    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
-<p><img src="/../img/image-20240710103927738.png" alt="show ip"></p>
+    <title>Proxychains install</title>
+    <url>/2024/07/17/Proxychains%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
 <span id="more"></span>
 
-<blockquote>
-<p>[!NOTE]</p>
-<p>该手册一共 2 个版本，此文档为第一版。</p>
-</blockquote>
-<h2 id="1-获取密钥"><a href="#1-获取密钥" class="headerlink" title="1. 获取密钥"></a>1. 获取密钥</h2>   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -f /root/.ssh/rsa</span><br></pre></td></tr></tbody></table></figure>
 
-<h2 id="2-验证"><a href="#2-验证" class="headerlink" title="2. 验证"></a>2. 验证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> id_rsa.pub authorized_keys</span><br><span class="line"><span class="comment"># authorized_keys是用于 SSH 服务器验证远程用户身份</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-配置StrictHostKeyChecking"><a href="#3-配置StrictHostKeyChecking" class="headerlink" title="3. 配置StrictHostKeyChecking"></a>3. 配置 <code>StrictHostKeyChecking</code></h2><ul>
-<li>创建 config 文件 <code>vim config</code></li>
-</ul>
-<figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">StrictHostKeyChecking no</span><br><span class="line"><span class="params">#</span> 设置 StrictHostKeyChecking no 意味着SSH客户端在连接到远程主机时不会检查该主机的公钥，也不会将新的主机密钥添加到已知主机列表中。这意味着所有远程主机的密钥将被自动接受，而不会进行任何验证。</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="4-准备ip文件"><a href="#4-准备ip文件" class="headerlink" title="4. 准备ip文件"></a>4. 准备 ip 文件</h2><ul>
-<li><p>创建 ip.txt <code>vim ip.txt</code></p>
-</li>
-<li><p>将需要免密的机器 <code>ip</code> 写入</p>
-<p><img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738"></p>
-</li>
-</ul>
-<h2 id="5-创建脚本"><a href="#5-创建脚本" class="headerlink" title="5. 创建脚本"></a>5. 创建脚本</h2><ul>
-<li>需要手动写登录密码 <code>password</code></li>
-<li>前提安装 <code>expect</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 IP 地址列表</span></span><br><span class="line">servers=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    servers+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地 .ssh 目录路径</span></span><br><span class="line">ssh_dir=<span class="string">"<span class="variable">$HOME</span>/.ssh"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 expect 进行 scp 并自动输入密码</span></span><br><span class="line"><span class="keyword">for</span> server <span class="keyword">in</span> <span class="string">"<span class="variable">${servers[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Copying SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    expect &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">spawn scp -r $ssh_dir root@$server:/root/</span></span><br><span class="line"><span class="string">expect {</span></span><br><span class="line"><span class="string">    "password:" {</span></span><br><span class="line"><span class="string">        send "your password\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    "yes/no" {</span></span><br><span class="line"><span class="string">        send "yes\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    eof {</span></span><br><span class="line"><span class="string">        exit</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">}</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">    <span class="keyword">if</span> [ $? -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Successfully copied SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Failed to copy SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"All servers have been updated with SSH keys."</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<p>补充安装 expect 包教程</p>
-<h3 id="在Ubuntu上安装Expect"><a href="#在Ubuntu上安装Expect" class="headerlink" title="在Ubuntu上安装Expect"></a>在 Ubuntu 上安装 Expect</h3><ol>
-<li><p><strong>更新包列表</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>安装 Expect</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install expect</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证安装</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这将显示已安装的 <code>expect</code> 版本。</p>
-</li>
-</ol>
-<h3 id="在CentOS上安装Expect"><a href="#在CentOS上安装Expect" class="headerlink" title="在CentOS上安装Expect"></a>在 CentOS 上安装 Expect</h3><ol>
-<li><p><strong>更新包列表</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>安装 Expect</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install expect</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证安装</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这将显示已安装的 <code>expect</code> 版本。</p>
-<hr>
-<p>完成这些步骤后，你的系统上就会安装 Expect 工具。Expect 是一种用于自动化交互任务的工具，常用于自动化 SSH 登录、FTP 等需要用户交互的任务。</p>
-</li>
-</ol>
-</blockquote>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
 <ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+<li><p>进入解压后的目录，执行 <code>./configure</code></p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
 </li>
 </ul>
+<blockquote>
+<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
 </blockquote>
 ]]></content>
       <tags>
         <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/07/15/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>基于 Openai API 进行接口移植</title>
+    <url>/2024/07/24/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>记录一下 基于 Openai API 进行接口移植的过程，从引用 api 到测试到最后转接口使用</p>
+<span id="more"></span>
+
+
+
+<blockquote>
+<h3 id="注册Openai-API账号"><a href="#注册Openai-API账号" class="headerlink" title="注册Openai API账号"></a>注册 Openai API 账号</h3><ul>
+<li>老生常谈的问题 ，首先我们需要注册一个 Openai API 账号，并申请一个 API key，或者购买一个 API_KEY。</li>
+<li><strong>申请点击此链接:<a href="https://platform.openai.com/login?launch">openai API 官网链接</a></strong></li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1-调用openai的GPT-4o模型接口"><a href="#1-调用openai的GPT-4o模型接口" class="headerlink" title="1.调用openai的GPT-4o模型接口"></a>1. 调用 openai 的 GPT-4o 模型接口</h3><ul>
+<li><p>OK 还是最常见的 chat_generate，这里直接放代码了</p>
+ <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">client = OpenAI(</span><br><span class="line">    api_key=<span class="comment">#这里就放入刚刚购买到的key就可以啦</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> opneai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gpt_generate_text</span>(<span class="params">prompt, messages_list</span>):</span><br><span class="line">    messages = <span class="string">''</span></span><br><span class="line">    <span class="keyword">if</span> messages_list:</span><br><span class="line">        messages = <span class="string">'以下是你和用户的当前会话消息：\n\n'</span> + <span class="string">'\n'</span>.join(messages_list)</span><br><span class="line">    stream = client.chat.completions.create(</span><br><span class="line">        <span class="comment"># model="gpt-4-turbo-preview",</span></span><br><span class="line">        model=<span class="string">"gpt-4o"</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: messages},</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: prompt},</span><br><span class="line">        ],</span><br><span class="line">        stream=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line">    text = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> stream:</span><br><span class="line">        <span class="keyword">if</span> chunk.choices[<span class="number">0</span>].delta.content <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(chunk.choices[<span class="number">0</span>].delta.content, end=<span class="string">""</span>)</span><br><span class="line">            text += chunk.choices[<span class="number">0</span>].delta.content</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>这里是<strong>路由函数</strong>的撰写</p>
+<ul>
+<li><p>可以看到这里可以通过 GET 和 POST （GET 不可以用哦）, 这里调用我们的 gpt_generate_text 函数，传入 prompt 和 messages_list，然后返回生成的文本。</p>
+  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/chatgpt"</span>, methods=[<span class="string">'GET'</span>, <span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">chat_with_gpt</span>():</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'chatgpt GET 请求'</span></span><br><span class="line">    <span class="keyword">elif</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        data = request.json</span><br><span class="line">        prompt = data[<span class="string">'prompt'</span>]</span><br><span class="line">        messages_list = data.get(<span class="string">'messages'</span>, [])</span><br><span class="line">        text = gpt_generate_text(prompt, messages_list)</span><br><span class="line"></span><br><span class="line">        timestamp = <span class="built_in">str</span>(time.time()).split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> text:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成成功'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: text}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">2</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成失败'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: <span class="literal">None</span>}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">return</span> jsonify(response_data)</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="2-调用Openai的whisper-1模型接口"><a href="#2-调用Openai的whisper-1模型接口" class="headerlink" title="2.调用Openai的whisper-1模型接口"></a>2. 调用 Openai 的 whisper-1 模型接口</h2><ul>
+<li>2.1 同理这里是调用的 openai 的 <strong>whisper-1</strong> 模型进行音频转文本的函数撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_audio</span>(<span class="params">audio_file</span>):</span><br><span class="line">    audio=<span class="built_in">open</span>(audio_file, <span class="string">"rb"</span>)</span><br><span class="line">    transcription = client.audio.transcriptions.create(model=<span class="string">"whisper-1"</span>,file=audio)</span><br><span class="line">    text = transcription.text</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
+<li>2.2 这里是最后<strong>路由函数</strong>的撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/transcribe"</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'file'</span> <span class="keyword">not</span> <span class="keyword">in</span> request.files:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No file part"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    audio_file = request.files[<span class="string">'file'</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file.filename == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No selected file"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file:</span><br><span class="line">        <span class="comment"># 保存文件到临时位置</span></span><br><span class="line">        temp_file_path = os.path.join(<span class="string">"temp"</span>, audio_file.filename)</span><br><span class="line">        audio_file.save(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 调用转录函数</span></span><br><span class="line">        transcription_text = transcribe_audio(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除临时文件</span></span><br><span class="line">        os.remove(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"text"</span>: transcription_text})</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<blockquote>
+<ul>
+<li>首先我们要确定返回的请求中是否包含文件和文件名，如果没有，则返回错误信息和 400，</li>
+<li>其次，我们需要保存文件到临时位置，然后调用我们写好的转录函数进行转录，最后删除临时文件。</li>
+<li>最后返回转录后的文本给客户端 供使用。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="3-调用Openai的TTS-1模型接口"><a href="#3-调用Openai的TTS-1模型接口" class="headerlink" title="3.调用Openai的TTS-1模型接口"></a>3. 调用 Openai 的 TTS-1 模型接口</h2><ul>
+<li>3.1 调用 openai 的 API，将文本转换为语音 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">def text_to_speech(text, vocie, model, path):</span><br><span class="line">    </span><br><span class="line">    response = client.audio.speech.create(</span><br><span class="line">        model=model,</span><br><span class="line">        voice=vocie,</span><br><span class="line">        input=text</span><br><span class="line">    )</span><br><span class="line">    speech_file_path = Path(path)</span><br><span class="line">    with open(speech_file_path, 'wb') as file:</span><br><span class="line">        file.write(response.content)</span><br><span class="line"></span><br><span class="line">    print(f'文件已保存到: {speech_file_path}')</span><br><span class="line">    return speech_file_path</span><br></pre></td></tr></tbody></table></figure></li>
+<li>3.2 文本转语音 text-to-speech 路由撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line">server_ip = <span class="string">""</span>  <span class="comment"># 替换为你的服务器IP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">'/text-to-speech'</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_to_speech_endpoint</span>():</span><br><span class="line">    data = request.json</span><br><span class="line">    text = data.get(<span class="string">'text'</span>)</span><br><span class="line">    voice = data.get(<span class="string">'voice'</span>)</span><br><span class="line">    model = data.get(<span class="string">'model'</span>)</span><br><span class="line">    output_path = <span class="string">'./output.mp3'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text <span class="keyword">or</span> <span class="keyword">not</span> voice <span class="keyword">or</span> <span class="keyword">not</span> model:</span><br><span class="line">        <span class="keyword">return</span> {<span class="string">'error'</span>: <span class="string">'Missing required parameters'</span>}, <span class="number">400</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Define the directory where you want to save the files</span></span><br><span class="line">        output_dir = Path(<span class="string">'./audio_files'</span>)</span><br><span class="line">        output_dir.mkdir(exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate a unique filename using UUID</span></span><br><span class="line">        unique_filename = <span class="string">f"<span class="subst">{uuid.uuid4()}</span>.mp3"</span></span><br><span class="line">        output_path = output_dir / unique_filename</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate the speech and save the file</span></span><br><span class="line">        speech_file_path = text_to_speech(text, voice, model, output_path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Create the file URL</span></span><br><span class="line">        file_url = <span class="string">f"http://<span class="subst">{server_ip}</span>/root/xxx/<span class="subst">{speech_file_path}</span>"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Return the file URL as a response</span></span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'file_url'</span>: file_url}), <span class="number">200</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'error'</span>: <span class="built_in">str</span>(e)}), <span class="number">500</span></span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<ul>
+<li>首先我们要在后端代码中写入 我们的服务器 ip 地址</li>
+<li>我们要确保我们的 json 数据存在 四个键 text ， voice ， model ， output_path ，</li>
+<li>其次我们调用 text_to_speech 函数，传入 text，voice，model，output_path，</li>
+<li>然后我们生成一个唯一的 filename，保存到 output_dir 目录下</li>
+<li>最后我们生成一个 file_url，然后返回给客户端。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h2 id="4-测试使用"><a href="#4-测试使用" class="headerlink" title="4.测试使用"></a>4. 测试使用</h2><ul>
+<li>4.1 我们可以使用以下方式，这种方式在我们的 py 脚本下直接测试，传参切记</li>
+</ul>
+<p>​	 <code>if __name__ == "__main__":</code><br>​	    	<code>main()</code></p>
+<ul>
+<li><p>4.2 使用 命令行在我们的服务器上测试 GET <a href="http://xxxx/">http://xxxx</a> {“xx”:”xx”}</p>
+</li>
+<li><p>4.3 使用 postman 、apifox 等等工具测试</p>
+</li>
+</ul>
+<p>​	本人这里使用的是第三种方法 apifox 这个工具，本人良心推荐大家使用，附<a href="https://apifox.com/help/">官方文档链接</a></p>
+<ul>
+<li><p> 4.4 测试截图及测试数据</p>
+<h3 id="测试用例一-chatgpt"><a href="#测试用例一-chatgpt" class="headerlink" title="测试用例一: /chatgpt"></a>测试用例一: /chatgpt</h3><ul>
+<li>测试数据 </li>
+</ul>
+  <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"code"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"data"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span> <span class="string">"你好！我是一个由人工智能驱动的助手，设计用于帮助回答问题、提供信息以及协助完成各种任务。有什么我可以帮你的吗？"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"message"</span><span class="punctuation">:</span> <span class="string">"内容生成成功"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"time"</span><span class="punctuation">:</span> <span class="string">"1721808765"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>响应截图</li>
+</ul>
+<p>  <img src="/../img/api-1.jpg" alt="gpt4o"></p>
+<hr>
+<h3 id="测试用例二-transcribe"><a href="#测试用例二-transcribe" class="headerlink" title="测试用例二: /transcribe"></a>测试用例二: /transcribe</h3><ul>
+<li>测试数据</li>
+</ul>
+<p>  <img src="/../img/api-2-1.jpg" alt="音频文件截图"></p>
+<ul>
+<li>响应截图</li>
+</ul>
+<p>  <img src="/../img/api-2.jpg" alt="gpt4o"></p>
+<hr>
+<h3 id="测试用例三-transcribe"><a href="#测试用例三-transcribe" class="headerlink" title="测试用例三: /transcribe"></a>测试用例三: /transcribe</h3><ul>
+<li><p>测试数据</p>
+   <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"model"</span><span class="punctuation">:</span><span class="string">"tts-1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"voice"</span><span class="punctuation">:</span><span class="string">"echo"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span><span class="string">"今天中午吃什么?"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>响应截图</p>
+<p><img src="/../img/api-3.jpg" alt="gpt4o"></p>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>LLM</tag>
       </tags>
   </entry>
 </search>
