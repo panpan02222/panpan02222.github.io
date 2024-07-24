@@ -131,6 +131,29 @@
       </tags>
   </entry>
   <entry>
+    <title>配置 Anaconda3 的 conda 源</title>
+    <url>/2024/04/25/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
+    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
+
+<h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="修改hosts文件-etc-hosts"><a href="#修改hosts文件-etc-hosts" class="headerlink" title="修改hosts文件 /etc/hosts"></a>修改 hosts 文件 /etc/hosts</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为"><a href="#修改为" class="headerlink" title="修改为:"></a>修改为:</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line">101.6.15.130  mirrors.tuna.tsinghua.edu.cn</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="配置conda源为清华源"><a href="#配置conda源为清华源" class="headerlink" title="配置conda源为清华源"></a>配置 conda 源为清华源</h3><ol>
+<li>查看 conda 配置文件的位置：<code>whereis conda</code></li>
+<li>编辑配置文件：<code>vim /root/.condarc</code></li>
+<li>将配置文件中的内容替换为：<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/</span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行 <code>conda clean -i </code>清除索引缓存</li>
+<li>创建新环境 <code>conda create -n myenv python==3.10</code> 验证 conda 源是否配置成功</li>
+</ol>
+</b>]]></content>
+      <tags>
+        <tag>anaconda</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>llama2-13B 联通云 AI 算力平台训练任务测试</title>
     <url>/2024/04/25/20240425_llama2-13B%20%E8%81%94%E9%80%9A%E4%BA%91AI%E7%AE%97%E5%8A%9B%E5%B9%B3%E5%8F%B0%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1%E6%B5%8B%E8%AF%95/</url>
     <content><![CDATA[<p>基于联通云 AI 算力平台训练 llama2-13B 任务测试</p>
@@ -232,77 +255,6 @@
       </tags>
   </entry>
   <entry>
-    <title>配置 Anaconda3 的 conda 源</title>
-    <url>/2024/04/25/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
-    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
-
-<h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="修改hosts文件-etc-hosts"><a href="#修改hosts文件-etc-hosts" class="headerlink" title="修改hosts文件 /etc/hosts"></a>修改 hosts 文件 /etc/hosts</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<h4 id="修改为"><a href="#修改为" class="headerlink" title="修改为:"></a>修改为:</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line">101.6.15.130  mirrors.tuna.tsinghua.edu.cn</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="配置conda源为清华源"><a href="#配置conda源为清华源" class="headerlink" title="配置conda源为清华源"></a>配置 conda 源为清华源</h3><ol>
-<li>查看 conda 配置文件的位置：<code>whereis conda</code></li>
-<li>编辑配置文件：<code>vim /root/.condarc</code></li>
-<li>将配置文件中的内容替换为：<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/</span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行 <code>conda clean -i </code>清除索引缓存</li>
-<li>创建新环境 <code>conda create -n myenv python==3.10</code> 验证 conda 源是否配置成功</li>
-</ol>
-</b>]]></content>
-      <tags>
-        <tag>anaconda</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>配置 VNC 教程</title>
-    <url>/2024/07/17/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
-<p>VNC（Virtual Network Computing），为一种使用 RFB 协议的屏幕画面分享及远程操作软件。此软件借由网络，可发送键盘与鼠标的动作及即时的屏幕画面。</p>
-<p>VNC 与操作系统无关，因此可跨平台使用，例如可用 Windows 连线到某 Linux 的电脑，反之亦同。甚至在没有安装客户端程序的电脑中，只要有支持 JAVA 的浏览器，也可使用。</p>
-<span id="more"></span>
-
-<ol>
-<li><h2 id="两台-windows电脑内下载并安装"><a href="#两台-windows电脑内下载并安装" class="headerlink" title="两台 windows电脑内下载并安装"></a><strong>两台</strong> windows 电脑内下载并安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">TightVNC官网地址</span><br><span class="line">https://www.tightvnc.com/download.php</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-26-43-1718673923532.jpg" alt="" width="563" data-align="center">
-
-<hr>
-<ol start="2">
-<li><h2 id="TightVNC-服务端-被连接端-配置"><a href="#TightVNC-服务端-被连接端-配置" class="headerlink" title="TightVNC 服务端(被连接端) 配置"></a>TightVNC <strong>服务端</strong> (被连接端) 配置</h2><ul>
-<li><p>默认端口号 5900</p>
-</li>
-<li><p>注意自己设置连接密码</p>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-36-02-image.png" alt="" width="337" data-align="left">
-
-<p><strong>如果找不到配置界面，在任务栏右下角图标内右键 或点击 ‘开始菜单’-‘所有应用’-‘TightVNC’-‘Run TightVNC Service’</strong></p>
-<hr>
-</li>
-</ul>
-</li>
-<li><h2 id="TightVNC-客户端-连接端-配置"><a href="#TightVNC-客户端-连接端-配置" class="headerlink" title="TightVNC 客户端(连接端) 配置"></a>TightVNC <strong>客户端</strong> (连接端) 配置</h2><ul>
-<li>进入方式：开始菜单 - 所有应用 - TightVNC-TightVNC Viewer</li>
-</ul>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-48-42-image.png" alt="" width="341" data-align="left">
-
-<ul>
-<li><p> 输入服务器的 <strong>ip 地址</strong>和<strong>端口</strong> , 并连接</p>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-57-49-image.png" alt="" width="412"></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p> <a href="https://cloud.baidu.com/article/3002603">参考博客 - 1</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>服务器批量安装 Nvidia-Docker</title>
     <url>/2024/07/15/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/</url>
     <content><![CDATA[<p>多台服务器同时安装 Nvidia-docker</p>
@@ -354,6 +306,54 @@
 <pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
 </li>
 </ul>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置 VNC 教程</title>
+    <url>/2024/07/17/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
+<p>VNC（Virtual Network Computing），为一种使用 RFB 协议的屏幕画面分享及远程操作软件。此软件借由网络，可发送键盘与鼠标的动作及即时的屏幕画面。</p>
+<p>VNC 与操作系统无关，因此可跨平台使用，例如可用 Windows 连线到某 Linux 的电脑，反之亦同。甚至在没有安装客户端程序的电脑中，只要有支持 JAVA 的浏览器，也可使用。</p>
+<span id="more"></span>
+
+<ol>
+<li><h2 id="两台-windows电脑内下载并安装"><a href="#两台-windows电脑内下载并安装" class="headerlink" title="两台 windows电脑内下载并安装"></a><strong>两台</strong> windows 电脑内下载并安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">TightVNC官网地址</span><br><span class="line">https://www.tightvnc.com/download.php</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-26-43-1718673923532.jpg" alt="" width="563" data-align="center">
+
+<hr>
+<ol start="2">
+<li><h2 id="TightVNC-服务端-被连接端-配置"><a href="#TightVNC-服务端-被连接端-配置" class="headerlink" title="TightVNC 服务端(被连接端) 配置"></a>TightVNC <strong>服务端</strong> (被连接端) 配置</h2><ul>
+<li><p>默认端口号 5900</p>
+</li>
+<li><p>注意自己设置连接密码</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-36-02-image.png" alt="" width="337" data-align="left">
+
+<p><strong>如果找不到配置界面，在任务栏右下角图标内右键 或点击 ‘开始菜单’-‘所有应用’-‘TightVNC’-‘Run TightVNC Service’</strong></p>
+<hr>
+</li>
+</ul>
+</li>
+<li><h2 id="TightVNC-客户端-连接端-配置"><a href="#TightVNC-客户端-连接端-配置" class="headerlink" title="TightVNC 客户端(连接端) 配置"></a>TightVNC <strong>客户端</strong> (连接端) 配置</h2><ul>
+<li>进入方式：开始菜单 - 所有应用 - TightVNC-TightVNC Viewer</li>
+</ul>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-48-42-image.png" alt="" width="341" data-align="left">
+
+<ul>
+<li><p> 输入服务器的 <strong>ip 地址</strong>和<strong>端口</strong> , 并连接</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-57-49-image.png" alt="" width="412"></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p> <a href="https://cloud.baidu.com/article/3002603">参考博客 - 1</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
 </blockquote>
 ]]></content>
       <tags>
@@ -692,39 +692,6 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>搭建基于 Hexo 架构的个人博客</title>
-    <url>/2024/07/18/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
-<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
-<span id="more"></span>
-
-
-<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
-<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
-<ul>
-<li>升级 npm：<code>npm install -g npm</code></li>
-</ul>
-<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
-<ul>
-<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
-</ul>
-<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
-<li><p>检查 node.js 版本：</p>
-<p>  <code>node -v</code></p>
-</li>
-<li><p>检查 npm 版本：</p>
-<p>  <code>npm -v</code></p>
-</li>
-<li><p>检查 cnpm 版本：</p>
-<p>  <code>cnpm -v</code></p>
-</li>
-</ul>
-<div class="note warning"><p>这里是警告。</p></div>]]></content>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DB-GPT 源代码部署</title>
     <url>/2024/07/23/20240724_DB-GPT%E6%BA%90%E4%BB%A3%E7%A0%81%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<p>源代码部署 DB-GPT 操作流程，含测试，部署，注意事项等。</p>
@@ -824,6 +791,39 @@ python dbgpt/app/dbgpt_server.py
 ]]></content>
       <tags>
         <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建基于 Hexo 架构的个人博客</title>
+    <url>/2024/07/18/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
+<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
+<span id="more"></span>
+
+
+<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
+<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
+<ul>
+<li>升级 npm：<code>npm install -g npm</code></li>
+</ul>
+<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
+<ul>
+<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
+</ul>
+<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
+<li><p>检查 node.js 版本：</p>
+<p>  <code>node -v</code></p>
+</li>
+<li><p>检查 npm 版本：</p>
+<p>  <code>npm -v</code></p>
+</li>
+<li><p>检查 cnpm 版本：</p>
+<p>  <code>cnpm -v</code></p>
+</li>
+</ul>
+<div class="note warning"><p>这里是警告。</p></div>]]></content>
+      <tags>
+        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
@@ -1016,94 +1016,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>Jupyter Notebook 快捷指令</title>
-    <url>/2021/01/15/Jupyter%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
-    <content><![CDATA[<p>以下是 Jupyter Notebook 的一些常用快捷操作：</p>
-<span id="more"></span>
-
-
-<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><ul>
-<li><p>在 Jupyter Notebook 中按下 Esc 键即进入命令模式，此时单元格外侧边框变为蓝色。</p>
-<ul>
-<li>A：在当前单元格上方添加一个新单元格。</li>
-<li>B：在当前单元格下方添加一个新单元格。</li>
-<li>DD：删除当前单元格。</li>
-<li>M：将当前单元格切换为 Markdown 模式。</li>
-<li>Y：将当前单元格切换为代码模式。</li>
-<li>1 ~ 6：将当前 Markdown 单元格变为对应的标题（# ~ ######）。</li>
-<li>H：显示所有快捷键。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3><ul>
-<li><p>在 Jupyter Notebook 中按下 Enter 键，即进入编辑模式，此时单元格外侧边框变为绿色。</p>
-<ul>
-<li><p>Ctrl + Enter：运行当前单元格，并选中下面的单元格。若是最后一个单元格则不选中。</p>
-</li>
-<li><p>Shift + Enter：运行当前单元格，并选中下面的单元格。若是最后一个单元格，则新建一个单元格并选中该单元格。</p>
-</li>
-<li><p>Alt + Enter：运行当前单元格，并在下面插入一个新单元格，并选中该单元格。</p>
-</li>
-<li><p>Ctrl + /：注释或取消注释当前行或选中区域。</p>
-</li>
-<li><p>Shift + Tab：显示函数或类的参数和文档字符串。重复按下时，分别显示更多信息。</p>
-</li>
-<li><p>Ctrl + Shift + -：在光标所在行下方分割单元格。<br>Ctrl + Shift + +：在光标所在行上方分割单元格。</p>
-</li>
-</ul>
-</li>
-<li><p>以上仅是一些常用的快捷键，你也可以在 Jupyter Notebook 的 Help -&gt; Keyboard Shortcuts 中看到完整的快捷键列表，你也可以自定义快捷键的方式来使得自己更舒适使用。</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Jupyter Notebook</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>K8s 常用命令</title>
-    <url>/2024/07/17/Kubenets%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
-<span id="more"></span>
-
-
-<ul>
-<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
-  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看容器内日志</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看所有镜像</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>进入容器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除 pods</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>从 pod 中复制文件到本地服务器上</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看 pod 详细信息</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Linux 快捷指令</title>
     <url>/2024/07/17/Linux%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
     <content><![CDATA[<p>本人工作时常用到的一些 linux 快捷指令，希望对大家有所帮助。</p>
@@ -1198,6 +1110,66 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
+    <title>Hello World</title>
+    <url>/2024/07/15/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>K8s 常用命令</title>
+    <url>/2024/07/17/Kubenets%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
+<span id="more"></span>
+
+
+<ul>
+<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
+  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看容器内日志</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看所有镜像</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>进入容器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除 pods</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>从 pod 中复制文件到本地服务器上</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看 pod 详细信息</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Proxychains install</title>
     <url>/2024/07/17/Proxychains%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
@@ -1223,21 +1195,49 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>Hello World</title>
-    <url>/2024/07/15/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+    <title>Jupyter Notebook 快捷指令</title>
+    <url>/2021/01/15/Jupyter%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
+    <content><![CDATA[<p>以下是 Jupyter Notebook 的一些常用快捷操作：</p>
+<span id="more"></span>
 
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
 
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><ul>
+<li><p>在 Jupyter Notebook 中按下 Esc 键即进入命令模式，此时单元格外侧边框变为蓝色。</p>
+<ul>
+<li>A：在当前单元格上方添加一个新单元格。</li>
+<li>B：在当前单元格下方添加一个新单元格。</li>
+<li>DD：删除当前单元格。</li>
+<li>M：将当前单元格切换为 Markdown 模式。</li>
+<li>Y：将当前单元格切换为代码模式。</li>
+<li>1 ~ 6：将当前 Markdown 单元格变为对应的标题（# ~ ######）。</li>
+<li>H：显示所有快捷键。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3><ul>
+<li><p>在 Jupyter Notebook 中按下 Enter 键，即进入编辑模式，此时单元格外侧边框变为绿色。</p>
+<ul>
+<li><p>Ctrl + Enter：运行当前单元格，并选中下面的单元格。若是最后一个单元格则不选中。</p>
+</li>
+<li><p>Shift + Enter：运行当前单元格，并选中下面的单元格。若是最后一个单元格，则新建一个单元格并选中该单元格。</p>
+</li>
+<li><p>Alt + Enter：运行当前单元格，并在下面插入一个新单元格，并选中该单元格。</p>
+</li>
+<li><p>Ctrl + /：注释或取消注释当前行或选中区域。</p>
+</li>
+<li><p>Shift + Tab：显示函数或类的参数和文档字符串。重复按下时，分别显示更多信息。</p>
+</li>
+<li><p>Ctrl + Shift + -：在光标所在行下方分割单元格。<br>Ctrl + Shift + +：在光标所在行上方分割单元格。</p>
+</li>
+</ul>
+</li>
+<li><p>以上仅是一些常用的快捷键，你也可以在 Jupyter Notebook 的 Help -&gt; Keyboard Shortcuts 中看到完整的快捷键列表，你也可以自定义快捷键的方式来使得自己更舒适使用。</p>
+</li>
+</ul>
 ]]></content>
+      <tags>
+        <tag>Jupyter Notebook</tag>
+      </tags>
   </entry>
 </search>
