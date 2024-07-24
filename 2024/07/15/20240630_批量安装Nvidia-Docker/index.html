@@ -21,29 +21,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="服务器免密配置教程 - 2 [!NOTE] 该手册一共 2 个版本，此文档为第二版。  1. 准备 ip 文件 创建 ip.txt vim ip.txt  将需要免密的机器 ip 写入   2. 创建脚本 + 运行脚本 vim set_key.sh  123456789101112131415#!&#x2F;bin&#x2F;bash# 检查是否已经生成了SSH密钥对if [ ! -f ~&#x2F;.ssh&#x2F;id_rsa.p">
+    <meta name="description" content="多台服务器同时安装 Nvidia-docker">
 <meta property="og:type" content="article">
-<meta property="og:title" content="服务器免密配置教程 - 2">
-<meta property="og:url" content="http://example.com/2024/07/15/2.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/index.html">
+<meta property="og:title" content="服务器批量安装 Nvidia-Docker">
+<meta property="og:url" content="http://example.com/2024/07/15/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/index.html">
 <meta property="og:site_name" content="潘秉宏的博客">
-<meta property="og:description" content="服务器免密配置教程 - 2 [!NOTE] 该手册一共 2 个版本，此文档为第二版。  1. 准备 ip 文件 创建 ip.txt vim ip.txt  将需要免密的机器 ip 写入   2. 创建脚本 + 运行脚本 vim set_key.sh  123456789101112131415#!&#x2F;bin&#x2F;bash# 检查是否已经生成了SSH密钥对if [ ! -f ~&#x2F;.ssh&#x2F;id_rsa.p">
+<meta property="og:description" content="多台服务器同时安装 Nvidia-docker">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png">
 <meta property="article:published_time" content="2024-07-15T08:22:16.000Z">
-<meta property="article:modified_time" content="2024-07-24T00:52:23.521Z">
+<meta property="article:modified_time" content="2024-07-24T03:22:17.600Z">
 <meta property="article:author" content="潘秉宏">
+<meta property="article:tag" content="Ops">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png">
 
 
-<link rel="canonical" href="http://example.com/2024/07/15/2.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/">
+<link rel="canonical" href="http://example.com/2024/07/15/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/07/15/2.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/","path":"2024/07/15/2.服务器免密配置教程-2/","title":"服务器免密配置教程 - 2"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/07/15/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/","path":"2024/07/15/20240630_批量安装Nvidia-Docker/","title":"服务器批量安装 Nvidia-Docker"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>服务器免密配置教程 - 2 | 潘秉宏的博客</title>
+<title>服务器批量安装 Nvidia-Docker | 潘秉宏的博客</title>
   
 
 
@@ -141,7 +140,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2"><span class="nav-number">1.</span> <span class="nav-text">服务器免密配置教程 - 2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%87%86%E5%A4%87ip%E6%96%87%E4%BB%B6"><span class="nav-number">1.1.</span> <span class="nav-text">1. 准备 ip 文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%88%9B%E5%BB%BA%E8%84%9A%E6%9C%AC-%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="nav-number">1.2.</span> <span class="nav-text">2. 创建脚本 + 运行脚本</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8D%95%E6%9C%BA%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4"><span class="nav-number">1.</span> <span class="nav-text">1. 单机安装命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"><span class="nav-number">2.</span> <span class="nav-text">2. 批量安装脚本</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -158,13 +157,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">20</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">7</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -203,7 +202,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/15/2.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/15/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -216,12 +215,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="服务器免密配置教程 - 2 | 潘秉宏的博客">
+      <meta itemprop="name" content="服务器批量安装 Nvidia-Docker | 潘秉宏的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          服务器免密配置教程 - 2
+          服务器批量安装 Nvidia-Docker
         </h1>
 
         <div class="post-meta-container">
@@ -239,7 +238,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-07-24 08:52:23" itemprop="dateModified" datetime="2024-07-24T08:52:23+08:00">2024-07-24</time>
+      <time title="修改时间：2024-07-24 11:22:17" itemprop="dateModified" datetime="2024-07-24T11:22:17+08:00">2024-07-24</time>
     </span>
 
   
@@ -256,14 +255,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>220</span>
+      <span>632</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -273,25 +272,30 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><h1 id="服务器免密配置教程-2"><a href="#服务器免密配置教程-2" class="headerlink" title="服务器免密配置教程-2"></a>服务器免密配置教程 - 2</h1><blockquote>
-<p>[!NOTE]</p>
-<p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
-</blockquote>
-<h2 id="1-准备ip文件"><a href="#1-准备ip文件" class="headerlink" title="1. 准备ip文件"></a>1. 准备 ip 文件</h2><ul>
-<li><p>创建 ip.txt <code>vim ip.txt</code></p>
-</li>
-<li><p>将需要免密的机器 <code>ip</code> 写入</p>
-<img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738" style="zoom:50%;"></li>
-</ul>
-<h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
-<li><code>vim set_key.sh</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否已经生成了SSH密钥对</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f ~/.ssh/id_rsa.pub ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Generating SSH key pair..."</span></span><br><span class="line">  ssh-keygen -t rsa -N <span class="string">""</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公钥复制到每台目标机器</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> -r ip; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Configuring SSH key authentication for <span class="variable">$ip</span>..."</span></span><br><span class="line">  ssh-copy-id root@<span class="variable">$ip</span></span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"><span class="built_in">echo</span> </span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+    <div class="post-body" itemprop="articleBody"><p>多台服务器同时安装 Nvidia-docker</p>
+<span id="more"></span>
+<h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
 
 <ul>
-<li><p><code>chmod +x set_key.sh</code></p>
+<li>将以上保存到一个文件中，命名 <code>installNGC</code></li>
+</ul>
+<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>这条命令是在 Linux 系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
+<ul>
+<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号 (SIGHUP)，这意味着即使用户退出当前终端会话，由 <code>nohup</code> 启动的进程仍然会继续运行。</p>
 </li>
-<li><p><code>./set_key.sh</code></p>
+<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code> 脚本或程序将会被运行，它位于 <code>/mnt/hcufs/tools</code> 目录下。</p>
+</li>
+<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到 <code>/dev/null</code> 设备文件。<code>/dev/null</code> 是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让 <code>installNGC</code> 程序的输出显示在终端上。</p>
+</li>
+<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果 <code>installNGC</code> 程序产生任何错误输出，也将被重定向到 <code>/dev/null</code>，同样不会在终端上显示。</p>
+</li>
+<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的 shell 提示符，而不需要等待 <code>installNGC</code> 完成执行。</p>
+</li>
+</ul>
+<p>综上所述，这条命令的意思是：在后台运行 <code>/mnt/hcufs/tools/installNGC</code> 程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
 </li>
 </ul>
 <hr>
@@ -344,18 +348,21 @@
   </div>
 </div>
 
+          <div class="post-tags">
+              <a href="/tags/Ops/" rel="tag"># Ops</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/07/15/4.%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/" rel="prev" title="服务器挂载外部存储卷">
-                  <i class="fa fa-angle-left"></i> 服务器挂载外部存储卷
+                <a href="/2024/07/15/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/" rel="prev" title="服务器配置永久修改 DNS">
+                  <i class="fa fa-angle-left"></i> 服务器配置永久修改 DNS
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2024/07/15/3.%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/" rel="next" title="多机配置 hosts 及 hostname">
-                  多机配置 hosts 及 hostname <i class="fa fa-angle-right"></i>
+                <a href="/2024/07/17/Proxychains%E5%AE%89%E8%A3%85/" rel="next" title="proxychains install">
+                  proxychains install <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
@@ -387,13 +394,13 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-chart-line"></i>
     </span>
-    <span title="站点总字数">5k</span>
+    <span title="站点总字数">6k</span>
   </span>
   <span class="post-meta-item">
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">19 分钟</span>
+    <span title="站点阅读时长">23 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">

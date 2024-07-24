@@ -1,9 +1,233 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>局域网远程桌面</title>
+    <url>/2021/01/14/20210114_%E5%B1%80%E5%9F%9F%E7%BD%91%E9%93%BE%E6%8E%A5/</url>
+    <content><![CDATA[<p>内网远程桌面连接方法</p>
+<span id="more"></span>
+
+
+<h4 id="依次执行以下命令："><a href="#依次执行以下命令：" class="headerlink" title="依次执行以下命令："></a>依次执行以下命令：</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">win+r</span><br><span class="line"></span><br><span class="line">mstsc</span><br><span class="line"></span><br><span class="line"><span class="comment">#输入需要链接的主机ip</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查询win+r--&gt;"cmd"--&gt;"ipconfig"</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>]]></content>
+      <tags>
+        <tag>work</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>llama2-13B 联通云 AI 算力平台训练任务测试</title>
+    <url>/2024/04/25/20240425_llama2-13B%20%E8%81%94%E9%80%9A%E4%BA%91AI%E7%AE%97%E5%8A%9B%E5%B9%B3%E5%8F%B0%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1%E6%B5%8B%E8%AF%95/</url>
+    <content><![CDATA[<p>基于联通云 AI 算力平台训练 llama2-13B 任务测试</p>
+<!---more-->
+
+<h2 id="一、准备环境"><a href="#一、准备环境" class="headerlink" title="一、准备环境"></a>一、准备环境</h2><h4 id="创建notebook"><a href="#创建notebook" class="headerlink" title="创建notebook"></a>创建 notebook</h4><p><del>在创建 notebook 选项中，根据如下进行选择</del></p>
+<p><del>付费类型：按量计费</del></p>
+<p><del>名称：llama2</del></p>
+<p><del>云区域：上海二十二区</del></p>
+<p><del>算力规格：184C1504G，8*910B_liquid</del></p>
+<p><del>镜像：公共镜像 jupyter:pytorch2.1.0-cann7</del></p>
+<p><del>存储卷：AI 原生存储</del></p>
+<p><del>确认配置后点击创建，一段时间后创建完成，点击打开</del></p>
+<hr>
+<h4 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h4><ul>
+<li><p>打开 terminal，默认在 base 环境下，在当前用户根目录下下载代码与权重与数据集</p>
+<p>  <code>git clone https://gitee.com/ascend/ModelLink.git</code></p>
+<p>  <code>git clone https://gitee.com/ascend/AscendSpeed.git</code></p>
+<p>  <code>git clone --depth 1 https://gitee.com/ascend/DeepSpeed.git -b v0.9.2</code></p>
+<blockquote>
+<p>注：下载权重时若文件过大，git 的时候需要使用 git-lfs，安装命令如下</p>
+<p>wget <a href="https://github.com/git-lfs/git-lfs/releases/download/v3.1.2/git-lfs-linux-arm64-v3.1.2.tar.gz">https://github.com/git-lfs/git-lfs/releases/download/v3.1.2/git-lfs-linux-arm64-v3.1.2.tar.gz</a><br><code>tar -xvf git-lfs-linux-arm64-v3.1.2.tar.gz</code></p>
+<p><code>sudo ./install.sh</code></p>
+<p><code>git lfs install</code></p>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h4 id="安装依赖-1"><a href="#安装依赖-1" class="headerlink" title="安装依赖"></a>安装依赖</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd AscendSpeed`</span><br><span class="line"></span><br><span class="line">pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br><span class="line"></span><br><span class="line">cd ..</span><br><span class="line"></span><br><span class="line">cd ModelLink</span><br><span class="line"></span><br><span class="line">pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h4 id="创建conda环境"><a href="#创建conda环境" class="headerlink" title="创建conda环境"></a>创建 conda 环境</h4><ul>
+<li><p>将 base 环境拷贝成新的 conda 环境</p>
+<p>  <code>conda create -n test1 --clone base</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="打包新环境"><a href="#打包新环境" class="headerlink" title="打包新环境"></a>打包新环境</h4><ul>
+<li><p>进入新环境</p>
+<p>  <code>conda deactivate</code></p>
+<p>  <code>conda activate test</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="安装conda-pack"><a href="#安装conda-pack" class="headerlink" title="安装conda-pack"></a>安装 conda-pack</h4><pre><code>`pip install conda-pack -i https://pypi.tuna.tsinghua.edu.cn/simple`
+</code></pre>
+<hr>
+<h4 id="打包新环境至文件夹"><a href="#打包新环境至文件夹" class="headerlink" title="打包新环境至文件夹"></a>打包新环境至文件夹</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">conda pack -n <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">mkdir</span> <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line">tar -zxf test.tar.gz -C <span class="built_in">test</span>/</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h4 id="返回base环境，安装依赖"><a href="#返回base环境，安装依赖" class="headerlink" title="返回base环境，安装依赖"></a>返回 base 环境，安装依赖</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> <span class="built_in">test</span>/bin/deactivate</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> DeepSpeed</span><br><span class="line"></span><br><span class="line">pip install -e .</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> ..</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> AscendSpeed</span><br><span class="line"></span><br><span class="line">pip install -e .</span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> ..</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h4 id="处理数据集"><a href="#处理数据集" class="headerlink" title="处理数据集"></a>处理数据集</h4><pre><code>`cd ModelLink`
+
+`vim dataset.sh`
+</code></pre>
+<ul>
+<li>添加如下内容 </li>
+</ul>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">python ./tools/preprocess_data.py \</span><br><span class="line">       --input ./data/train-00000-of-00001-a09b74b3ef9c3b56.parquet \</span><br><span class="line">       --tokenizer-name-or-path ../Llama-2-13b-chat-ms \</span><br><span class="line">       --output-prefix ./dataset/alpaca \</span><br><span class="line">       --workers 4 \</span><br><span class="line">       --log-interval 1000 \</span><br><span class="line">       --tokenizer-type PretrainedFromHF</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>进行数据处理</p>
+<p>  <code>bash dataset.sh</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="创建训练脚本"><a href="#创建训练脚本" class="headerlink" title="创建训练脚本"></a>创建训练脚本</h4><p><code>vim examples/llama2/pretrain_llama2_13B_ptd_8p_2.sh</code></p>
+<ul>
+<li>添加如下内容 </li>
+</ul>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">!/bin/bash</span></span><br><span class="line"></span><br><span class="line">export CUDA_DEVICE_MAX_CONNECTIONS=1</span><br><span class="line">export NPU_ASD_ENABLE=0</span><br><span class="line"></span><br><span class="line">GPUS_PER_NODE=8</span><br><span class="line">MASTER_ADDR=$MASTER_ADDR</span><br><span class="line">MASTER_PORT=$MASTER_PORT</span><br><span class="line">NODE_RANK=$RANK</span><br><span class="line">WORLD_SIZE=$WORLD_SIZE</span><br><span class="line">NNODES=2</span><br><span class="line"></span><br><span class="line">CKPT_SAVE_DIR=/home/aifs/ModelLink/output/ckpt</span><br><span class="line">DATA_PATH=/home/aifs/ModelLink/dataset/alpaca_text_document</span><br><span class="line">TOKENIZER_MODEL=/home/aifs/Llama-2-13b-chat-ms/tokenizer.model</span><br><span class="line">TP=8</span><br><span class="line">PP=1</span><br><span class="line"></span><br><span class="line">DISTRIBUTED_ARGS="</span><br><span class="line">    --nproc_per_node $GPUS_PER_NODE \</span><br><span class="line">    --nnodes $NNODES \</span><br><span class="line">    --node_rank $NODE_RANK \</span><br><span class="line">    --master_addr $MASTER_ADDR \</span><br><span class="line">    --master_port $MASTER_PORT</span><br><span class="line">"</span><br><span class="line"></span><br><span class="line">GPT_ARGS="</span><br><span class="line">    --tensor-model-parallel-size ${TP} \</span><br><span class="line">    --pipeline-model-parallel-size ${PP} \</span><br><span class="line">    --sequence-parallel \</span><br><span class="line">    --num-layers 40 \</span><br><span class="line">    --hidden-size 5120 \</span><br><span class="line">    --ffn-hidden-size 13824 \</span><br><span class="line">    --num-attention-heads 40 \</span><br><span class="line">    --tokenizer-type Llama2Tokenizer \</span><br><span class="line">    --tokenizer-model ${TOKENIZER_MODEL} \</span><br><span class="line">    --seq-length 4096 \</span><br><span class="line">    --max-position-embeddings 4096 \</span><br><span class="line">    --micro-batch-size 2 \</span><br><span class="line">    --global-batch-size 16 \</span><br><span class="line">    --make-vocab-size-divisible-by 1 \</span><br><span class="line">    --lr 1e-6 \</span><br><span class="line">    --train-iters 5000 \</span><br><span class="line">    --lr-decay-style cosine \</span><br><span class="line">    --untie-embeddings-and-output-weights \</span><br><span class="line">    --disable-bias-linear \</span><br><span class="line">    --attention-dropout 0.0 \</span><br><span class="line">    --init-method-std 0.01 \</span><br><span class="line">    --hidden-dropout 0.0 \</span><br><span class="line">    --position-embedding-type rope \</span><br><span class="line">    --normalization RMSNorm \</span><br><span class="line">    --use-fused-rmsnorm \</span><br><span class="line">    --swiglu \</span><br><span class="line">    --use-flash-attn \</span><br><span class="line">    --no-masked-softmax-fusion \</span><br><span class="line">    --attention-softmax-in-fp32 \</span><br><span class="line">    --min-lr 1e-8 \</span><br><span class="line">    --weight-decay 1e-1 \</span><br><span class="line">    --lr-warmup-fraction 0.01 \</span><br><span class="line">    --clip-grad 1.0 \</span><br><span class="line">    --adam-beta1 0.9 \</span><br><span class="line">    --initial-loss-scale 4096 \</span><br><span class="line">    --adam-beta2 0.95 \</span><br><span class="line">    --no-gradient-accumulation-fusion \</span><br><span class="line">    --no-load-optim \</span><br><span class="line">    --no-load-rng \</span><br><span class="line">    --bf16</span><br><span class="line">"</span><br><span class="line"></span><br><span class="line">DATA_ARGS="</span><br><span class="line">    --data-path $DATA_PATH \</span><br><span class="line">    --split 949,50,1</span><br><span class="line">"</span><br><span class="line"></span><br><span class="line">OUTPUT_ARGS="</span><br><span class="line">    --log-interval 1 \</span><br><span class="line">    --save-interval 10000 \</span><br><span class="line">    --eval-interval 1000 \</span><br><span class="line">    --eval-iters 10 \</span><br><span class="line">"</span><br><span class="line"></span><br><span class="line">python -m torch.distributed.launch $DISTRIBUTED_ARGS pretrain_gpt.py \</span><br><span class="line">    $GPT_ARGS \</span><br><span class="line">    $DATA_ARGS \</span><br><span class="line">    $OUTPUT_ARGS \</span><br><span class="line">    --distributed-backend nccl \</span><br><span class="line">    --save $CKPT_SAVE_DIR \</span><br><span class="line">    | tee logs/train_llama2_13b.log</span><br></pre></td></tr></tbody></table></figure>
+
+<pre><code>`vim train_1.sh`
+</code></pre>
+<ul>
+<li>添加如下内容 </li>
+</ul>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">export CRYPTOGRAPHY_OPENSSL_NO_LEGACY=1</span><br><span class="line">export ASCEND_LAUNCH_BLOCKING=1</span><br><span class="line">bash examples/llama2/pretrain_llama2_13B_ptd_8p_2.sh</span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<h2 id="二、创建训练任务"><a href="#二、创建训练任务" class="headerlink" title="二、创建训练任务"></a>二、创建训练任务</h2><p><del>在提交任务中，根据如下进行选择</del></p>
+<p><del>任务名称：test</del></p>
+<p><del>训练环境：预置镜像 PyTorch2.1.0 pytorch2.1.0-cann7</del></p>
+<p><del>存储挂载：AI 原生存储</del></p>
+<p><del>云区域：上海二十二区</del></p>
+<p><del>存储路径：AI_product</del></p>
+<p><del>启动命令：</del></p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">source /home/aifs/test1/bin/activate &amp;&amp; source /usr/local/Ascend/ascend-toolkit/set_env.sh &amp;&amp; cd /home/aifs/DeepSpeed &amp;&amp; pip install -e . &amp;&amp; cd /home/aifs/AscendSpeed &amp;&amp; pip install -e . &amp;&amp; cd .. &amp;&amp; cd ModelLink &amp;&amp; bash train_1.sh</span><br></pre></td></tr></tbody></table></figure>
+
+<p><del>算力池：公共算力池</del></p>
+<p><del>付费类型：按量计费</del></p>
+<p><del>算力规格：184C1504G，8*910B_liquid</del></p>
+<p><del>节点数量：2</del></p>
+<p><del>确认配置后点击提交，一段时间后创建完成</del></p>
+]]></content>
+      <tags>
+        <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置 Anaconda3 的 conda 源</title>
+    <url>/2024/04/25/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
+    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
+
+<h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="修改hosts文件-etc-hosts"><a href="#修改hosts文件-etc-hosts" class="headerlink" title="修改hosts文件 /etc/hosts"></a>修改 hosts 文件 /etc/hosts</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为"><a href="#修改为" class="headerlink" title="修改为:"></a>修改为:</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line">101.6.15.130  mirrors.tuna.tsinghua.edu.cn</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="配置conda源为清华源"><a href="#配置conda源为清华源" class="headerlink" title="配置conda源为清华源"></a>配置 conda 源为清华源</h3><ol>
+<li>查看 conda 配置文件的位置：<code>whereis conda</code></li>
+<li>编辑配置文件：<code>vim /root/.condarc</code></li>
+<li>将配置文件中的内容替换为：<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/</span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行 <code>conda clean -i </code>清除索引缓存</li>
+<li>创建新环境 <code>conda create -n myenv python==3.10</code> 验证 conda 源是否配置成功</li>
+</ol>
+</b>]]></content>
+      <tags>
+        <tag>anaconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器批量安装 Nvidia-Docker</title>
+    <url>/2024/07/15/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/</url>
+    <content><![CDATA[<p>多台服务器同时安装 Nvidia-docker</p>
+<span id="more"></span>
+<h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>将以上保存到一个文件中，命名 <code>installNGC</code></li>
+</ul>
+<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>这条命令是在 Linux 系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
+<ul>
+<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号 (SIGHUP)，这意味着即使用户退出当前终端会话，由 <code>nohup</code> 启动的进程仍然会继续运行。</p>
+</li>
+<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code> 脚本或程序将会被运行，它位于 <code>/mnt/hcufs/tools</code> 目录下。</p>
+</li>
+<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到 <code>/dev/null</code> 设备文件。<code>/dev/null</code> 是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让 <code>installNGC</code> 程序的输出显示在终端上。</p>
+</li>
+<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果 <code>installNGC</code> 程序产生任何错误输出，也将被重定向到 <code>/dev/null</code>，同样不会在终端上显示。</p>
+</li>
+<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的 shell 提示符，而不需要等待 <code>installNGC</code> 完成执行。</p>
+</li>
+</ul>
+<p>综上所述，这条命令的意思是：在后台运行 <code>/mnt/hcufs/tools/installNGC</code> 程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器配置永久修改 DNS</title>
+    <url>/2024/07/15/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
+    <content><![CDATA[<p>服务器内配置 DNS</p>
+<span id="more"></span>
+
+<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
+<ol start="2">
+<li><pre><code class="tex">DNS=114.114.114.114 8.8.8.8 8.8.4.4
+FallbackDNs=8.8.8.8
+Domains=domain.com
+</code></pre>
+</li>
+<li><pre><code class="bash">sudo systemctl restart systemd-resolved
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
+</code></pre>
+</li>
+<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
+</code></pre>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>服务器免密配置教程 - 1</title>
-    <url>/2024/07/15/1.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
-    <content><![CDATA[<blockquote>
+    <url>/2024/07/15/20240701_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
+    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
+<p><img src="/../img/image-20240710103927738.png" alt="show ip"></p>
+<span id="more"></span>
+
+<blockquote>
 <p>[!NOTE]</p>
 <p>该手册一共 2 个版本，此文档为第一版。</p>
 </blockquote>
@@ -96,42 +320,13 @@
       </tags>
   </entry>
   <entry>
-    <title>多机配置 hosts 及 hostname</title>
-    <url>/2024/07/15/3.%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
-    <content><![CDATA[<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
-<li>把 <code>ip</code> 复制到文本内</li>
-</ul>
-<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-  </entry>
-  <entry>
     <title>服务器免密配置教程 - 2</title>
-    <url>/2024/07/15/2.%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
-    <content><![CDATA[<h1 id="服务器免密配置教程-2"><a href="#服务器免密配置教程-2" class="headerlink" title="服务器免密配置教程-2"></a>服务器免密配置教程 - 2</h1><blockquote>
+    <url>/2024/07/15/20240709_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
+    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
+<span id="more"></span>
+
+
+<blockquote>
 <p>[!NOTE]</p>
 <p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
 </blockquote>
@@ -139,7 +334,7 @@
 <li><p>创建 ip.txt <code>vim ip.txt</code></p>
 </li>
 <li><p>将需要免密的机器 <code>ip</code> 写入</p>
-<img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738" style="zoom:50%;"></li>
+</li>
 </ul>
 <h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
 <li><code>vim set_key.sh</code></li>
@@ -177,58 +372,18 @@
 </ul>
 </blockquote>
 ]]></content>
-  </entry>
-  <entry>
-    <title>服务器挂载外部存储卷</title>
-    <url>/2024/07/15/4.%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
-    <content><![CDATA[<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
-<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
-</li>
-<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
-</li>
-<li><p>批量发送脚本为:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
-<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
-</li>
-<li><p>批量挂脚本：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
   </entry>
   <entry>
     <title>批量加载 docker 镜像 &amp; 镜像重命名</title>
-    <url>/2024/07/15/5.%E6%89%B9%E9%87%8F%E5%8A%A0%E8%BD%BDdocker%E9%95%9C%E5%83%8F&amp;%E9%95%9C%E5%83%8F%E9%87%8D%E5%91%BD%E5%90%8D/</url>
-    <content><![CDATA[<h1 id="批量加载docker镜像"><a href="#批量加载docker镜像" class="headerlink" title="批量加载docker镜像"></a>批量加载 docker 镜像</h1><h2 id="1-加载镜像"><a href="#1-加载镜像" class="headerlink" title="1. 加载镜像"></a>1. 加载镜像</h2><ul>
+    <url>/2024/07/15/20240711_%E6%89%B9%E9%87%8F%E5%8A%A0%E8%BD%BDdocker%E9%95%9C%E5%83%8F&amp;%E9%95%9C%E5%83%8F%E9%87%8D%E5%91%BD%E5%90%8D/</url>
+    <content><![CDATA[<p>多台服务器同时批量加载 docker 镜像 + 重命名，并创建容器。</p>
+<span id="more"></span>
+
+
+<h2 id="1-加载镜像"><a href="#1-加载镜像" class="headerlink" title="1. 加载镜像"></a>1. 加载镜像</h2><ul>
 <li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
 </li>
 <li><p>单机执行命令：<code>docker load -i /mnt/hcufs/pytorch.tar</code></p>
@@ -274,33 +429,33 @@
 </ul>
 </blockquote>
 ]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
   </entry>
   <entry>
-    <title>服务器批量安装 Nvidia-Docker</title>
-    <url>/2024/07/15/6.%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/</url>
-    <content><![CDATA[<h1 id="安装Nvidia-docker"><a href="#安装Nvidia-docker" class="headerlink" title="安装Nvidia-docker"></a>安装 Nvidia-docker</h1><h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
+    <title>服务器挂载外部存储卷</title>
+    <url>/2024/07/15/20240712_%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
+    <content><![CDATA[<p>多服务器之间共享文件，需要挂载外部存储卷。从保存数据的服务器上，将共享目录挂载到其他服务器上。</p>
+<!---more-->
 
-<ul>
-<li>将以上保存到一个文件中，命名 <code>installNGC</code></li>
+<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
+<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
+</li>
+<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
+</li>
+<li><p>批量发送脚本为:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
-<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
 
-<ul>
-<li><p>这条命令是在 Linux 系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
-<ul>
-<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号 (SIGHUP)，这意味着即使用户退出当前终端会话，由 <code>nohup</code> 启动的进程仍然会继续运行。</p>
+
+
+<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
+<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
 </li>
-<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code> 脚本或程序将会被运行，它位于 <code>/mnt/hcufs/tools</code> 目录下。</p>
-</li>
-<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到 <code>/dev/null</code> 设备文件。<code>/dev/null</code> 是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让 <code>installNGC</code> 程序的输出显示在终端上。</p>
-</li>
-<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果 <code>installNGC</code> 程序产生任何错误输出，也将被重定向到 <code>/dev/null</code>，同样不会在终端上显示。</p>
-</li>
-<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的 shell 提示符，而不需要等待 <code>installNGC</code> 完成执行。</p>
-</li>
-</ul>
-<p>综上所述，这条命令的意思是：在后台运行 <code>/mnt/hcufs/tools/installNGC</code> 程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
-</li>
+<li><p>批量挂脚本：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
 <hr>
 <blockquote>
@@ -327,124 +482,52 @@
 </ul>
 </blockquote>
 ]]></content>
-  </entry>
-  <entry>
-    <title>本人工作中常用的 docker 命令</title>
-    <url>/2021/01/11/Docker%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>常用的 docker 命令</p>
-<p><img src="/../img/docker.png" alt="docker"></p>
-<span id="more"></span>
-
-<ul>
-<li><p>加载镜像</p>
- <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker load 压缩包.</span><br><span class="line">docker load -i 压缩包 -t 镜像名称:版本号v1</span><br></pre></td></tr></tbody></table></figure>
-
-
-</li>
-<li><p>查看所有镜像</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></tbody></table></figure>
-
-
-</li>
-<li><p>启动容器</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -d --name=<span class="string">"容器名称"</span> --p</span><br><span class="line">-i:以交互模型运行容器，通常与-t同时使用;</span><br><span class="line">-d:后台运行容器，并返回容器ID</span><br><span class="line">--name=<span class="string">"容器名称"</span></span><br><span class="line">--runtime=nvidia -e NVIDIA_VISIBLE_DEVICE=1 :指定启动显卡号</span><br><span class="line">--p:指定端口映射，主机（宿主）端口：容器端口</span><br><span class="line"></span><br><span class="line">[<span class="built_in">sudo</span> docker run -it 镜像名称 /bin/bash]</span><br></pre></td></tr></tbody></table></figure>
-
-   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># example </span></span><br><span class="line">docker run -it -d -p 10016:9147 --name 容器名称 --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=3 镜像名称 bash</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-</li>
-<li><p>查看所有容器</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-</li>
-<li><p>启动容器</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker start</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-</li>
-<li><p>进入容器</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it 容器名称 bash</span><br></pre></td></tr></tbody></table></figure>
-
-
-</li>
-<li><p>退出容器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>停止容器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker stop 容器名称</span><br></pre></td></tr></tbody></table></figure>
-
-
-</li>
-<li><p>删除容器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> 容器名称</span><br></pre></td></tr></tbody></table></figure>
-
-
-</li>
-<li><p>在容器内新增文件，并创建新的镜像</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">cp</span> 本地路径/文件名称 容器名称：容器内路径</span><br><span class="line"><span class="built_in">exit</span>    <span class="comment">#退出容器</span></span><br><span class="line">docker   commit -m=<span class="string">"描述信息"</span> -a=<span class="string">"作者"</span> 容器<span class="built_in">id</span> 目标镜像名： [TAG]</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看容器信息</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker inspect 容器ID</span><br></pre></td></tr></tbody></table></figure>
-
-
-</li>
-<li><p>删除镜像 #必须删除容器再删除镜像</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker rmi 镜像ID（前三位）</span><br></pre></td></tr></tbody></table></figure>
-
-
-</li>
-<li><p>下载镜像到本地</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker save 镜像ID：版本 -o 路径/保存的镜像名称.tar</span><br></pre></td></tr></tbody></table></figure>
-
-
-</li>
-<li><p>改镜像名字</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker tag 旧名字 新名字</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>改容器名词</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker rename 旧名字 新名字</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<p>删除 conda 环境<br>conda remove -n 环境名 –all</p>
-<p>安装低版本 pip install setuptools==56.1.0</p>
-<ul>
-<li>查看环境<br>conda env list</li>
-</ul>
-<p>在 OSX/Linux 上使用 source activate my_env 进入环境<br>source activate 环境名称</p>
-<p>之后操作文件即可</p>
-]]></content>
       <tags>
-        <tag>docker</tag>
+        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
-    <title>服务器配置永久修改 DNS</title>
-    <url>/2024/07/15/7.%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
-    <content><![CDATA[<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
-<ol start="2">
-<li><pre><code class="tex">DNS=114.114.114.114 8.8.8.8 8.8.4.4
-FallbackDNs=8.8.8.8
-Domains=domain.com
-</code></pre>
+    <title>多机配置 hosts 及 hostname</title>
+    <url>/2024/07/15/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
+    <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
+<span id="more"></span>
+
+<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
+<li>把 <code>ip</code> 复制到文本内</li>
+</ul>
+<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
 </li>
-<li><pre><code class="bash">sudo systemctl restart systemd-resolved
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
-</code></pre>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
 </li>
-<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
-</code></pre>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
 </li>
-</ol>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
 ]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
   </entry>
   <entry>
     <title>DB-GPT 源代码部署</title>
-    <url>/2024/07/23/DB-GPT%E6%BA%90%E4%BB%A3%E7%A0%81%E9%83%A8%E7%BD%B2/</url>
+    <url>/2024/07/23/20240724_DB-GPT%E6%BA%90%E4%BB%A3%E7%A0%81%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<p>源代码部署 DB-GPT 操作流程，含测试，部署，注意事项等。</p>
 <p><img src="/../img/dbgpt.png" alt="dbgpt"></p>
 <span id="more"></span>
@@ -543,45 +626,36 @@ DEEPSEEK_API_KEY=api_key
       </tags>
   </entry>
   <entry>
-    <title>K8s 常用命令</title>
-    <url>/2024/07/17/Kubenets%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
+    <title>搭建基于 Hexo 架构的个人博客</title>
+    <url>/2024/07/18/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
+<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
 <span id="more"></span>
 
 
+<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
+<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
 <ul>
-<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
-  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看容器内日志</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看所有镜像</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>进入容器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除 pods</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>从 pod 中复制文件到本地服务器上</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看 pod 详细信息</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
+<li>升级 npm：<code>npm install -g npm</code></li>
 </ul>
-]]></content>
+<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
+<ul>
+<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
+</ul>
+<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
+<li><p>检查 node.js 版本：</p>
+<p>  <code>node -v</code></p>
+</li>
+<li><p>检查 npm 版本：</p>
+<p>  <code>npm -v</code></p>
+</li>
+<li><p>检查 cnpm 版本：</p>
+<p>  <code>cnpm -v</code></p>
+</li>
+</ul>
+<div class="note warning"><p>这里是警告。</p></div>]]></content>
       <tags>
-        <tag>Ops</tag>
+        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
@@ -631,28 +705,139 @@ DEEPSEEK_API_KEY=api_key
       </tags>
   </entry>
   <entry>
-    <title>proxychains install</title>
-    <url>/2024/07/17/Proxychains%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
+    <title>K8s 常用命令</title>
+    <url>/2024/07/17/Kubenets%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
 <span id="more"></span>
 
 
 <ul>
-<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
+<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
+  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
+
 </li>
-<li><p>进入解压后的目录，执行 <code>./configure</code></p>
+<li><p>查看容器内日志</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
 </li>
-<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
+<li><p>查看控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
 </li>
-<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
+<li><p>删除控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+
 </li>
+<li><p>查看所有镜像</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>进入容器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除 pods</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>从 pod 中复制文件到本地服务器上</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看 pod 详细信息</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
-<blockquote>
-<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
-</blockquote>
 ]]></content>
       <tags>
         <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>本人工作中常用的 docker 命令</title>
+    <url>/2021/01/11/Docker%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>常用的 docker 命令</p>
+<p><img src="/../img/docker.png" alt="docker"></p>
+<span id="more"></span>
+
+<ul>
+<li><p>加载镜像</p>
+ <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker load 压缩包.</span><br><span class="line">docker load -i 压缩包 -t 镜像名称:版本号v1</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p>查看所有镜像</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p>启动容器</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker run -it -d --name=<span class="string">"容器名称"</span> --p</span><br><span class="line">-i:以交互模型运行容器，通常与-t同时使用;</span><br><span class="line">-d:后台运行容器，并返回容器ID</span><br><span class="line">--name=<span class="string">"容器名称"</span></span><br><span class="line">--runtime=nvidia -e NVIDIA_VISIBLE_DEVICE=1 :指定启动显卡号</span><br><span class="line">--p:指定端口映射，主机（宿主）端口：容器端口</span><br><span class="line"></span><br><span class="line">[<span class="built_in">sudo</span> docker run -it 镜像名称 /bin/bash]</span><br></pre></td></tr></tbody></table></figure>
+
+   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># example </span></span><br><span class="line">docker run -it -d -p 10016:9147 --name 容器名称 --runtime=nvidia -e NVIDIA_VISIBLE_DEVICES=3 镜像名称 bash</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+</li>
+<li><p>查看所有容器</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker ps -a</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+</li>
+<li><p>启动容器</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker start</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+</li>
+<li><p>进入容器</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">exec</span> -it 容器名称 bash</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p>退出容器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">exit</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>停止容器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker stop 容器名称</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p>删除容器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">rm</span> 容器名称</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p>在容器内新增文件，并创建新的镜像</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker <span class="built_in">cp</span> 本地路径/文件名称 容器名称：容器内路径</span><br><span class="line"><span class="built_in">exit</span>    <span class="comment">#退出容器</span></span><br><span class="line">docker   commit -m=<span class="string">"描述信息"</span> -a=<span class="string">"作者"</span> 容器<span class="built_in">id</span> 目标镜像名： [TAG]</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看容器信息</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker inspect 容器ID</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p>删除镜像 #必须删除容器再删除镜像</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker rmi 镜像ID（前三位）</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p>下载镜像到本地</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker save 镜像ID：版本 -o 路径/保存的镜像名称.tar</span><br></pre></td></tr></tbody></table></figure>
+
+
+</li>
+<li><p>改镜像名字</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker tag 旧名字 新名字</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>改容器名词</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">docker rename 旧名字 新名字</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<p>删除 conda 环境<br>conda remove -n 环境名 –all</p>
+<p>安装低版本 pip install setuptools==56.1.0</p>
+<ul>
+<li>查看环境<br>conda env list</li>
+</ul>
+<p>在 OSX/Linux 上使用 source activate my_env 进入环境<br>source activate 环境名称</p>
+<p>之后操作文件即可</p>
+]]></content>
+      <tags>
+        <tag>docker</tag>
       </tags>
   </entry>
   <entry>
@@ -750,6 +935,31 @@ DEEPSEEK_API_KEY=api_key
       </tags>
   </entry>
   <entry>
+    <title>proxychains install</title>
+    <url>/2024/07/17/Proxychains%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
+<span id="more"></span>
+
+
+<ul>
+<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
+</li>
+<li><p>进入解压后的目录，执行 <code>./configure</code></p>
+</li>
+<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
+</li>
+<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
+</li>
+</ul>
+<blockquote>
+<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Hello World</title>
     <url>/2024/07/15/hello-world/</url>
     <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
@@ -787,51 +997,6 @@ DEEPSEEK_API_KEY=api_key
 </li>
 </ol>
 ]]></content>
-      <tags>
-        <tag>work</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建基于 Hexo 架构的个人博客</title>
-    <url>/2024/07/18/%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
-<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
-<span id="more"></span>
-
-
-<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
-<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
-<ul>
-<li>升级 npm：<code>npm install -g npm</code></li>
-</ul>
-<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
-<ul>
-<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
-</ul>
-<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
-<li><p>检查 node.js 版本：</p>
-<p>  <code>node -v</code></p>
-</li>
-<li><p>检查 npm 版本：</p>
-<p>  <code>npm -v</code></p>
-</li>
-<li><p>检查 cnpm 版本：</p>
-<p>  <code>cnpm -v</code></p>
-</li>
-</ul>
-<div class="note warning"><p>这里是警告。</p></div>]]></content>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>局域网远程桌面</title>
-    <url>/2021/01/14/%E5%B1%80%E5%9F%9F%E7%BD%91%E9%93%BE%E6%8E%A5/</url>
-    <content><![CDATA[<p>内网远程桌面连接方法</p>
-<span id="more"></span>
-
-
-<h4 id="依次执行以下命令："><a href="#依次执行以下命令：" class="headerlink" title="依次执行以下命令："></a>依次执行以下命令：</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">win+r</span><br><span class="line"></span><br><span class="line">mstsc</span><br><span class="line"></span><br><span class="line"><span class="comment">#输入需要链接的主机ip</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查询win+r--&gt;"cmd"--&gt;"ipconfig"</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>]]></content>
       <tags>
         <tag>work</tag>
       </tags>
