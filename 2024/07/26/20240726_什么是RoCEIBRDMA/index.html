@@ -28,19 +28,19 @@
 <meta property="og:site_name" content="潘秉宏的博客">
 <meta property="og:description" content="在分布式存储网络中，我们使用的协议有 RoCE、Infiniband（IB）和 TCP&#x2F;IP。其中 RoCE 和 IB 属于 RDMA (RemoteDirect Memory Access) 技术，他和传统的 TCP&#x2F;IP 有什么区别呢，接下来我们将做详细对比。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="e:\hexo-site\source\img\RDMA.png">
-<meta property="og:image" content="e:\hexo-site\source\img\download.png">
-<meta property="og:image" content="e:\hexo-site\source\img\36a8e300fd6759f17464122ef108e37b.png">
-<meta property="og:image" content="e:\hexo-site\source\img\RDMA.png">
-<meta property="og:image" content="e:\hexo-site\source\img\RoCE_Header_format.png">
+<meta property="og:image" content="http://example.com/img/RDMA.png">
+<meta property="og:image" content="http://example.com/img/download.png">
+<meta property="og:image" content="http://example.com/img/36a8e300fd6759f17464122ef108e37b.png">
+<meta property="og:image" content="http://example.com/img/RDMA.png">
+<meta property="og:image" content="http://example.com/img/RoCE_Header_format.png">
 <meta property="article:published_time" content="2024-07-26T01:20:35.000Z">
-<meta property="article:modified_time" content="2024-07-26T01:53:04.872Z">
+<meta property="article:modified_time" content="2024-07-26T01:59:39.667Z">
 <meta property="article:author" content="潘秉宏">
 <meta property="article:tag" content="work">
 <meta property="article:tag" content="Ops">
 <meta property="article:tag" content="网络">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="e:\hexo-site\source\img\RDMA.png">
+<meta name="twitter:image" content="http://example.com/img/RDMA.png">
 
 
 <link rel="canonical" href="http://example.com/2024/07/26/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/">
@@ -240,7 +240,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-07-26 09:20:35 / 修改时间：09:53:04" itemprop="dateCreated datePublished" datetime="2024-07-26T09:20:35+08:00">2024-07-26</time>
+      <time title="创建时间：2024-07-26 09:20:35 / 修改时间：09:59:39" itemprop="dateCreated datePublished" datetime="2024-07-26T09:20:35+08:00">2024-07-26</time>
     </span>
 
   
@@ -275,7 +275,7 @@
     
     
     <div class="post-body" itemprop="articleBody"><p> 在分布式存储网络中，我们使用的协议有 <strong>RoCE</strong>、<strong>Infiniband（IB）</strong>和 <strong>TCP/IP</strong>。其中 RoCE 和 IB 属于 <strong>RDMA (RemoteDirect Memory Access) 技术</strong>，他和传统的 TCP/IP 有什么区别呢，接下来我们将做详细对比。</p>
-<p><img src="E:\hexo-site\source\img\RDMA.png" alt="RDMA API"></p>
+<p><img src="/../img/RDMA.png" alt="RDMA API"></p>
 <span id="more"></span>
 
 <h2 id="RoCE和IB，RDMA通述"><a href="#RoCE和IB，RDMA通述" class="headerlink" title="RoCE和IB，RDMA通述"></a>RoCE 和 IB，RDMA 通述</h2><h3 id="什么是RoCE"><a href="#什么是RoCE" class="headerlink" title="什么是RoCE"></a>什么是 RoCE</h3><ul>
@@ -289,7 +289,7 @@
 <h3 id="什么是RDMA"><a href="#什么是RDMA" class="headerlink" title="什么是RDMA"></a>什么是 RDMA</h3><ul>
 <li>RDMA (译为” 远程直接内存访问”, 英文全称：remote direct memory access) 是一种绕过远程主机操作系统内核访问其内存中数据的技术。由于不经过操作系统，不仅节省了大量 CPU 资源，同样也提高了系统吞吐量、降低了系统的网络通信<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Latency_(engineering)">延迟</a>，尤其适合在大规模并行<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%9B%86%E7%BE%A4">计算机集群</a>中有广泛应用。</li>
 </ul>
-<p><img src="E:\hexo-site\source\img\download.png" alt="TCP/RDMA"></p>
+<p><img src="/../img/download.png" alt="TCP/RDMA"></p>
 <blockquote>
 <h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>传统应用要发送数据，‍‍需要通过 OS 封装 TCP/IP，‍‍然后依次经过主缓存、网卡缓存，‍‍再发出去。‍‍这样会导致两个限制。</p>
 <p>限制一：TCP/IP 协议栈处理会带来数 10 微秒的时延。‍‍TCP 协议栈在接收发送报文时，‍‍内核需要做多次上下文的切换，‍‍每次切换需要耗费 5-10 微秒。‍另外还需要至少三次的数据拷贝‍‍和依赖 CPU 进行协议工作，‍‍这导致仅仅协议上处理就会带来数 10 微秒的‍‍固定时延，‍‍协议栈时延成为最明显的瓶颈。‍‍</p>
@@ -321,7 +321,7 @@
 </ul>
 <h3 id="RoCE的关键技术"><a href="#RoCE的关键技术" class="headerlink" title="RoCE的关键技术"></a>RoCE 的关键技术</h3><ul>
 <li><p>由于 RDMA 要求承载网络无丢包，否则效率就会急剧下降，所以 RoCE 技术如果选用以太网进行承载，就需要通过 PFC，ECN 以及 DCQCN 等技术对传统以太网络改造，打造无损以太网络，以确保零丢包。</p>
-<p><img src="E:\hexo-site\source\img\36a8e300fd6759f17464122ef108e37b.png" alt="PEC&amp;ECN"></p>
+<p><img src="/../img/36a8e300fd6759f17464122ef108e37b.png" alt="PEC&amp;ECN"></p>
 </li>
 <li><p><strong>PFC:</strong></p>
 <p>基于优先级的流量控制。PFC 为多种类型的流量提供基于每跳优先级的流量控制。设备在转发报文时，通过在优先级映射表中查找报文的优先级，将报文分配到队列中进行调度和转发。当 802.1p 优先级报文的发送速率超过接收速率且接收端的数据缓存空间不足时，接收端向发送端发送 PFC 暂停帧。当发送端收到 PFC 暂停帧时，发送端停止发送具有指定 802.1p 优先级的报文，直到发送端收到 PFC XON 帧或老化定时器超时。配置 PFC 时，特定类型报文的拥塞不影响其他类型报文的正常转发。</p>
@@ -333,12 +333,12 @@
 <hr>
 <h2 id="RoCE应用趋势"><a href="#RoCE应用趋势" class="headerlink" title="RoCE应用趋势"></a>RoCE 应用趋势</h2><ul>
 <li><p>当比较 RoCE 与其他类似的策略时，例如 iWARP（Internet Wide Area RDMA Protocol）和传统的 InfiniBand 网络，我们可以看到一些显著的区别。</p>
-<p><img src="E:\hexo-site\source\img\RDMA.png"></p>
+<p><img src="/../img/RDMA.png" alt="RDMA"></p>
 </li>
 <li><p>iWARP 是一种通过 TCP/IP 协议栈实现 RDMA 的技术。虽然它可以在标准的三层网络中运行，但它的实现通常比 RoCE 复杂，并且可能需要更多的 CPU 资源来处理额外的软件堆栈。此外，iWARP 在网络性能方面可能不如 RoCE，尤其是在低延迟和高带宽的应用场景中。</p>
 </li>
 <li><p>InfiniBand 是一种专为高性能计算设计的网络技术，它提供了极低的延迟和非常高的带宽。尽管 InfiniBand 在性能上优于 RoCE，但它通常也更昂贵，并且需要专用的硬件。相比之下，RoCE 可以在现有的以太网基础设施上运行，降低了部署成本。</p>
-<p><img src="E:\hexo-site\source\img\RoCE_Header_format.png"></p>
+<p><img src="/../img/RoCE_Header_format.png"></p>
 </li>
 <li><p>随着 RoCEv2 的成熟和普及，它已成为数据中心网络中的一个主要趋势。越来越多的企业开始采用 RoCEv2 来支持高性能计算、机器学习和大规模存储集群等应用。RoCEv2 的优势在于它能够在标准以太网上实现低延迟和高带宽的 RDMA 通信，同时保持较低的成本。</p>
 </li>
