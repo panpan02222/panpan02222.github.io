@@ -21,12 +21,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="在分布式存储网络中，我们使用的协议有 RoCE、Infiniband（IB）和 TCP&#x2F;IP。其中 RoCE 和 IB 属于 RDMA (RemoteDirect Memory Access) 技术，他和传统的 TCP&#x2F;IP 有什么区别呢，接下来我们将做详细对比。">
+    <meta name="description" content="在分布式存储网络中，我们使用的协议有RoCE、Infiniband（IB）和TCP&#x2F;IP。其中RoCE和IB属于RDMA(RemoteDirect Memory Access)技术，他和传统的TCP&#x2F;IP有什么区别呢，接下来我们将做详细对比。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="什么是 RoCE&#x2F;IB&#x2F;RDMA">
 <meta property="og:url" content="http://example.com/2024/07/26/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/index.html">
 <meta property="og:site_name" content="潘秉宏的博客">
-<meta property="og:description" content="在分布式存储网络中，我们使用的协议有 RoCE、Infiniband（IB）和 TCP&#x2F;IP。其中 RoCE 和 IB 属于 RDMA (RemoteDirect Memory Access) 技术，他和传统的 TCP&#x2F;IP 有什么区别呢，接下来我们将做详细对比。">
+<meta property="og:description" content="在分布式存储网络中，我们使用的协议有RoCE、Infiniband（IB）和TCP&#x2F;IP。其中RoCE和IB属于RDMA(RemoteDirect Memory Access)技术，他和传统的TCP&#x2F;IP有什么区别呢，接下来我们将做详细对比。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="http://example.com/img/RDMA.png">
 <meta property="og:image" content="http://example.com/img/download.png">
@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://example.com/img/RDMA.png">
 <meta property="og:image" content="http://example.com/img/RoCE_Header_format.png">
 <meta property="article:published_time" content="2024-07-26T01:20:35.000Z">
-<meta property="article:modified_time" content="2024-07-26T02:08:49.013Z">
+<meta property="article:modified_time" content="2024-07-26T02:11:13.402Z">
 <meta property="article:author" content="潘秉宏">
 <meta property="article:tag" content="work">
 <meta property="article:tag" content="Ops">
@@ -240,7 +240,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-07-26 09:20:35 / 修改时间：10:08:49" itemprop="dateCreated datePublished" datetime="2024-07-26T09:20:35+08:00">2024-07-26</time>
+      <time title="创建时间：2024-07-26 09:20:35 / 修改时间：10:11:13" itemprop="dateCreated datePublished" datetime="2024-07-26T09:20:35+08:00">2024-07-26</time>
     </span>
 
   
@@ -279,9 +279,7 @@
 <span id="more"></span>
 
 <h2 id="RoCE和IB，RDMA通述"><a href="#RoCE和IB，RDMA通述" class="headerlink" title="RoCE和IB，RDMA通述"></a>RoCE 和 IB，RDMA 通述</h2><h3 id="什么是RoCE"><a href="#什么是RoCE" class="headerlink" title="什么是RoCE"></a>什么是 RoCE</h3><ul>
-<li><pre><code>RoCE (译为”基于融合以太网的RDMA”, 英文全称: RDMA over Converged Ethernet)是一个网络协议,允许在一个[以太网](https://zh.wikipedia.org/wiki/以太网)网络上使用[远程直接内存访问](https://zh.wikipedia.org/wiki/远程直接内存访问)（RDMA）。RoCE有RoCE v1和RoCE v2两个版本。RoCE v1是一个以太网[链路层](https://zh.wikipedia.org/wiki/链路层)协议，因此允许同一个以太网[广播域](https://zh.wikipedia.org/wiki/广播域)中的任意两台主机间进行通信。RoCE v2是一个[网络层](https://zh.wikipedia.org/wiki/网络层)协议，因而RoCE v2数据包可以被路由。虽然RoCE协议受益于[融合以太网网络](https://zh.wikipedia.org/w/index.php?title=Data_center_bridging&amp;action=edit&amp;redlink=1)的特征，但该协议也可用于传统或非融合的以太网网络。
-</code></pre>
-</li>
+<li>RoCE (译为” 基于融合以太网的 RDMA”, 英文全称: RDMA over Converged Ethernet) 是一个网络协议，允许在一个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BB%A5%E5%A4%AA%E7%BD%91">以太网</a>网络上使用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%BF%9C%E7%A8%8B%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE">远程直接内存访问</a>（RDMA）。RoCE 有 RoCE v1 和 RoCE v2 两个版本。RoCE v1 是一个以太网<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%93%BE%E8%B7%AF%E5%B1%82">链路层</a>协议，因此允许同一个以太网<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%B9%BF%E6%92%AD%E5%9F%9F">广播域</a>中的任意两台主机间进行通信。RoCE v2 是一个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%BB%9C%E5%B1%82">网络层</a>协议，因而 RoCE v2 数据包可以被路由。虽然 RoCE 协议受益于<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/w/index.php?title=Data_center_bridging&amp;action=edit&amp;redlink=1">融合以太网网络</a>的特征，但该协议也可用于传统或非融合的以太网网络。</li>
 </ul>
 <h3 id="什么是IB"><a href="#什么是IB" class="headerlink" title="什么是IB"></a>什么是 IB</h3><ul>
 <li>InfiniBand (直译为 “无限带宽” 技术，缩写为 IB) 是一个用于<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97/0?fromModule=lemma_inlink">高性能计算</a>的计算机网络通信标准，它具有极高的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%90%9E%E5%90%90%E9%87%8F/0?fromModule=lemma_inlink">吞吐量</a>和极低的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BB%B6%E8%BF%9F/0?fromModule=lemma_inlink">延迟</a>，用于计算机与计算机之间的数据互连。InfiniBand 也用作服务器与存储系统之间的直接或交换互连，以及存储系统之间的互连。</li>
