@@ -13,6 +13,30 @@
       </tags>
   </entry>
   <entry>
+    <title>修改远程桌面端口步骤</title>
+    <url>/2021/01/11/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4%20/</url>
+    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
+<span id="more"></span>
+
+
+<ol>
+<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
+</li>
+<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
+</li>
+<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
+</li>
+<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
+</li>
+<li><p>重启电脑</p>
+</li>
+</ol>
+]]></content>
+      <tags>
+        <tag>work</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>本人工作中常用的 Docker 命令</title>
     <url>/2021/01/11/20220105_Docker%E5%91%BD%E4%BB%A4/</url>
     <content><![CDATA[<p>常用的 docker 命令</p>
@@ -104,30 +128,6 @@
 ]]></content>
       <tags>
         <tag>docker</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>修改远程桌面端口步骤</title>
-    <url>/2021/01/11/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4%20/</url>
-    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
-<span id="more"></span>
-
-
-<ol>
-<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
-</li>
-<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
-</li>
-<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
-</li>
-<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
-</li>
-<li><p>重启电脑</p>
-</li>
-</ol>
-]]></content>
-      <tags>
-        <tag>work</tag>
       </tags>
   </entry>
   <entry>
@@ -243,31 +243,6 @@
       </tags>
   </entry>
   <entry>
-    <title>Proxychains install</title>
-    <url>/2022/07/17/20220707_Proxychains%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
-<span id="more"></span>
-
-
-<ul>
-<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
-</li>
-<li><p>进入解压后的目录，执行 <code>./configure</code></p>
-</li>
-<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
-</li>
-<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
-</li>
-</ul>
-<blockquote>
-<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>llama2-13B 联通云 AI 算力平台训练任务测试</title>
     <url>/2024/04/25/20240425_llama2-13B%20%E8%81%94%E9%80%9A%E4%BA%91AI%E7%AE%97%E5%8A%9B%E5%B9%B3%E5%8F%B0%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1%E6%B5%8B%E8%AF%95/</url>
     <content><![CDATA[<p>基于联通云 AI 算力平台训练 llama2-13B 任务测试</p>
@@ -369,6 +344,31 @@
       </tags>
   </entry>
   <entry>
+    <title>Proxychains install</title>
+    <url>/2022/07/17/20220707_Proxychains%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
+<span id="more"></span>
+
+
+<ul>
+<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
+</li>
+<li><p>进入解压后的目录，执行 <code>./configure</code></p>
+</li>
+<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
+</li>
+<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
+</li>
+</ul>
+<blockquote>
+<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>配置 Anaconda3 的 conda 源</title>
     <url>/2024/04/25/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
     <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
@@ -389,91 +389,6 @@
 </b>]]></content>
       <tags>
         <tag>anaconda</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>获取 NVIDIA 驱动问题的全流程</title>
-    <url>/2024/05/23/20240523_%E8%8E%B7%E5%8F%96nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97/</url>
-    <content><![CDATA[<p>获取 NVIDIA 驱动问题的全流程</p>
-<span id="more"></span>
-
-
-
-<ul>
-<li><p>在 master 机器内通过 ssh 登陆其他机器</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">ssh root@h800-机器号</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>run 收集有关 NVIDIA 显卡驱动程序问题的诊断信息的脚本</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">nvidia-bug-report.sh</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>将刚才生成的日志文件，重命名</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mv nvidia-xx-xxx-log.gz nvidia-机器号-xx-xx-log.gz</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>新建文件夹命名为：日期 - log</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mkdir 0601-log #0601对应日期</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>复制刚才生成的所有文件到文件夹内</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cp nvidia-机器号-xx-xx-log.gz 0601-log</span><br><span class="line">cp /var/log/sys* 0601-log    # 将sys开头的文件复制到0601-log文件夹内</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>压缩文件夹</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">tar -cvf 日期-log.tar 0601-log</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="补充命令"><a href="#补充命令" class="headerlink" title="补充命令"></a>补充命令</h3><ul>
-<li><p>scp 协议传输跨机器传输文件</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">scp root@master:path /home/folder_name/</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-        <tag>NVIDIA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>配置 VNC 教程</title>
-    <url>/2024/07/17/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
-<p>VNC（Virtual Network Computing），为一种使用 RFB 协议的屏幕画面分享及远程操作软件。此软件借由网络，可发送键盘与鼠标的动作及即时的屏幕画面。</p>
-<p>VNC 与操作系统无关，因此可跨平台使用，例如可用 Windows 连线到某 Linux 的电脑，反之亦同。甚至在没有安装客户端程序的电脑中，只要有支持 JAVA 的浏览器，也可使用。</p>
-<span id="more"></span>
-
-<ol>
-<li><h2 id="两台-windows电脑内下载并安装"><a href="#两台-windows电脑内下载并安装" class="headerlink" title="两台 windows电脑内下载并安装"></a><strong>两台</strong> windows 电脑内下载并安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">TightVNC官网地址</span><br><span class="line">https://www.tightvnc.com/download.php</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-26-43-1718673923532.jpg" alt="" width="563" data-align="center">
-
-<hr>
-<ol start="2">
-<li><h2 id="TightVNC-服务端-被连接端-配置"><a href="#TightVNC-服务端-被连接端-配置" class="headerlink" title="TightVNC 服务端(被连接端) 配置"></a>TightVNC <strong>服务端</strong> (被连接端) 配置</h2><ul>
-<li><p>默认端口号 5900</p>
-</li>
-<li><p>注意自己设置连接密码</p>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-36-02-image.png" alt="" width="337" data-align="left">
-
-<p><strong>如果找不到配置界面，在任务栏右下角图标内右键 或点击 ‘开始菜单’-‘所有应用’-‘TightVNC’-‘Run TightVNC Service’</strong></p>
-<hr>
-</li>
-</ul>
-</li>
-<li><h2 id="TightVNC-客户端-连接端-配置"><a href="#TightVNC-客户端-连接端-配置" class="headerlink" title="TightVNC 客户端(连接端) 配置"></a>TightVNC <strong>客户端</strong> (连接端) 配置</h2><ul>
-<li>进入方式：开始菜单 - 所有应用 - TightVNC-TightVNC Viewer</li>
-</ul>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-48-42-image.png" alt="" width="341" data-align="left">
-
-<ul>
-<li><p> 输入服务器的 <strong>ip 地址</strong>和<strong>端口</strong> , 并连接</p>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-57-49-image.png" alt="" width="412"></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p> <a href="https://cloud.baidu.com/article/3002603">参考博客 - 1</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
@@ -525,6 +440,43 @@
         <tag>npu</tag>
         <tag>chatglm3</tag>
         <tag>deepspeed</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>获取 NVIDIA 驱动问题的全流程</title>
+    <url>/2024/05/23/20240523_%E8%8E%B7%E5%8F%96nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97/</url>
+    <content><![CDATA[<p>获取 NVIDIA 驱动问题的全流程</p>
+<span id="more"></span>
+
+
+
+<ul>
+<li><p>在 master 机器内通过 ssh 登陆其他机器</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">ssh root@h800-机器号</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>run 收集有关 NVIDIA 显卡驱动程序问题的诊断信息的脚本</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">nvidia-bug-report.sh</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>将刚才生成的日志文件，重命名</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mv nvidia-xx-xxx-log.gz nvidia-机器号-xx-xx-log.gz</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>新建文件夹命名为：日期 - log</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mkdir 0601-log #0601对应日期</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>复制刚才生成的所有文件到文件夹内</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cp nvidia-机器号-xx-xx-log.gz 0601-log</span><br><span class="line">cp /var/log/sys* 0601-log    # 将sys开头的文件复制到0601-log文件夹内</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>压缩文件夹</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">tar -cvf 日期-log.tar 0601-log</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h3 id="补充命令"><a href="#补充命令" class="headerlink" title="补充命令"></a>补充命令</h3><ul>
+<li><p>scp 协议传输跨机器传输文件</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">scp root@master:path /home/folder_name/</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+        <tag>NVIDIA</tag>
       </tags>
   </entry>
   <entry>
@@ -606,6 +558,54 @@ Domains=domain.com
 </code></pre>
 </li>
 </ol>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置 VNC 教程</title>
+    <url>/2024/07/17/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
+<p>VNC（Virtual Network Computing），为一种使用 RFB 协议的屏幕画面分享及远程操作软件。此软件借由网络，可发送键盘与鼠标的动作及即时的屏幕画面。</p>
+<p>VNC 与操作系统无关，因此可跨平台使用，例如可用 Windows 连线到某 Linux 的电脑，反之亦同。甚至在没有安装客户端程序的电脑中，只要有支持 JAVA 的浏览器，也可使用。</p>
+<span id="more"></span>
+
+<ol>
+<li><h2 id="两台-windows电脑内下载并安装"><a href="#两台-windows电脑内下载并安装" class="headerlink" title="两台 windows电脑内下载并安装"></a><strong>两台</strong> windows 电脑内下载并安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">TightVNC官网地址</span><br><span class="line">https://www.tightvnc.com/download.php</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-26-43-1718673923532.jpg" alt="" width="563" data-align="center">
+
+<hr>
+<ol start="2">
+<li><h2 id="TightVNC-服务端-被连接端-配置"><a href="#TightVNC-服务端-被连接端-配置" class="headerlink" title="TightVNC 服务端(被连接端) 配置"></a>TightVNC <strong>服务端</strong> (被连接端) 配置</h2><ul>
+<li><p>默认端口号 5900</p>
+</li>
+<li><p>注意自己设置连接密码</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-36-02-image.png" alt="" width="337" data-align="left">
+
+<p><strong>如果找不到配置界面，在任务栏右下角图标内右键 或点击 ‘开始菜单’-‘所有应用’-‘TightVNC’-‘Run TightVNC Service’</strong></p>
+<hr>
+</li>
+</ul>
+</li>
+<li><h2 id="TightVNC-客户端-连接端-配置"><a href="#TightVNC-客户端-连接端-配置" class="headerlink" title="TightVNC 客户端(连接端) 配置"></a>TightVNC <strong>客户端</strong> (连接端) 配置</h2><ul>
+<li>进入方式：开始菜单 - 所有应用 - TightVNC-TightVNC Viewer</li>
+</ul>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-48-42-image.png" alt="" width="341" data-align="left">
+
+<ul>
+<li><p> 输入服务器的 <strong>ip 地址</strong>和<strong>端口</strong> , 并连接</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-57-49-image.png" alt="" width="412"></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p> <a href="https://cloud.baidu.com/article/3002603">参考博客 - 1</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
+</blockquote>
 ]]></content>
       <tags>
         <tag>Ops</tag>
@@ -711,102 +711,6 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>批量加载 docker 镜像 &amp; 镜像重命名</title>
-    <url>/2024/07/15/20240711_%E6%89%B9%E9%87%8F%E5%8A%A0%E8%BD%BDdocker%E9%95%9C%E5%83%8F&amp;%E9%95%9C%E5%83%8F%E9%87%8D%E5%91%BD%E5%90%8D/</url>
-    <content><![CDATA[<p>多台服务器同时批量加载 docker 镜像 + 重命名，并创建容器。</p>
-<span id="more"></span>
-
-
-<h2 id="1-加载镜像"><a href="#1-加载镜像" class="headerlink" title="1. 加载镜像"></a>1. 加载镜像</h2><ul>
-<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
-</li>
-<li><p>单机执行命令：<code>docker load -i /mnt/hcufs/pytorch.tar</code></p>
-</li>
-<li><p>多机命令: </p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"nohup docker load -i /mnt/hcufs/pytorch.tar &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证是否加载镜像</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">for i in $(cat serivce.txt); do ssh $i "docker images"</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="2-重命名镜像"><a href="#2-重命名镜像" class="headerlink" title="2. 重命名镜像"></a>2. 重命名镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 此处的3f0为镜像的ID</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker tag 3f0 pytorch:1.0"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-创建容器"><a href="#3-创建容器" class="headerlink" title="3. 创建容器"></a>3. 创建容器</h2><ul>
-<li><p>单机命令 <code>docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash</code></p>
-</li>
-<li><p>多机创建:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash &amp;&amp; exit"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>多机配置 hosts 及 hostname</title>
-    <url>/2024/07/15/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
-    <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
-<span id="more"></span>
-
-<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
-<li>把 <code>ip</code> 复制到文本内</li>
-</ul>
-<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>服务器免密配置教程 - 2</title>
     <url>/2024/07/15/20240709_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
     <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
@@ -833,6 +737,63 @@ Domains=domain.com
 </li>
 <li><p><code>./set_key.sh</code></p>
 </li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>批量加载 docker 镜像 &amp; 镜像重命名</title>
+    <url>/2024/07/15/20240711_%E6%89%B9%E9%87%8F%E5%8A%A0%E8%BD%BDdocker%E9%95%9C%E5%83%8F&amp;%E9%95%9C%E5%83%8F%E9%87%8D%E5%91%BD%E5%90%8D/</url>
+    <content><![CDATA[<p>多台服务器同时批量加载 docker 镜像 + 重命名，并创建容器。</p>
+<span id="more"></span>
+
+
+<h2 id="1-加载镜像"><a href="#1-加载镜像" class="headerlink" title="1. 加载镜像"></a>1. 加载镜像</h2><ul>
+<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
+</li>
+<li><p>单机执行命令：<code>docker load -i /mnt/hcufs/pytorch.tar</code></p>
+</li>
+<li><p>多机命令: </p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"nohup docker load -i /mnt/hcufs/pytorch.tar &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>验证是否加载镜像</strong></p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">for i in $(cat serivce.txt); do ssh $i "docker images"</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h2 id="2-重命名镜像"><a href="#2-重命名镜像" class="headerlink" title="2. 重命名镜像"></a>2. 重命名镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 此处的3f0为镜像的ID</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker tag 3f0 pytorch:1.0"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-创建容器"><a href="#3-创建容器" class="headerlink" title="3. 创建容器"></a>3. 创建容器</h2><ul>
+<li><p>单机命令 <code>docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash</code></p>
+</li>
+<li><p>多机创建:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash &amp;&amp; exit"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
 <hr>
 <blockquote>
@@ -894,59 +855,6 @@ Domains=domain.com
 <div class="note warning"><p>这里是警告。</p></div>]]></content>
       <tags>
         <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服务器挂载外部存储卷</title>
-    <url>/2024/07/15/20240712_%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
-    <content><![CDATA[<p>多服务器之间共享文件，需要挂载外部存储卷。从保存数据的服务器上，将共享目录挂载到其他服务器上。</p>
-<!---more-->
-
-<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
-<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
-</li>
-<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
-</li>
-<li><p>批量发送脚本为:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
-<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
-</li>
-<li><p>批量挂脚本：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
@@ -1049,6 +957,45 @@ python dbgpt/app/dbgpt_server.py
 ]]></content>
       <tags>
         <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多机配置 hosts 及 hostname</title>
+    <url>/2024/07/15/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
+    <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
+<span id="more"></span>
+
+<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
+<li>把 <code>ip</code> 复制到文本内</li>
+</ul>
+<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
@@ -1241,6 +1188,342 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
+    <title>Jupyter Notebook 快捷指令</title>
+    <url>/2021/01/15/Jupyter%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
+    <content><![CDATA[<p>以下是 Jupyter Notebook 的一些常用快捷操作：</p>
+<span id="more"></span>
+
+
+<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><ul>
+<li><p>在 Jupyter Notebook 中按下 Esc 键即进入命令模式，此时单元格外侧边框变为蓝色。</p>
+<ul>
+<li>A：在当前单元格上方添加一个新单元格。</li>
+<li>B：在当前单元格下方添加一个新单元格。</li>
+<li>DD：删除当前单元格。</li>
+<li>M：将当前单元格切换为 Markdown 模式。</li>
+<li>Y：将当前单元格切换为代码模式。</li>
+<li>1 ~ 6：将当前 Markdown 单元格变为对应的标题（# ~ ######）。</li>
+<li>H：显示所有快捷键。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3><ul>
+<li><p>在 Jupyter Notebook 中按下 Enter 键，即进入编辑模式，此时单元格外侧边框变为绿色。</p>
+<ul>
+<li><p>Ctrl + Enter：运行当前单元格，并选中下面的单元格。若是最后一个单元格则不选中。</p>
+</li>
+<li><p>Shift + Enter：运行当前单元格，并选中下面的单元格。若是最后一个单元格，则新建一个单元格并选中该单元格。</p>
+</li>
+<li><p>Alt + Enter：运行当前单元格，并在下面插入一个新单元格，并选中该单元格。</p>
+</li>
+<li><p>Ctrl + /：注释或取消注释当前行或选中区域。</p>
+</li>
+<li><p>Shift + Tab：显示函数或类的参数和文档字符串。重复按下时，分别显示更多信息。</p>
+</li>
+<li><p>Ctrl + Shift + -：在光标所在行下方分割单元格。<br>Ctrl + Shift + +：在光标所在行上方分割单元格。</p>
+</li>
+</ul>
+</li>
+<li><p>以上仅是一些常用的快捷键，你也可以在 Jupyter Notebook 的 Help -&gt; Keyboard Shortcuts 中看到完整的快捷键列表，你也可以自定义快捷键的方式来使得自己更舒适使用。</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Jupyter Notebook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什么是 RoCE/IB/RDMA</title>
+    <url>/2024/07/26/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/</url>
+    <content><![CDATA[<p> 在分布式存储网络中，我们使用的协议有 <strong>RoCE</strong>、<strong>Infiniband（IB）</strong>和 <strong>TCP/IP</strong>。其中 RoCE 和 IB 属于 <strong>RDMA (RemoteDirect Memory Access) 技术</strong>，他和传统的 TCP/IP 有什么区别呢，接下来我们将做详细对比。</p>
+<p><img src="/../img/RDMA.png" alt="RDMA API"></p>
+<span id="more"></span>
+
+<h2 id="RoCE和IB，RDMA通述"><a href="#RoCE和IB，RDMA通述" class="headerlink" title="RoCE和IB，RDMA通述"></a>RoCE 和 IB，RDMA 通述</h2><h3 id="什么是RoCE"><a href="#什么是RoCE" class="headerlink" title="什么是RoCE"></a>什么是 RoCE</h3><ul>
+<li><pre><code>RoCE (译为”基于融合以太网的RDMA”, 英文全称: RDMA over Converged Ethernet)是一个网络协议,允许在一个[以太网](https://zh.wikipedia.org/wiki/以太网)网络上使用[远程直接内存访问](https://zh.wikipedia.org/wiki/远程直接内存访问)（RDMA）。RoCE有RoCE v1和RoCE v2两个版本。RoCE v1是一个以太网[链路层](https://zh.wikipedia.org/wiki/链路层)协议，因此允许同一个以太网[广播域](https://zh.wikipedia.org/wiki/广播域)中的任意两台主机间进行通信。RoCE v2是一个[网络层](https://zh.wikipedia.org/wiki/网络层)协议，因而RoCE v2数据包可以被路由。虽然RoCE协议受益于[融合以太网网络](https://zh.wikipedia.org/w/index.php?title=Data_center_bridging&amp;action=edit&amp;redlink=1)的特征，但该协议也可用于传统或非融合的以太网网络。
+</code></pre>
+</li>
+</ul>
+<h3 id="什么是IB"><a href="#什么是IB" class="headerlink" title="什么是IB"></a>什么是 IB</h3><ul>
+<li>InfiniBand (直译为 “无限带宽” 技术，缩写为 IB) 是一个用于<a href="https://baike.baidu.com/item/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97/0?fromModule=lemma_inlink">高性能计算</a>的计算机网络通信标准，它具有极高的<a href="https://baike.baidu.com/item/%E5%90%9E%E5%90%90%E9%87%8F/0?fromModule=lemma_inlink">吞吐量</a>和极低的<a href="https://baike.baidu.com/item/%E5%BB%B6%E8%BF%9F/0?fromModule=lemma_inlink">延迟</a>，用于计算机与计算机之间的数据互连。InfiniBand 也用作服务器与存储系统之间的直接或交换互连，以及存储系统之间的互连。</li>
+</ul>
+<h3 id="什么是RDMA"><a href="#什么是RDMA" class="headerlink" title="什么是RDMA"></a>什么是 RDMA</h3><ul>
+<li>RDMA (译为” 远程直接内存访问”, 英文全称：remote direct memory access) 是一种绕过远程主机操作系统内核访问其内存中数据的技术。由于不经过操作系统，不仅节省了大量 CPU 资源，同样也提高了系统吞吐量、降低了系统的网络通信<a href="https://zh.wikipedia.org/wiki/Latency_(engineering)">延迟</a>，尤其适合在大规模并行<a href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%9B%86%E7%BE%A4">计算机集群</a>中有广泛应用。</li>
+</ul>
+<p><img src="/../img/download.png" alt="TCP/RDMA"></p>
+<blockquote>
+<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>传统应用要发送数据，‍‍需要通过 OS 封装 TCP/IP，‍‍然后依次经过主缓存、网卡缓存，‍‍再发出去。‍‍这样会导致两个限制。</p>
+<p>限制一：TCP/IP 协议栈处理会带来数 10 微秒的时延。‍‍TCP 协议栈在接收发送报文时，‍‍内核需要做多次上下文的切换，‍‍每次切换需要耗费 5-10 微秒。‍另外还需要至少三次的数据拷贝‍‍和依赖 CPU 进行协议工作，‍‍这导致仅仅协议上处理就会带来数 10 微秒的‍‍固定时延，‍‍协议栈时延成为最明显的瓶颈。‍‍</p>
+<p>限制二：TCP 协议栈处理导致服务器 CPU 负载‍‍居高不下。‍‍除了固定时延较长的问题，TCP/IP 网络需要主机 CPU‍‍多次参与协议的内存拷贝，‍‍网络规模越大，‍‍网络带宽越高，‍‍CPU 在收发数据时的调度负担越大，‍‍导致 CPU 持续高负载。‍‍</p>
+<p>在数据中心内部，超大规模分布式计算存储资源之间，如果使用传统的 TCP/IP 进行网络互连，将占用系统大量的计算资源，造成 IO 瓶颈，无法满足更高吞吐，更低时延的网络需求。</p>
+</blockquote>
+<hr>
+<h2 id="RoCE优缺点及关键技术"><a href="#RoCE优缺点及关键技术" class="headerlink" title="RoCE优缺点及关键技术"></a>RoCE 优缺点及关键技术</h2><h3 id="使用RoCE的优势"><a href="#使用RoCE的优势" class="headerlink" title="使用RoCE的优势"></a>使用 RoCE 的优势</h3><ul>
+<li><p><strong>成本效益：</strong> </p>
+<p>利用现有以太网基础设施：RoCE 可以在现有的以太网基础设施上运行，降低了部署和维护成本。 通用设备：使用通用的以太网交换机和网卡，设备成本较低。</p>
+</li>
+<li><p>** 兼容性和灵活性： **</p>
+<p>广泛兼容：RoCE 基于以太网，兼容性和通用性好，可以与其他网络设备和协议无缝集成。 灵活部署：可以灵活地部署在不同的网络拓扑和环境中。 </p>
+</li>
+<li><p><strong>易于管理：</strong></p>
+<p>统一管理：由于 RoCE 基于以太网，可以使用现有的网络管理工具和协议进行管理，简化了管理流程。</p>
+</li>
+</ul>
+<h3 id="RoCE的缺点"><a href="#RoCE的缺点" class="headerlink" title="RoCE的缺点"></a>RoCE 的缺点</h3><ul>
+<li><p><strong>性能：</strong></p>
+<p>较高的延迟：尽管 RoCE 能够提供低延迟，但通常不如 IB 网络，在极端低延迟需求的应用中可能不如 IB 表现优秀。 网络拥塞：在共享以太网上运行时，可能受到其他网络流量的影响，导致性能下降。 </p>
+</li>
+<li><p><strong>可靠性：</strong></p>
+<p>依赖于以太网质量：RoCE 的性能和可靠性依赖于以太网的质量，如果以太网网络质量不佳，可能会影响 RoCE 的表现。</p>
+</li>
+</ul>
+<h3 id="RoCE对比IB总结"><a href="#RoCE对比IB总结" class="headerlink" title="RoCE对比IB总结"></a>RoCE 对比 IB 总结</h3><ul>
+<li>IB 和 RoCE 的区别为链路层一个为 IB 协议，一个为 Ethernet 协议，其中 Ethernet 协议更具有普适性，且大部分场景 RoCE 时延更低、带宽更高。</li>
+</ul>
+<h3 id="RoCE的关键技术"><a href="#RoCE的关键技术" class="headerlink" title="RoCE的关键技术"></a>RoCE 的关键技术</h3><ul>
+<li><p>由于 RDMA 要求承载网络无丢包，否则效率就会急剧下降，所以 RoCE 技术如果选用以太网进行承载，就需要通过 PFC，ECN 以及 DCQCN 等技术对传统以太网络改造，打造无损以太网络，以确保零丢包。</p>
+<p><img src="/../img/36a8e300fd6759f17464122ef108e37b.png" alt="PEC&amp;ECN"></p>
+</li>
+<li><p><strong>PFC:</strong></p>
+<p>基于优先级的流量控制。PFC 为多种类型的流量提供基于每跳优先级的流量控制。设备在转发报文时，通过在优先级映射表中查找报文的优先级，将报文分配到队列中进行调度和转发。当 802.1p 优先级报文的发送速率超过接收速率且接收端的数据缓存空间不足时，接收端向发送端发送 PFC 暂停帧。当发送端收到 PFC 暂停帧时，发送端停止发送具有指定 802.1p 优先级的报文，直到发送端收到 PFC XON 帧或老化定时器超时。配置 PFC 时，特定类型报文的拥塞不影响其他类型报文的正常转发。</p>
+</li>
+<li><p><strong>ECN：</strong></p>
+<p>显式拥塞通知。ECN 定义了基于 IP 层和传输层的流量控制和端到端拥塞通知机制。当设备拥塞时，ECN 会在数据包的 IP 头中标记 ECN 字段。接收端发送拥塞通知包（CNP）通知发送端放慢发送速度。ECN 实现端到端的拥塞管理，减少拥塞的扩散和加剧。</p>
+</li>
+</ul>
+<hr>
+<h2 id="RoCE应用趋势"><a href="#RoCE应用趋势" class="headerlink" title="RoCE应用趋势"></a>RoCE 应用趋势</h2><ul>
+<li><p>当比较 RoCE 与其他类似的策略时，例如 iWARP（Internet Wide Area RDMA Protocol）和传统的 InfiniBand 网络，我们可以看到一些显著的区别。</p>
+<p><img src="/../img/RDMA.png" alt="RDMA"></p>
+</li>
+<li><p>iWARP 是一种通过 TCP/IP 协议栈实现 RDMA 的技术。虽然它可以在标准的三层网络中运行，但它的实现通常比 RoCE 复杂，并且可能需要更多的 CPU 资源来处理额外的软件堆栈。此外，iWARP 在网络性能方面可能不如 RoCE，尤其是在低延迟和高带宽的应用场景中。</p>
+</li>
+<li><p>InfiniBand 是一种专为高性能计算设计的网络技术，它提供了极低的延迟和非常高的带宽。尽管 InfiniBand 在性能上优于 RoCE，但它通常也更昂贵，并且需要专用的硬件。相比之下，RoCE 可以在现有的以太网基础设施上运行，降低了部署成本。</p>
+<p><img src="/../img/RoCE_Header_format.png"></p>
+</li>
+<li><p>随着 RoCEv2 的成熟和普及，它已成为数据中心网络中的一个主要趋势。越来越多的企业开始采用 RoCEv2 来支持高性能计算、机器学习和大规模存储集群等应用。RoCEv2 的优势在于它能够在标准以太网上实现低延迟和高带宽的 RDMA 通信，同时保持较低的成本。</p>
+</li>
+<li><p>未来，随着对数据密集型应用需求的增长，RoCEv2 将继续在其核心市场中发挥重要作用。随着技术的进步和新的应用场景的出现，RoCEv2 可能会进一步优化以支持更广泛的用例，包括边缘计算和物联网（IoT）领域中的实时数据处理。</p>
+</li>
+<li><p>RoCEv2 凭借其在性能和成本之间的平衡，正在成为数据中心网络架构中的关键技术之一，而 RoCEv1 则由于其局限性而在实际应用中逐渐被淘汰。随着网络技术和市场需求的不断发展，RoCEv2 有望在未来的数据中心和高性能计算环境中扮演更加重要的角色。</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>work</tag>
+        <tag>Ops</tag>
+        <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器挂载外部存储卷</title>
+    <url>/2024/07/15/20240712_%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
+    <content><![CDATA[<p>多服务器之间共享文件，需要挂载外部存储卷。从保存数据的服务器上，将共享目录挂载到其他服务器上。</p>
+<!---more-->
+
+<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
+<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
+</li>
+<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
+</li>
+<li><p>批量发送脚本为:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
+<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
+</li>
+<li><p>批量挂脚本：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>K8s 常用命令</title>
+    <url>/2024/07/17/Kubenets%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
+<span id="more"></span>
+
+
+<ul>
+<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
+  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看容器内日志</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看所有镜像</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>进入容器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除 pods</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>从 pod 中复制文件到本地服务器上</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看 pod 详细信息</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 快捷指令</title>
+    <url>/2024/07/17/Linux%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
+    <content><![CDATA[<p>本人工作时常用到的一些 linux 快捷指令，希望对大家有所帮助。</p>
+<span id="more"></span>
+
+<ul>
+<li><p>查看正在运行的 python 脚本<br>  <code>ps -ef |grep python</code></p>
+<p>  <code>ps aux | grep python</code></p>
+</li>
+<li><p>查看当前目录下的文件占用内存</p>
+<p>  <code>du -sh</code></p>
+</li>
+<li><p>查看文件系统磁盘占用情况</p>
+<p>  <code>df -h $home</code></p>
+</li>
+<li><p>计算文件数</p>
+<p>  <code>ls | wc -l</code></p>
+</li>
+<li><p>查看当前文件夹下每个文件的大小</p>
+<p>  <code>ls -lh</code></p>
+</li>
+<li><p>暂停进程 18000 秒</p>
+<p>  <code>sh -c | sleep 18000</code></p>
+</li>
+<li><p>显示物理地址<br>  <code>overlay </code></p>
+</li>
+</ul>
+<hr>
+<h4 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h4><ul>
+<li><p><strong>解压</strong> tar.gz file</p>
+<p>  <code>tar -zxvf folder.tar.gz folder</code></p>
+</li>
+<li><p><strong>解压</strong> tar file</p>
+<p>  <code>tar -xvf folder.tar</code></p>
+</li>
+</ul>
+<h4 id="unrar"><a href="#unrar" class="headerlink" title="unrar"></a>unrar</h4><ul>
+<li><p>解压 rar file</p>
+<p>  <code>unrar x example.rar</code></p>
+</li>
+</ul>
+<h4 id="unzip"><a href="#unzip" class="headerlink" title="unzip"></a>unzip</h4><ul>
+<li><p><strong>解压</strong> zip file</p>
+<p><code>unzip -l example.zip</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="远程操作"><a href="#远程操作" class="headerlink" title="远程操作"></a>远程操作</h4><ul>
+<li><p>远程发送文件<br><code>scp folder_path root@ip:folder_path</code></p>
+</li>
+<li><p>远程链接服务器<br><code>ssh username@remote_server_ip</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h4><ul>
+<li>手动挂载 U 盘 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mkdir /mnt/usb 			#新建文件夹</span><br><span class="line">fdisk -l			#查看u盘名称</span><br><span class="line">mount /dev/sdb1 /mnt/usb	#将u盘挂载到文件夹</span><br><span class="line">umount /mnt/usb			#使用完，退出挂载</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<ul>
+<li>批量安装 rpm 包<br><code>rpm -ivh *.rpm</code></li>
+</ul>
+<hr>
+<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><ul>
+<li><p>将日志输入到 log 中<br><code>nohup python main.py &gt;log.log 2&gt;&amp;1 &amp;</code></p>
+</li>
+<li><p>查看日志<br><code>tail -f log.log</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h4><ul>
+<li>建立软链接<br>ln  -s   [源文件]   [软链接文件]</li>
+</ul>
+<hr>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
+<li><p>排查 ip 后缀</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl `kubectl get svc -n bfe| fgrep ilb-controller | awk <span class="string">'{print $3}'</span>`:8086/v1/third-party/integration/bml/services?content=config  -H  <span class="string">"Authorization:Token H9zUjETTd3oajBaCJdoYNiynzfEs"</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删垃圾</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl -X DELETE http://`kubectl get svc -n bfe|fgrep ilb-controller | awk <span class="string">'{print $3}'</span>`:8086/v1/third-party/integration/bml/asi-v8874znn6ph51iiu -H  <span class="string">"Authorization:Token H9zUjETTd3oajBaCJdoYNiynzfEs"</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h4 id="GPT写的"><a href="#GPT写的" class="headerlink" title="GPT写的"></a>GPT 写的</h4><ul>
+<li>Shell 是一种特别的交互式命令行接口，常见的有 Bash（Linux、MacOS）和 Command Prompt（Windows），以下是一些常用的 Bash Shell 操作命令：</li>
+</ul>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">pwd：打印当前工作目录。</span><br><span class="line">ls：列出当前目录下的所有文件和文件夹（不包括以.开头的隐藏文件）。</span><br><span class="line">cd：进入指定目录，如 “cd /usr/local”。</span><br><span class="line">mkdir：新建一个目录，如 “mkdir dir_name”。</span><br><span class="line">touch：新建一个空文件，如 “touch file_name”。</span><br><span class="line">cp：复制文件或目录，如 “cp file1 file2”。</span><br><span class="line">mv：移动文件或目录，如 “mv file1 file2”。</span><br><span class="line">rm：删除文件或目录，如 “rm file_name” 或者 “rm -r dir_name”。</span><br><span class="line">cat：查看文件内容，如 “cat file_name”。</span><br><span class="line">grep：在文件中查找指定的文本，如 “grep ‘some text’ file_name”。</span><br><span class="line">top：查看进程信息。</span><br><span class="line">ps：列出系统中当前运行的进程信息。</span><br><span class="line">kill：结束一个进程，如 “kill PID” 或者 “killall process_name”。</span><br><span class="line">history：查看历史命令记录，如 “history”。</span><br><span class="line">chmod：修改文件或者目录的权限，如 “chmod 777 file_name”。</span><br><span class="line">df：查看磁盘空间的使用情况，如 “df -h”。</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>以上只是 Shell 命令中的一些常用的操作，Bash Shell 还支持大量的其他命令和操作，可以通过 man 命令查看命令的 manual 手册来了解更多细节信息和使用方法。</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2024/07/15/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
     <title>基于 Openai API 进行接口移植</title>
     <url>/2024/07/25/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<p>记录一下 基于 Openai API 进行接口移植的过程，从引用 api 到测试到最后转接口使用</p>
@@ -1339,288 +1622,5 @@ python dbgpt/app/dbgpt_server.py
       <tags>
         <tag>LLM</tag>
       </tags>
-  </entry>
-  <entry>
-    <title>什么是 RoCE/IB/RDMA</title>
-    <url>/2024/07/26/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/</url>
-    <content><![CDATA[<p> 在分布式存储网络中，我们使用的协议有 <strong>RoCE</strong>、<strong>Infiniband（IB）</strong>和 <strong>TCP/IP</strong>。其中 RoCE 和 IB 属于 <strong>RDMA (RemoteDirect Memory Access) 技术</strong>，他和传统的 TCP/IP 有什么区别呢，接下来我们将做详细对比。</p>
-<p><img src="/../img/RDMA.png" alt="RDMA API"></p>
-<span id="more"></span>
-
-<h2 id="RoCE和IB，RDMA通述"><a href="#RoCE和IB，RDMA通述" class="headerlink" title="RoCE和IB，RDMA通述"></a>RoCE 和 IB，RDMA 通述</h2><h3 id="什么是RoCE"><a href="#什么是RoCE" class="headerlink" title="什么是RoCE"></a>什么是 RoCE</h3><ul>
-<li><pre><code>RoCE (译为”基于融合以太网的RDMA”, 英文全称: RDMA over Converged Ethernet)是一个网络协议,允许在一个[以太网](https://zh.wikipedia.org/wiki/以太网)网络上使用[远程直接内存访问](https://zh.wikipedia.org/wiki/远程直接内存访问)（RDMA）。RoCE有RoCE v1和RoCE v2两个版本。RoCE v1是一个以太网[链路层](https://zh.wikipedia.org/wiki/链路层)协议，因此允许同一个以太网[广播域](https://zh.wikipedia.org/wiki/广播域)中的任意两台主机间进行通信。RoCE v2是一个[网络层](https://zh.wikipedia.org/wiki/网络层)协议，因而RoCE v2数据包可以被路由。虽然RoCE协议受益于[融合以太网网络](https://zh.wikipedia.org/w/index.php?title=Data_center_bridging&amp;action=edit&amp;redlink=1)的特征，但该协议也可用于传统或非融合的以太网网络。
-</code></pre>
-</li>
-</ul>
-<h3 id="什么是IB"><a href="#什么是IB" class="headerlink" title="什么是IB"></a>什么是 IB</h3><ul>
-<li>InfiniBand (直译为 “无限带宽” 技术，缩写为 IB) 是一个用于<a href="https://baike.baidu.com/item/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97/0?fromModule=lemma_inlink">高性能计算</a>的计算机网络通信标准，它具有极高的<a href="https://baike.baidu.com/item/%E5%90%9E%E5%90%90%E9%87%8F/0?fromModule=lemma_inlink">吞吐量</a>和极低的<a href="https://baike.baidu.com/item/%E5%BB%B6%E8%BF%9F/0?fromModule=lemma_inlink">延迟</a>，用于计算机与计算机之间的数据互连。InfiniBand 也用作服务器与存储系统之间的直接或交换互连，以及存储系统之间的互连。</li>
-</ul>
-<h3 id="什么是RDMA"><a href="#什么是RDMA" class="headerlink" title="什么是RDMA"></a>什么是 RDMA</h3><ul>
-<li>RDMA (译为” 远程直接内存访问”, 英文全称：remote direct memory access) 是一种绕过远程主机操作系统内核访问其内存中数据的技术。由于不经过操作系统，不仅节省了大量 CPU 资源，同样也提高了系统吞吐量、降低了系统的网络通信<a href="https://zh.wikipedia.org/wiki/Latency_(engineering)">延迟</a>，尤其适合在大规模并行<a href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%9B%86%E7%BE%A4">计算机集群</a>中有广泛应用。</li>
-</ul>
-<p><img src="/../img/download.png" alt="TCP/RDMA"></p>
-<blockquote>
-<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>传统应用要发送数据，‍‍需要通过 OS 封装 TCP/IP，‍‍然后依次经过主缓存、网卡缓存，‍‍再发出去。‍‍这样会导致两个限制。</p>
-<p>限制一：TCP/IP 协议栈处理会带来数 10 微秒的时延。‍‍TCP 协议栈在接收发送报文时，‍‍内核需要做多次上下文的切换，‍‍每次切换需要耗费 5-10 微秒。‍另外还需要至少三次的数据拷贝‍‍和依赖 CPU 进行协议工作，‍‍这导致仅仅协议上处理就会带来数 10 微秒的‍‍固定时延，‍‍协议栈时延成为最明显的瓶颈。‍‍</p>
-<p>限制二：TCP 协议栈处理导致服务器 CPU 负载‍‍居高不下。‍‍除了固定时延较长的问题，TCP/IP 网络需要主机 CPU‍‍多次参与协议的内存拷贝，‍‍网络规模越大，‍‍网络带宽越高，‍‍CPU 在收发数据时的调度负担越大，‍‍导致 CPU 持续高负载。‍‍</p>
-<p>在数据中心内部，超大规模分布式计算存储资源之间，如果使用传统的 TCP/IP 进行网络互连，将占用系统大量的计算资源，造成 IO 瓶颈，无法满足更高吞吐，更低时延的网络需求。</p>
-</blockquote>
-<hr>
-<h2 id="RoCE优缺点及关键技术"><a href="#RoCE优缺点及关键技术" class="headerlink" title="RoCE优缺点及关键技术"></a>RoCE 优缺点及关键技术</h2><h3 id="使用RoCE的优势"><a href="#使用RoCE的优势" class="headerlink" title="使用RoCE的优势"></a>使用 RoCE 的优势</h3><ul>
-<li><p><strong>成本效益：</strong> </p>
-<p>利用现有以太网基础设施：RoCE 可以在现有的以太网基础设施上运行，降低了部署和维护成本。 通用设备：使用通用的以太网交换机和网卡，设备成本较低。</p>
-</li>
-<li><p>** 兼容性和灵活性： **</p>
-<p>广泛兼容：RoCE 基于以太网，兼容性和通用性好，可以与其他网络设备和协议无缝集成。 灵活部署：可以灵活地部署在不同的网络拓扑和环境中。 </p>
-</li>
-<li><p><strong>易于管理：</strong></p>
-<p>统一管理：由于 RoCE 基于以太网，可以使用现有的网络管理工具和协议进行管理，简化了管理流程。</p>
-</li>
-</ul>
-<h3 id="RoCE的缺点"><a href="#RoCE的缺点" class="headerlink" title="RoCE的缺点"></a>RoCE 的缺点</h3><ul>
-<li><p><strong>性能：</strong></p>
-<p>较高的延迟：尽管 RoCE 能够提供低延迟，但通常不如 IB 网络，在极端低延迟需求的应用中可能不如 IB 表现优秀。 网络拥塞：在共享以太网上运行时，可能受到其他网络流量的影响，导致性能下降。 </p>
-</li>
-<li><p><strong>可靠性：</strong></p>
-<p>依赖于以太网质量：RoCE 的性能和可靠性依赖于以太网的质量，如果以太网网络质量不佳，可能会影响 RoCE 的表现。</p>
-</li>
-</ul>
-<h3 id="RoCE对比IB总结"><a href="#RoCE对比IB总结" class="headerlink" title="RoCE对比IB总结"></a>RoCE 对比 IB 总结</h3><ul>
-<li>IB 和 RoCE 的区别为链路层一个为 IB 协议，一个为 Ethernet 协议，其中 Ethernet 协议更具有普适性，且大部分场景 RoCE 时延更低、带宽更高。</li>
-</ul>
-<h3 id="RoCE的关键技术"><a href="#RoCE的关键技术" class="headerlink" title="RoCE的关键技术"></a>RoCE 的关键技术</h3><ul>
-<li><p>由于 RDMA 要求承载网络无丢包，否则效率就会急剧下降，所以 RoCE 技术如果选用以太网进行承载，就需要通过 PFC，ECN 以及 DCQCN 等技术对传统以太网络改造，打造无损以太网络，以确保零丢包。</p>
-<p><img src="/../img/36a8e300fd6759f17464122ef108e37b.png" alt="PEC&amp;ECN"></p>
-</li>
-<li><p><strong>PFC:</strong></p>
-<p>基于优先级的流量控制。PFC 为多种类型的流量提供基于每跳优先级的流量控制。设备在转发报文时，通过在优先级映射表中查找报文的优先级，将报文分配到队列中进行调度和转发。当 802.1p 优先级报文的发送速率超过接收速率且接收端的数据缓存空间不足时，接收端向发送端发送 PFC 暂停帧。当发送端收到 PFC 暂停帧时，发送端停止发送具有指定 802.1p 优先级的报文，直到发送端收到 PFC XON 帧或老化定时器超时。配置 PFC 时，特定类型报文的拥塞不影响其他类型报文的正常转发。</p>
-</li>
-<li><p><strong>ECN：</strong></p>
-<p>显式拥塞通知。ECN 定义了基于 IP 层和传输层的流量控制和端到端拥塞通知机制。当设备拥塞时，ECN 会在数据包的 IP 头中标记 ECN 字段。接收端发送拥塞通知包（CNP）通知发送端放慢发送速度。ECN 实现端到端的拥塞管理，减少拥塞的扩散和加剧。</p>
-</li>
-</ul>
-<hr>
-<h2 id="RoCE应用趋势"><a href="#RoCE应用趋势" class="headerlink" title="RoCE应用趋势"></a>RoCE 应用趋势</h2><ul>
-<li><p>当比较 RoCE 与其他类似的策略时，例如 iWARP（Internet Wide Area RDMA Protocol）和传统的 InfiniBand 网络，我们可以看到一些显著的区别。</p>
-<p><img src="/../img/RDMA.png" alt="RDMA"></p>
-</li>
-<li><p>iWARP 是一种通过 TCP/IP 协议栈实现 RDMA 的技术。虽然它可以在标准的三层网络中运行，但它的实现通常比 RoCE 复杂，并且可能需要更多的 CPU 资源来处理额外的软件堆栈。此外，iWARP 在网络性能方面可能不如 RoCE，尤其是在低延迟和高带宽的应用场景中。</p>
-</li>
-<li><p>InfiniBand 是一种专为高性能计算设计的网络技术，它提供了极低的延迟和非常高的带宽。尽管 InfiniBand 在性能上优于 RoCE，但它通常也更昂贵，并且需要专用的硬件。相比之下，RoCE 可以在现有的以太网基础设施上运行，降低了部署成本。</p>
-<p><img src="/../img/RoCE_Header_format.png"></p>
-</li>
-<li><p>随着 RoCEv2 的成熟和普及，它已成为数据中心网络中的一个主要趋势。越来越多的企业开始采用 RoCEv2 来支持高性能计算、机器学习和大规模存储集群等应用。RoCEv2 的优势在于它能够在标准以太网上实现低延迟和高带宽的 RDMA 通信，同时保持较低的成本。</p>
-</li>
-<li><p>未来，随着对数据密集型应用需求的增长，RoCEv2 将继续在其核心市场中发挥重要作用。随着技术的进步和新的应用场景的出现，RoCEv2 可能会进一步优化以支持更广泛的用例，包括边缘计算和物联网（IoT）领域中的实时数据处理。</p>
-</li>
-<li><p>RoCEv2 凭借其在性能和成本之间的平衡，正在成为数据中心网络架构中的关键技术之一，而 RoCEv1 则由于其局限性而在实际应用中逐渐被淘汰。随着网络技术和市场需求的不断发展，RoCEv2 有望在未来的数据中心和高性能计算环境中扮演更加重要的角色。</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>work</tag>
-        <tag>Ops</tag>
-        <tag>网络</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux 快捷指令</title>
-    <url>/2024/07/17/Linux%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
-    <content><![CDATA[<p>本人工作时常用到的一些 linux 快捷指令，希望对大家有所帮助。</p>
-<span id="more"></span>
-
-<ul>
-<li><p>查看正在运行的 python 脚本<br>  <code>ps -ef |grep python</code></p>
-<p>  <code>ps aux | grep python</code></p>
-</li>
-<li><p>查看当前目录下的文件占用内存</p>
-<p>  <code>du -sh</code></p>
-</li>
-<li><p>查看文件系统磁盘占用情况</p>
-<p>  <code>df -h $home</code></p>
-</li>
-<li><p>计算文件数</p>
-<p>  <code>ls | wc -l</code></p>
-</li>
-<li><p>查看当前文件夹下每个文件的大小</p>
-<p>  <code>ls -lh</code></p>
-</li>
-<li><p>暂停进程 18000 秒</p>
-<p>  <code>sh -c | sleep 18000</code></p>
-</li>
-<li><p>显示物理地址<br>  <code>overlay </code></p>
-</li>
-</ul>
-<hr>
-<h4 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h4><ul>
-<li><p><strong>解压</strong> tar.gz file</p>
-<p>  <code>tar -zxvf folder.tar.gz folder</code></p>
-</li>
-<li><p><strong>解压</strong> tar file</p>
-<p>  <code>tar -xvf folder.tar</code></p>
-</li>
-</ul>
-<h4 id="unrar"><a href="#unrar" class="headerlink" title="unrar"></a>unrar</h4><ul>
-<li><p>解压 rar file</p>
-<p>  <code>unrar x example.rar</code></p>
-</li>
-</ul>
-<h4 id="unzip"><a href="#unzip" class="headerlink" title="unzip"></a>unzip</h4><ul>
-<li><p><strong>解压</strong> zip file</p>
-<p><code>unzip -l example.zip</code></p>
-</li>
-</ul>
-<hr>
-<h4 id="远程操作"><a href="#远程操作" class="headerlink" title="远程操作"></a>远程操作</h4><ul>
-<li><p>远程发送文件<br><code>scp folder_path root@ip:folder_path</code></p>
-</li>
-<li><p>远程链接服务器<br><code>ssh username@remote_server_ip</code></p>
-</li>
-</ul>
-<hr>
-<h4 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h4><ul>
-<li>手动挂载 U 盘 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mkdir /mnt/usb 			#新建文件夹</span><br><span class="line">fdisk -l			#查看u盘名称</span><br><span class="line">mount /dev/sdb1 /mnt/usb	#将u盘挂载到文件夹</span><br><span class="line">umount /mnt/usb			#使用完，退出挂载</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<hr>
-<ul>
-<li>批量安装 rpm 包<br><code>rpm -ivh *.rpm</code></li>
-</ul>
-<hr>
-<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><ul>
-<li><p>将日志输入到 log 中<br><code>nohup python main.py &gt;log.log 2&gt;&amp;1 &amp;</code></p>
-</li>
-<li><p>查看日志<br><code>tail -f log.log</code></p>
-</li>
-</ul>
-<hr>
-<h4 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h4><ul>
-<li>建立软链接<br>ln  -s   [源文件]   [软链接文件]</li>
-</ul>
-<hr>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
-<li><p>排查 ip 后缀</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl `kubectl get svc -n bfe| fgrep ilb-controller | awk <span class="string">'{print $3}'</span>`:8086/v1/third-party/integration/bml/services?content=config  -H  <span class="string">"Authorization:Token H9zUjETTd3oajBaCJdoYNiynzfEs"</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删垃圾</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl -X DELETE http://`kubectl get svc -n bfe|fgrep ilb-controller | awk <span class="string">'{print $3}'</span>`:8086/v1/third-party/integration/bml/asi-v8874znn6ph51iiu -H  <span class="string">"Authorization:Token H9zUjETTd3oajBaCJdoYNiynzfEs"</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h4 id="GPT写的"><a href="#GPT写的" class="headerlink" title="GPT写的"></a>GPT 写的</h4><ul>
-<li>Shell 是一种特别的交互式命令行接口，常见的有 Bash（Linux、MacOS）和 Command Prompt（Windows），以下是一些常用的 Bash Shell 操作命令：</li>
-</ul>
-<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">pwd：打印当前工作目录。</span><br><span class="line">ls：列出当前目录下的所有文件和文件夹（不包括以.开头的隐藏文件）。</span><br><span class="line">cd：进入指定目录，如 “cd /usr/local”。</span><br><span class="line">mkdir：新建一个目录，如 “mkdir dir_name”。</span><br><span class="line">touch：新建一个空文件，如 “touch file_name”。</span><br><span class="line">cp：复制文件或目录，如 “cp file1 file2”。</span><br><span class="line">mv：移动文件或目录，如 “mv file1 file2”。</span><br><span class="line">rm：删除文件或目录，如 “rm file_name” 或者 “rm -r dir_name”。</span><br><span class="line">cat：查看文件内容，如 “cat file_name”。</span><br><span class="line">grep：在文件中查找指定的文本，如 “grep ‘some text’ file_name”。</span><br><span class="line">top：查看进程信息。</span><br><span class="line">ps：列出系统中当前运行的进程信息。</span><br><span class="line">kill：结束一个进程，如 “kill PID” 或者 “killall process_name”。</span><br><span class="line">history：查看历史命令记录，如 “history”。</span><br><span class="line">chmod：修改文件或者目录的权限，如 “chmod 777 file_name”。</span><br><span class="line">df：查看磁盘空间的使用情况，如 “df -h”。</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>以上只是 Shell 命令中的一些常用的操作，Bash Shell 还支持大量的其他命令和操作，可以通过 man 命令查看命令的 manual 手册来了解更多细节信息和使用方法。</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Jupyter Notebook 快捷指令</title>
-    <url>/2021/01/15/Jupyter%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
-    <content><![CDATA[<p>以下是 Jupyter Notebook 的一些常用快捷操作：</p>
-<span id="more"></span>
-
-
-<h3 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h3><ul>
-<li><p>在 Jupyter Notebook 中按下 Esc 键即进入命令模式，此时单元格外侧边框变为蓝色。</p>
-<ul>
-<li>A：在当前单元格上方添加一个新单元格。</li>
-<li>B：在当前单元格下方添加一个新单元格。</li>
-<li>DD：删除当前单元格。</li>
-<li>M：将当前单元格切换为 Markdown 模式。</li>
-<li>Y：将当前单元格切换为代码模式。</li>
-<li>1 ~ 6：将当前 Markdown 单元格变为对应的标题（# ~ ######）。</li>
-<li>H：显示所有快捷键。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h3 id="编辑模式"><a href="#编辑模式" class="headerlink" title="编辑模式"></a>编辑模式</h3><ul>
-<li><p>在 Jupyter Notebook 中按下 Enter 键，即进入编辑模式，此时单元格外侧边框变为绿色。</p>
-<ul>
-<li><p>Ctrl + Enter：运行当前单元格，并选中下面的单元格。若是最后一个单元格则不选中。</p>
-</li>
-<li><p>Shift + Enter：运行当前单元格，并选中下面的单元格。若是最后一个单元格，则新建一个单元格并选中该单元格。</p>
-</li>
-<li><p>Alt + Enter：运行当前单元格，并在下面插入一个新单元格，并选中该单元格。</p>
-</li>
-<li><p>Ctrl + /：注释或取消注释当前行或选中区域。</p>
-</li>
-<li><p>Shift + Tab：显示函数或类的参数和文档字符串。重复按下时，分别显示更多信息。</p>
-</li>
-<li><p>Ctrl + Shift + -：在光标所在行下方分割单元格。<br>Ctrl + Shift + +：在光标所在行上方分割单元格。</p>
-</li>
-</ul>
-</li>
-<li><p>以上仅是一些常用的快捷键，你也可以在 Jupyter Notebook 的 Help -&gt; Keyboard Shortcuts 中看到完整的快捷键列表，你也可以自定义快捷键的方式来使得自己更舒适使用。</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Jupyter Notebook</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>K8s 常用命令</title>
-    <url>/2024/07/17/Kubenets%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
-<span id="more"></span>
-
-
-<ul>
-<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
-  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看容器内日志</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看所有镜像</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>进入容器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除 pods</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>从 pod 中复制文件到本地服务器上</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看 pod 详细信息</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hello World</title>
-    <url>/2024/07/15/hello-world/</url>
-    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-]]></content>
   </entry>
 </search>
