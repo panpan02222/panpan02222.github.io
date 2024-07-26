@@ -474,33 +474,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>修改远程桌面端口步骤</title>
-    <url>/2021/01/11/Config/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4%20/</url>
-    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
-<span id="more"></span>
-
-
-<ol>
-<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
-</li>
-<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
-</li>
-<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
-</li>
-<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
-</li>
-<li><p>重启电脑</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>work</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>局域网远程桌面</title>
     <url>/2021/01/14/Config/20210114_%E5%B1%80%E5%9F%9F%E7%BD%91%E9%93%BE%E6%8E%A5/</url>
     <content><![CDATA[<p>内网远程桌面连接方法</p>
@@ -544,9 +517,36 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
+    <title>修改远程桌面端口步骤</title>
+    <url>/2021/01/11/Config/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4%20/</url>
+    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
+<span id="more"></span>
+
+
+<ol>
+<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
+</li>
+<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
+</li>
+<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
+</li>
+<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
+</li>
+<li><p>重启电脑</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>work</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>配置 Anaconda3 的 conda 源</title>
     <url>/2024/04/25/Config/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
-    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
+    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><b><span id="more"></span>
 
 <h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
 <h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
@@ -723,6 +723,66 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
+    <title>服务器免密配置教程 - 2</title>
+    <url>/2024/07/15/Config/20240709_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
+    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
+<span id="more"></span>
+
+
+<blockquote>
+<p>[!NOTE]</p>
+<p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
+</blockquote>
+<h2 id="1-准备ip文件"><a href="#1-准备ip文件" class="headerlink" title="1. 准备ip文件"></a>1. 准备 ip 文件</h2><ul>
+<li><p>创建 ip.txt <code>vim ip.txt</code></p>
+</li>
+<li><p>将需要免密的机器 <code>ip</code> 写入</p>
+</li>
+</ul>
+<h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
+<li><code>vim set_key.sh</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否已经生成了SSH密钥对</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f ~/.ssh/id_rsa.pub ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Generating SSH key pair..."</span></span><br><span class="line">  ssh-keygen -t rsa -N <span class="string">""</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公钥复制到每台目标机器</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> -r ip; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Configuring SSH key authentication for <span class="variable">$ip</span>..."</span></span><br><span class="line">  ssh-copy-id root@<span class="variable">$ip</span></span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"><span class="built_in">echo</span> </span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p><code>chmod +x set_key.sh</code></p>
+</li>
+<li><p><code>./set_key.sh</code></p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>服务器配置永久修改 DNS</title>
     <url>/2024/07/15/Config/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
     <content><![CDATA[<p>服务器内配置 DNS</p>
@@ -749,42 +809,6 @@ Domains=domain.com
       </categories>
       <tags>
         <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建基于 Hexo 架构的个人博客</title>
-    <url>/2024/07/18/Config/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
-<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
-<span id="more"></span>
-
-
-<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
-<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
-<ul>
-<li>升级 npm：<code>npm install -g npm</code></li>
-</ul>
-<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
-<ul>
-<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
-</ul>
-<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
-<li><p>检查 node.js 版本：</p>
-<p>  <code>node -v</code></p>
-</li>
-<li><p>检查 npm 版本：</p>
-<p>  <code>npm -v</code></p>
-</li>
-<li><p>检查 cnpm 版本：</p>
-<p>  <code>cnpm -v</code></p>
-</li>
-</ul>
-<div class="note warning"><p>这里是警告。</p></div>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
@@ -885,63 +909,39 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>服务器免密配置教程 - 2</title>
-    <url>/2024/07/15/Config/20240709_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
-    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
+    <title>搭建基于 Hexo 架构的个人博客</title>
+    <url>/2024/07/18/Config/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
+<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
 <span id="more"></span>
 
 
-<blockquote>
-<p>[!NOTE]</p>
-<p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
-</blockquote>
-<h2 id="1-准备ip文件"><a href="#1-准备ip文件" class="headerlink" title="1. 准备ip文件"></a>1. 准备 ip 文件</h2><ul>
-<li><p>创建 ip.txt <code>vim ip.txt</code></p>
-</li>
-<li><p>将需要免密的机器 <code>ip</code> 写入</p>
-</li>
-</ul>
-<h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
-<li><code>vim set_key.sh</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否已经生成了SSH密钥对</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f ~/.ssh/id_rsa.pub ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Generating SSH key pair..."</span></span><br><span class="line">  ssh-keygen -t rsa -N <span class="string">""</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公钥复制到每台目标机器</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> -r ip; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Configuring SSH key authentication for <span class="variable">$ip</span>..."</span></span><br><span class="line">  ssh-copy-id root@<span class="variable">$ip</span></span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"><span class="built_in">echo</span> </span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
+<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
 <ul>
-<li><p><code>chmod +x set_key.sh</code></p>
-</li>
-<li><p><code>./set_key.sh</code></p>
-</li>
+<li>升级 npm：<code>npm install -g npm</code></li>
 </ul>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
+<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
 <ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
+</ul>
+<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
+<li><p>检查 node.js 版本：</p>
+<p>  <code>node -v</code></p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+<li><p>检查 npm 版本：</p>
+<p>  <code>npm -v</code></p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+<li><p>检查 cnpm 版本：</p>
+<p>  <code>cnpm -v</code></p>
 </li>
 </ul>
-</blockquote>
-]]></content>
+<div class="note warning"><p>这里是警告。</p></div>]]></content>
       <categories>
         <category>Config</category>
       </categories>
       <tags>
-        <tag>Ops</tag>
+        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
@@ -1319,51 +1319,6 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>K8s 常用命令</title>
-    <url>/2024/07/17/In%20Linux/Kubenets%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
-<span id="more"></span>
-
-
-<ul>
-<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
-  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看容器内日志</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看所有镜像</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>进入容器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除 pods</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>从 pod 中复制文件到本地服务器上</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看 pod 详细信息</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>In Linux</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Jupyter Notebook 快捷指令</title>
     <url>/2021/01/15/In%20Linux/Jupyter%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
     <content><![CDATA[<p>以下是 Jupyter Notebook 的一些常用快捷操作：</p>
@@ -1410,6 +1365,148 @@ Domains=domain.com
       </categories>
       <tags>
         <tag>Jupyter Notebook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 快捷指令</title>
+    <url>/2024/07/17/In%20Linux/Linux%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
+    <content><![CDATA[<p>本人工作时常用到的一些 linux 快捷指令，希望对大家有所帮助。</p>
+<span id="more"></span>
+
+<ul>
+<li><p>查看正在运行的 python 脚本<br>  <code>ps -ef |grep python</code></p>
+<p>  <code>ps aux | grep python</code></p>
+</li>
+<li><p>查看当前目录下的文件占用内存</p>
+<p>  <code>du -sh</code></p>
+</li>
+<li><p>查看文件系统磁盘占用情况</p>
+<p>  <code>df -h $home</code></p>
+</li>
+<li><p>计算文件数</p>
+<p>  <code>ls | wc -l</code></p>
+</li>
+<li><p>查看当前文件夹下每个文件的大小</p>
+<p>  <code>ls -lh</code></p>
+</li>
+<li><p>暂停进程 18000 秒</p>
+<p>  <code>sh -c | sleep 18000</code></p>
+</li>
+<li><p>显示物理地址<br>  <code>overlay </code></p>
+</li>
+</ul>
+<hr>
+<h4 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h4><ul>
+<li><p><strong>解压</strong> tar.gz file</p>
+<p>  <code>tar -zxvf folder.tar.gz folder</code></p>
+</li>
+<li><p><strong>解压</strong> tar file</p>
+<p>  <code>tar -xvf folder.tar</code></p>
+</li>
+</ul>
+<h4 id="unrar"><a href="#unrar" class="headerlink" title="unrar"></a>unrar</h4><ul>
+<li><p>解压 rar file</p>
+<p>  <code>unrar x example.rar</code></p>
+</li>
+</ul>
+<h4 id="unzip"><a href="#unzip" class="headerlink" title="unzip"></a>unzip</h4><ul>
+<li><p><strong>解压</strong> zip file</p>
+<p><code>unzip -l example.zip</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="远程操作"><a href="#远程操作" class="headerlink" title="远程操作"></a>远程操作</h4><ul>
+<li><p>远程发送文件<br><code>scp folder_path root@ip:folder_path</code></p>
+</li>
+<li><p>远程链接服务器<br><code>ssh username@remote_server_ip</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h4><ul>
+<li>手动挂载 U 盘 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mkdir /mnt/usb 			#新建文件夹</span><br><span class="line">fdisk -l			#查看u盘名称</span><br><span class="line">mount /dev/sdb1 /mnt/usb	#将u盘挂载到文件夹</span><br><span class="line">umount /mnt/usb			#使用完，退出挂载</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<ul>
+<li>批量安装 rpm 包<br><code>rpm -ivh *.rpm</code></li>
+</ul>
+<hr>
+<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><ul>
+<li><p>将日志输入到 log 中<br><code>nohup python main.py &gt;log.log 2&gt;&amp;1 &amp;</code></p>
+</li>
+<li><p>查看日志<br><code>tail -f log.log</code></p>
+</li>
+</ul>
+<hr>
+<h4 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h4><ul>
+<li>建立软链接<br>ln  -s   [源文件]   [软链接文件]</li>
+</ul>
+<hr>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
+<li><p>排查 ip 后缀</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl `kubectl get svc -n bfe| fgrep ilb-controller | awk <span class="string">'{print $3}'</span>`:8086/v1/third-party/integration/bml/services?content=config  -H  <span class="string">"Authorization:Token H9zUjETTd3oajBaCJdoYNiynzfEs"</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删垃圾</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl -X DELETE http://`kubectl get svc -n bfe|fgrep ilb-controller | awk <span class="string">'{print $3}'</span>`:8086/v1/third-party/integration/bml/asi-v8874znn6ph51iiu -H  <span class="string">"Authorization:Token H9zUjETTd3oajBaCJdoYNiynzfEs"</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h4 id="GPT写的"><a href="#GPT写的" class="headerlink" title="GPT写的"></a>GPT 写的</h4><ul>
+<li>Shell 是一种特别的交互式命令行接口，常见的有 Bash（Linux、MacOS）和 Command Prompt（Windows），以下是一些常用的 Bash Shell 操作命令：</li>
+</ul>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">pwd：打印当前工作目录。</span><br><span class="line">ls：列出当前目录下的所有文件和文件夹（不包括以.开头的隐藏文件）。</span><br><span class="line">cd：进入指定目录，如 “cd /usr/local”。</span><br><span class="line">mkdir：新建一个目录，如 “mkdir dir_name”。</span><br><span class="line">touch：新建一个空文件，如 “touch file_name”。</span><br><span class="line">cp：复制文件或目录，如 “cp file1 file2”。</span><br><span class="line">mv：移动文件或目录，如 “mv file1 file2”。</span><br><span class="line">rm：删除文件或目录，如 “rm file_name” 或者 “rm -r dir_name”。</span><br><span class="line">cat：查看文件内容，如 “cat file_name”。</span><br><span class="line">grep：在文件中查找指定的文本，如 “grep ‘some text’ file_name”。</span><br><span class="line">top：查看进程信息。</span><br><span class="line">ps：列出系统中当前运行的进程信息。</span><br><span class="line">kill：结束一个进程，如 “kill PID” 或者 “killall process_name”。</span><br><span class="line">history：查看历史命令记录，如 “history”。</span><br><span class="line">chmod：修改文件或者目录的权限，如 “chmod 777 file_name”。</span><br><span class="line">df：查看磁盘空间的使用情况，如 “df -h”。</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>以上只是 Shell 命令中的一些常用的操作，Bash Shell 还支持大量的其他命令和操作，可以通过 man 命令查看命令的 manual 手册来了解更多细节信息和使用方法。</li>
+</ul>
+]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>K8s 常用命令</title>
+    <url>/2024/07/17/In%20Linux/Kubenets%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
+<span id="more"></span>
+
+
+<ul>
+<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
+  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看容器内日志</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看所有镜像</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>进入容器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除 pods</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>从 pod 中复制文件到本地服务器上</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看 pod 详细信息</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
@@ -1597,103 +1694,6 @@ Domains=domain.com
       </categories>
       <tags>
         <tag>LLM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux 快捷指令</title>
-    <url>/2024/07/17/In%20Linux/Linux%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
-    <content><![CDATA[<p>本人工作时常用到的一些 linux 快捷指令，希望对大家有所帮助。</p>
-<span id="more"></span>
-
-<ul>
-<li><p>查看正在运行的 python 脚本<br>  <code>ps -ef |grep python</code></p>
-<p>  <code>ps aux | grep python</code></p>
-</li>
-<li><p>查看当前目录下的文件占用内存</p>
-<p>  <code>du -sh</code></p>
-</li>
-<li><p>查看文件系统磁盘占用情况</p>
-<p>  <code>df -h $home</code></p>
-</li>
-<li><p>计算文件数</p>
-<p>  <code>ls | wc -l</code></p>
-</li>
-<li><p>查看当前文件夹下每个文件的大小</p>
-<p>  <code>ls -lh</code></p>
-</li>
-<li><p>暂停进程 18000 秒</p>
-<p>  <code>sh -c | sleep 18000</code></p>
-</li>
-<li><p>显示物理地址<br>  <code>overlay </code></p>
-</li>
-</ul>
-<hr>
-<h4 id="tar"><a href="#tar" class="headerlink" title="tar"></a>tar</h4><ul>
-<li><p><strong>解压</strong> tar.gz file</p>
-<p>  <code>tar -zxvf folder.tar.gz folder</code></p>
-</li>
-<li><p><strong>解压</strong> tar file</p>
-<p>  <code>tar -xvf folder.tar</code></p>
-</li>
-</ul>
-<h4 id="unrar"><a href="#unrar" class="headerlink" title="unrar"></a>unrar</h4><ul>
-<li><p>解压 rar file</p>
-<p>  <code>unrar x example.rar</code></p>
-</li>
-</ul>
-<h4 id="unzip"><a href="#unzip" class="headerlink" title="unzip"></a>unzip</h4><ul>
-<li><p><strong>解压</strong> zip file</p>
-<p><code>unzip -l example.zip</code></p>
-</li>
-</ul>
-<hr>
-<h4 id="远程操作"><a href="#远程操作" class="headerlink" title="远程操作"></a>远程操作</h4><ul>
-<li><p>远程发送文件<br><code>scp folder_path root@ip:folder_path</code></p>
-</li>
-<li><p>远程链接服务器<br><code>ssh username@remote_server_ip</code></p>
-</li>
-</ul>
-<hr>
-<h4 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h4><ul>
-<li>手动挂载 U 盘 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mkdir /mnt/usb 			#新建文件夹</span><br><span class="line">fdisk -l			#查看u盘名称</span><br><span class="line">mount /dev/sdb1 /mnt/usb	#将u盘挂载到文件夹</span><br><span class="line">umount /mnt/usb			#使用完，退出挂载</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<hr>
-<ul>
-<li>批量安装 rpm 包<br><code>rpm -ivh *.rpm</code></li>
-</ul>
-<hr>
-<h4 id="日志"><a href="#日志" class="headerlink" title="日志"></a>日志</h4><ul>
-<li><p>将日志输入到 log 中<br><code>nohup python main.py &gt;log.log 2&gt;&amp;1 &amp;</code></p>
-</li>
-<li><p>查看日志<br><code>tail -f log.log</code></p>
-</li>
-</ul>
-<hr>
-<h4 id="软链接"><a href="#软链接" class="headerlink" title="软链接"></a>软链接</h4><ul>
-<li>建立软链接<br>ln  -s   [源文件]   [软链接文件]</li>
-</ul>
-<hr>
-<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><ul>
-<li><p>排查 ip 后缀</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl `kubectl get svc -n bfe| fgrep ilb-controller | awk <span class="string">'{print $3}'</span>`:8086/v1/third-party/integration/bml/services?content=config  -H  <span class="string">"Authorization:Token H9zUjETTd3oajBaCJdoYNiynzfEs"</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删垃圾</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">curl -X DELETE http://`kubectl get svc -n bfe|fgrep ilb-controller | awk <span class="string">'{print $3}'</span>`:8086/v1/third-party/integration/bml/asi-v8874znn6ph51iiu -H  <span class="string">"Authorization:Token H9zUjETTd3oajBaCJdoYNiynzfEs"</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h4 id="GPT写的"><a href="#GPT写的" class="headerlink" title="GPT写的"></a>GPT 写的</h4><ul>
-<li>Shell 是一种特别的交互式命令行接口，常见的有 Bash（Linux、MacOS）和 Command Prompt（Windows），以下是一些常用的 Bash Shell 操作命令：</li>
-</ul>
-<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">pwd：打印当前工作目录。</span><br><span class="line">ls：列出当前目录下的所有文件和文件夹（不包括以.开头的隐藏文件）。</span><br><span class="line">cd：进入指定目录，如 “cd /usr/local”。</span><br><span class="line">mkdir：新建一个目录，如 “mkdir dir_name”。</span><br><span class="line">touch：新建一个空文件，如 “touch file_name”。</span><br><span class="line">cp：复制文件或目录，如 “cp file1 file2”。</span><br><span class="line">mv：移动文件或目录，如 “mv file1 file2”。</span><br><span class="line">rm：删除文件或目录，如 “rm file_name” 或者 “rm -r dir_name”。</span><br><span class="line">cat：查看文件内容，如 “cat file_name”。</span><br><span class="line">grep：在文件中查找指定的文本，如 “grep ‘some text’ file_name”。</span><br><span class="line">top：查看进程信息。</span><br><span class="line">ps：列出系统中当前运行的进程信息。</span><br><span class="line">kill：结束一个进程，如 “kill PID” 或者 “killall process_name”。</span><br><span class="line">history：查看历史命令记录，如 “history”。</span><br><span class="line">chmod：修改文件或者目录的权限，如 “chmod 777 file_name”。</span><br><span class="line">df：查看磁盘空间的使用情况，如 “df -h”。</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>以上只是 Shell 命令中的一些常用的操作，Bash Shell 还支持大量的其他命令和操作，可以通过 man 命令查看命令的 manual 手册来了解更多细节信息和使用方法。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>In Linux</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
       </tags>
   </entry>
 </search>
