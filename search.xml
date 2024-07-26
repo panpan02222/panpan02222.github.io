@@ -131,6 +131,31 @@
       </tags>
   </entry>
   <entry>
+    <title>Proxychains install</title>
+    <url>/2022/07/17/20220707_Proxychains%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
+<span id="more"></span>
+
+
+<ul>
+<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
+</li>
+<li><p>进入解压后的目录，执行 <code>./configure</code></p>
+</li>
+<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
+</li>
+<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
+</li>
+</ul>
+<blockquote>
+<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基准测试全流程</title>
     <url>/2024/04/18/20240418_%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%85%A8%E6%B5%81%E7%A8%8B/</url>
     <content><![CDATA[<p>nccl 测试，p2pBandwidthLatency 测试，all_reduce_perf 测试</p>
@@ -238,39 +263,14 @@
 </blockquote>
 ]]></content>
       <tags>
+        <tag>Ops</tag>
         <tag>nccl</tag>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Proxychains install</title>
-    <url>/2022/07/17/20220707_Proxychains%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
-<span id="more"></span>
-
-
-<ul>
-<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
-</li>
-<li><p>进入解压后的目录，执行 <code>./configure</code></p>
-</li>
-<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
-</li>
-<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
-</li>
-</ul>
-<blockquote>
-<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
     <title>配置 Anaconda3 的 conda 源</title>
     <url>/2024/04/25/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
-    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><b><span id="more"></span>
+    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
 
 <h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
 <h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
@@ -288,152 +288,6 @@
 </b>]]></content>
       <tags>
         <tag>anaconda</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>利用 NPU 运行 ChatGLM3 全流程</title>
-    <url>/2024/04/26/20240426_%E5%88%A9%E7%94%A8NPU%E8%BF%90%E8%A1%8CChatGLM3%E5%85%A8%E6%B5%81%E7%A8%8B/</url>
-    <content><![CDATA[<p>利用 NPU 运行 ChatGLM3 全流程</p>
-<span id="more"></span>
-
-
-<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><ol>
-<li><p>新建 Conda 虚拟环境  <code>conda create -n env_name python==3.10</code></p>
-</li>
-<li><p>下载 ChatGLM3 源代码 <code>git clone https://github.com/THUDM/ChatGLM3.git</code></p>
-</li>
-<li><p>下载模型权重 </p>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">git lfs install</span><br><span class="line">git clone https://www.modelscope.cn/ZhipuAI/chatglm3-6b.git</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>安装基础环境，进入源码仓库 <code>cd ChatGLM3</code> , pip 安装 <code>pip install -r requirements.txt</code><br><strong>特别说明 : torch 版本可在 requirements.txt 中手动修改</strong></p>
-</li>
-<li><p>安装 npu 基础环境，下载对应 torch 的 <strong>torch-npu</strong> 依赖包，本地安装 <code>pip install xxx.whl</code><br><a href="https://gitee.com/ascend/pytorch/releases">torch-npu 官方下载地址</a></p>
-</li>
-<li><p>运行以下代码，验证环境是否安装成功</p>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu</span><br><span class="line"></span><br><span class="line">x = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">y = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">z = x.mm(y)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(z)</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<hr>
-<h4 id="推理"><a href="#推理" class="headerlink" title="推理"></a>推理</h4><ol>
-<li>修改代码 <code>ChatGLM3-main/basic_demo/cli_demo.py</code><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu <span class="comment"># 新增一行</span></span><br></pre></td></tr></tbody></table></figure>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># transoformer架构需要加 `.to('npu') `</span></span><br><span class="line">model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=<span class="literal">True</span>).to(<span class="string">'npu'</span>).<span class="built_in">eval</span>()</span><br><span class="line"><span class="comment"># model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行代码 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">python basic_demo/cli_demo.py</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><hr>
-<h5 id="安装依赖deepspeed"><a href="#安装依赖deepspeed" class="headerlink" title="安装依赖deepspeed"></a>安装依赖 <strong>deepspeed</strong></h5><ol>
-<li><code>pip install deepspeed==0.9.2</code></li>
-<li>下载 DeepSpeed,  执行本地安装 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd DeepSpeed-v0.9.2</span><br><span class="line">pip3 install -e ./</span><br></pre></td></tr></tbody></table></figure>
- <a href="https://gitee.com/ascend/DeepSpeed/">DeepSpeed 官方仓库</a></li>
-</ol>
-<hr>
-<ol start="0">
-<li>注释微调依赖文件 <code>vim requirements.txt</code>  ,  安装微调相关依赖 <code>pip install -r requirements.txt</code><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">jieba&gt;=0.42.1</span><br><span class="line">ruamel_yaml&gt;=0.18.6</span><br><span class="line">rouge_chinese&gt;=1.0.3</span><br><span class="line">jupyter&gt;=1.0.0</span><br><span class="line">datasets&gt;=2.18.0</span><br><span class="line">peft&gt;=0.10.0</span><br><span class="line"># deepspeed==0.13.1 #注释</span><br><span class="line"># mpi4py&gt;=3.1.5 #注释</span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行微调脚本，按需修改路径 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> finetune_demo</span><br><span class="line"></span><br><span class="line">OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_hf.py  /home/jovyan/chatglm3/AdvertiseGen_fix  THUDM/chatglm3-6b  configs/sft.yaml configs/ds_zero_3.json</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<blockquote>
-<p>参考链接<br><a href="https://zhipu-ai.feishu.cn/wiki/HIj5wVxGqiUg3rkbQ1OcVEe5n9g">chatglm3 官方说明</a><br><a href="https://gitee.com/ascend/ModelZoo-PyTorch/tree/master/PyTorch/built-in/foundation/ChatGLM-6B">ascend 运行 chatglm1 官方教程</a><br><a href="https://www.hiascend.com/software/modelzoo/models/detail/5dfa1b69e0db4b8f889c5ee20aa23dcb">ascend 运行 chatglm2 官方教程</a></p>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>nccl</tag>
-        <tag>npu</tag>
-        <tag>chatglm3</tag>
-        <tag>deepspeed</tag>
-        <tag>LLM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>获取 NVIDIA 驱动问题的全流程</title>
-    <url>/2024/05/23/20240523_%E8%8E%B7%E5%8F%96nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97/</url>
-    <content><![CDATA[<p>获取 NVIDIA 驱动问题的全流程</p>
-<span id="more"></span>
-
-
-
-<ul>
-<li><p>在 master 机器内通过 ssh 登陆其他机器</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">ssh root@h800-机器号</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>run 收集有关 NVIDIA 显卡驱动程序问题的诊断信息的脚本</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">nvidia-bug-report.sh</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>将刚才生成的日志文件，重命名</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mv nvidia-xx-xxx-log.gz nvidia-机器号-xx-xx-log.gz</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>新建文件夹命名为：日期 - log</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mkdir 0601-log #0601对应日期</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>复制刚才生成的所有文件到文件夹内</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cp nvidia-机器号-xx-xx-log.gz 0601-log</span><br><span class="line">cp /var/log/sys* 0601-log    # 将sys开头的文件复制到0601-log文件夹内</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>压缩文件夹</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">tar -cvf 日期-log.tar 0601-log</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h3 id="补充命令"><a href="#补充命令" class="headerlink" title="补充命令"></a>补充命令</h3><ul>
-<li><p>scp 协议传输跨机器传输文件</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">scp root@master:path /home/folder_name/</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-        <tag>NVIDIA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服务器批量安装 Nvidia-Docker</title>
-    <url>/2024/07/15/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/</url>
-    <content><![CDATA[<p>多台服务器同时安装 Nvidia-docker</p>
-<span id="more"></span>
-<h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>将以上保存到一个文件中，命名 <code>installNGC</code></li>
-</ul>
-<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p>这条命令是在 Linux 系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
-<ul>
-<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号 (SIGHUP)，这意味着即使用户退出当前终端会话，由 <code>nohup</code> 启动的进程仍然会继续运行。</p>
-</li>
-<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code> 脚本或程序将会被运行，它位于 <code>/mnt/hcufs/tools</code> 目录下。</p>
-</li>
-<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到 <code>/dev/null</code> 设备文件。<code>/dev/null</code> 是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让 <code>installNGC</code> 程序的输出显示在终端上。</p>
-</li>
-<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果 <code>installNGC</code> 程序产生任何错误输出，也将被重定向到 <code>/dev/null</code>，同样不会在终端上显示。</p>
-</li>
-<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的 shell 提示符，而不需要等待 <code>installNGC</code> 完成执行。</p>
-</li>
-</ul>
-<p>综上所述，这条命令的意思是：在后台运行 <code>/mnt/hcufs/tools/installNGC</code> 程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
-</li>
-</ul>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
@@ -538,6 +392,94 @@
       </tags>
   </entry>
   <entry>
+    <title>利用 NPU 运行 ChatGLM3 全流程</title>
+    <url>/2024/04/26/20240426_%E5%88%A9%E7%94%A8NPU%E8%BF%90%E8%A1%8CChatGLM3%E5%85%A8%E6%B5%81%E7%A8%8B/</url>
+    <content><![CDATA[<p>利用 NPU 运行 ChatGLM3 全流程</p>
+<span id="more"></span>
+
+
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><ol>
+<li><p>新建 Conda 虚拟环境  <code>conda create -n env_name python==3.10</code></p>
+</li>
+<li><p>下载 ChatGLM3 源代码 <code>git clone https://github.com/THUDM/ChatGLM3.git</code></p>
+</li>
+<li><p>下载模型权重 </p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">git lfs install</span><br><span class="line">git clone https://www.modelscope.cn/ZhipuAI/chatglm3-6b.git</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装基础环境，进入源码仓库 <code>cd ChatGLM3</code> , pip 安装 <code>pip install -r requirements.txt</code><br><strong>特别说明 : torch 版本可在 requirements.txt 中手动修改</strong></p>
+</li>
+<li><p>安装 npu 基础环境，下载对应 torch 的 <strong>torch-npu</strong> 依赖包，本地安装 <code>pip install xxx.whl</code><br><a href="https://gitee.com/ascend/pytorch/releases">torch-npu 官方下载地址</a></p>
+</li>
+<li><p>运行以下代码，验证环境是否安装成功</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu</span><br><span class="line"></span><br><span class="line">x = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">y = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">z = x.mm(y)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(z)</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<hr>
+<h4 id="推理"><a href="#推理" class="headerlink" title="推理"></a>推理</h4><ol>
+<li>修改代码 <code>ChatGLM3-main/basic_demo/cli_demo.py</code><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu <span class="comment"># 新增一行</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># transoformer架构需要加 `.to('npu') `</span></span><br><span class="line">model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=<span class="literal">True</span>).to(<span class="string">'npu'</span>).<span class="built_in">eval</span>()</span><br><span class="line"><span class="comment"># model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行代码 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">python basic_demo/cli_demo.py</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><hr>
+<h5 id="安装依赖deepspeed"><a href="#安装依赖deepspeed" class="headerlink" title="安装依赖deepspeed"></a>安装依赖 <strong>deepspeed</strong></h5><ol>
+<li><code>pip install deepspeed==0.9.2</code></li>
+<li>下载 DeepSpeed,  执行本地安装 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd DeepSpeed-v0.9.2</span><br><span class="line">pip3 install -e ./</span><br></pre></td></tr></tbody></table></figure>
+ <a href="https://gitee.com/ascend/DeepSpeed/">DeepSpeed 官方仓库</a></li>
+</ol>
+<hr>
+<ol start="0">
+<li>注释微调依赖文件 <code>vim requirements.txt</code>  ,  安装微调相关依赖 <code>pip install -r requirements.txt</code><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">jieba&gt;=0.42.1</span><br><span class="line">ruamel_yaml&gt;=0.18.6</span><br><span class="line">rouge_chinese&gt;=1.0.3</span><br><span class="line">jupyter&gt;=1.0.0</span><br><span class="line">datasets&gt;=2.18.0</span><br><span class="line">peft&gt;=0.10.0</span><br><span class="line"># deepspeed==0.13.1 #注释</span><br><span class="line"># mpi4py&gt;=3.1.5 #注释</span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行微调脚本，按需修改路径 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> finetune_demo</span><br><span class="line"></span><br><span class="line">OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_hf.py  /home/jovyan/chatglm3/AdvertiseGen_fix  THUDM/chatglm3-6b  configs/sft.yaml configs/ds_zero_3.json</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<blockquote>
+<p>参考链接<br><a href="https://zhipu-ai.feishu.cn/wiki/HIj5wVxGqiUg3rkbQ1OcVEe5n9g">chatglm3 官方说明</a><br><a href="https://gitee.com/ascend/ModelZoo-PyTorch/tree/master/PyTorch/built-in/foundation/ChatGLM-6B">ascend 运行 chatglm1 官方教程</a><br><a href="https://www.hiascend.com/software/modelzoo/models/detail/5dfa1b69e0db4b8f889c5ee20aa23dcb">ascend 运行 chatglm2 官方教程</a></p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>nccl</tag>
+        <tag>LLM</tag>
+        <tag>npu</tag>
+        <tag>chatglm3</tag>
+        <tag>deepspeed</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>获取 NVIDIA 驱动问题的全流程</title>
+    <url>/2024/05/23/20240523_%E8%8E%B7%E5%8F%96nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97/</url>
+    <content><![CDATA[<p>获取 NVIDIA 驱动问题的全流程</p>
+<span id="more"></span>
+
+
+
+<ul>
+<li><p>在 master 机器内通过 ssh 登陆其他机器</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">ssh root@h800-机器号</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>run 收集有关 NVIDIA 显卡驱动程序问题的诊断信息的脚本</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">nvidia-bug-report.sh</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>将刚才生成的日志文件，重命名</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mv nvidia-xx-xxx-log.gz nvidia-机器号-xx-xx-log.gz</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>新建文件夹命名为：日期 - log</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">mkdir 0601-log #0601对应日期</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>复制刚才生成的所有文件到文件夹内</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cp nvidia-机器号-xx-xx-log.gz 0601-log</span><br><span class="line">cp /var/log/sys* 0601-log    # 将sys开头的文件复制到0601-log文件夹内</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>压缩文件夹</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">tar -cvf 日期-log.tar 0601-log</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h3 id="补充命令"><a href="#补充命令" class="headerlink" title="补充命令"></a>补充命令</h3><ul>
+<li><p>scp 协议传输跨机器传输文件</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">scp root@master:path /home/folder_name/</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
+        <tag>NVIDIA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>配置 VNC 教程</title>
     <url>/2024/07/17/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
@@ -586,75 +528,34 @@
       </tags>
   </entry>
   <entry>
-    <title>服务器免密配置教程 - 1</title>
-    <url>/2024/07/15/20240701_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
-    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
-<p><img src="/../img/image-20240710103927738.png" alt="show ip"></p>
+    <title>服务器批量安装 Nvidia-Docker</title>
+    <url>/2024/07/15/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/</url>
+    <content><![CDATA[<p>多台服务器同时安装 Nvidia-docker</p>
 <span id="more"></span>
+<h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
 
-<blockquote>
-<p>[!NOTE]</p>
-<p>该手册一共 2 个版本，此文档为第一版。</p>
-</blockquote>
-<h2 id="1-获取密钥"><a href="#1-获取密钥" class="headerlink" title="1. 获取密钥"></a>1. 获取密钥</h2>   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -f /root/.ssh/rsa</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="2-验证"><a href="#2-验证" class="headerlink" title="2. 验证"></a>2. 验证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> id_rsa.pub authorized_keys</span><br><span class="line"><span class="comment"># authorized_keys是用于 SSH 服务器验证远程用户身份</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-配置StrictHostKeyChecking"><a href="#3-配置StrictHostKeyChecking" class="headerlink" title="3. 配置StrictHostKeyChecking"></a>3. 配置 <code>StrictHostKeyChecking</code></h2><ul>
-<li>创建 config 文件 <code>vim config</code></li>
+<ul>
+<li>将以上保存到一个文件中，命名 <code>installNGC</code></li>
 </ul>
-<figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">StrictHostKeyChecking no</span><br><span class="line"><span class="params">#</span> 设置 StrictHostKeyChecking no 意味着SSH客户端在连接到远程主机时不会检查该主机的公钥，也不会将新的主机密钥添加到已知主机列表中。这意味着所有远程主机的密钥将被自动接受，而不会进行任何验证。</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
 
-
-
-<h2 id="4-准备ip文件"><a href="#4-准备ip文件" class="headerlink" title="4. 准备ip文件"></a>4. 准备 ip 文件</h2><ul>
-<li><p>创建 ip.txt <code>vim ip.txt</code></p>
+<ul>
+<li><p>这条命令是在 Linux 系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
+<ul>
+<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号 (SIGHUP)，这意味着即使用户退出当前终端会话，由 <code>nohup</code> 启动的进程仍然会继续运行。</p>
 </li>
-<li><p>将需要免密的机器 <code>ip</code> 写入</p>
-<p><img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738"></p>
+<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code> 脚本或程序将会被运行，它位于 <code>/mnt/hcufs/tools</code> 目录下。</p>
+</li>
+<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到 <code>/dev/null</code> 设备文件。<code>/dev/null</code> 是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让 <code>installNGC</code> 程序的输出显示在终端上。</p>
+</li>
+<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果 <code>installNGC</code> 程序产生任何错误输出，也将被重定向到 <code>/dev/null</code>，同样不会在终端上显示。</p>
+</li>
+<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的 shell 提示符，而不需要等待 <code>installNGC</code> 完成执行。</p>
 </li>
 </ul>
-<h2 id="5-创建脚本"><a href="#5-创建脚本" class="headerlink" title="5. 创建脚本"></a>5. 创建脚本</h2><ul>
-<li>需要手动写登录密码 <code>password</code></li>
-<li>前提安装 <code>expect</code></li>
+<p>综上所述，这条命令的意思是：在后台运行 <code>/mnt/hcufs/tools/installNGC</code> 程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
+</li>
 </ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 IP 地址列表</span></span><br><span class="line">servers=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    servers+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地 .ssh 目录路径</span></span><br><span class="line">ssh_dir=<span class="string">"<span class="variable">$HOME</span>/.ssh"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 expect 进行 scp 并自动输入密码</span></span><br><span class="line"><span class="keyword">for</span> server <span class="keyword">in</span> <span class="string">"<span class="variable">${servers[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Copying SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    expect &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">spawn scp -r $ssh_dir root@$server:/root/</span></span><br><span class="line"><span class="string">expect {</span></span><br><span class="line"><span class="string">    "password:" {</span></span><br><span class="line"><span class="string">        send "your password\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    "yes/no" {</span></span><br><span class="line"><span class="string">        send "yes\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    eof {</span></span><br><span class="line"><span class="string">        exit</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">}</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">    <span class="keyword">if</span> [ $? -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Successfully copied SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Failed to copy SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"All servers have been updated with SSH keys."</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<p>补充安装 expect 包教程</p>
-<h3 id="在Ubuntu上安装Expect"><a href="#在Ubuntu上安装Expect" class="headerlink" title="在Ubuntu上安装Expect"></a>在 Ubuntu 上安装 Expect</h3><ol>
-<li><p><strong>更新包列表</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>安装 Expect</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install expect</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证安装</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这将显示已安装的 <code>expect</code> 版本。</p>
-</li>
-</ol>
-<h3 id="在CentOS上安装Expect"><a href="#在CentOS上安装Expect" class="headerlink" title="在CentOS上安装Expect"></a>在 CentOS 上安装 Expect</h3><ol>
-<li><p><strong>更新包列表</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>安装 Expect</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install expect</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证安装</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这将显示已安装的 <code>expect</code> 版本。</p>
-<hr>
-<p>完成这些步骤后，你的系统上就会安装 Expect 工具。Expect 是一种用于自动化交互任务的工具，常用于自动化 SSH 登录、FTP 等需要用户交互的任务。</p>
-</li>
-</ol>
-</blockquote>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -825,39 +726,6 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>搭建基于 Hexo 架构的个人博客</title>
-    <url>/2024/07/18/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
-<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
-<span id="more"></span>
-
-
-<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
-<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
-<ul>
-<li>升级 npm：<code>npm install -g npm</code></li>
-</ul>
-<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
-<ul>
-<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
-</ul>
-<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
-<li><p>检查 node.js 版本：</p>
-<p>  <code>node -v</code></p>
-</li>
-<li><p>检查 npm 版本：</p>
-<p>  <code>npm -v</code></p>
-</li>
-<li><p>检查 cnpm 版本：</p>
-<p>  <code>cnpm -v</code></p>
-</li>
-</ul>
-<div class="note warning"><p>这里是警告。</p></div>]]></content>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>服务器挂载外部存储卷</title>
     <url>/2024/07/15/20240712_%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
     <content><![CDATA[<p>多服务器之间共享文件，需要挂载外部存储卷。从保存数据的服务器上，将共享目录挂载到其他服务器上。</p>
@@ -911,15 +779,210 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>多机配置 hosts 及 hostname</title>
-    <url>/2024/07/15/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
-    <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
+    <title>搭建基于 Hexo 架构的个人博客</title>
+    <url>/2024/07/18/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
+<p><img src="/../img/hexo-1.jpg" alt="hexo 首页"></p>
 <span id="more"></span>
 
-<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
-<li>把 <code>ip</code> 复制到文本内</li>
+
+<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
+<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
+<ul>
+<li>升级 npm：<code>npm install -g npm</code></li>
 </ul>
-<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
+<ul>
+<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
+</ul>
+<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
+<li><p>检查 node.js 版本：</p>
+<p>  <code>node -v</code></p>
+</li>
+<li><p>检查 npm 版本：</p>
+<p>  <code>npm -v</code></p>
+</li>
+<li><p>检查 cnpm 版本：</p>
+<p>  <code>cnpm -v</code></p>
+</li>
+</ul>
+<div class="note warning"><p>这里是警告。</p></div>]]></content>
+      <tags>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>DB-GPT 源代码部署</title>
+    <url>/2024/07/23/20240724_DB-GPT%E6%BA%90%E4%BB%A3%E7%A0%81%E9%83%A8%E7%BD%B2/</url>
+    <content><![CDATA[<p>源代码部署 DB-GPT 操作流程，含测试，部署，注意事项等。</p>
+<p><img src="/../img/dbgpt.png" alt="dbgpt"></p>
+<span id="more"></span>
+
+<h4 id="1-下载源码"><a href="#1-下载源码" class="headerlink" title="1. 下载源码"></a>1. 下载源码</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/eosphoros-ai/DB-GPT.git</span><br></pre></td></tr></tbody></table></figure>
+
+
+<h4 id="2-安装Minconda-运行环境"><a href="#2-安装Minconda-运行环境" class="headerlink" title="2. 安装Minconda(运行环境)"></a>2. 安装 Minconda (运行环境)</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 新建文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line"><span class="comment"># 在线下载minconda安装包</span></span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line"><span class="comment"># 运行安装程序</span></span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="comment"># 删除安装包</span></span><br><span class="line"><span class="built_in">rm</span> -rf ~/miniconda3/miniconda.sh</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>[!NOTE]</p>
+<p>安装 <code>Minconda</code> 软件后重新连接终端，用于激活.</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">初始化</span><br><span class="line">~/miniconda3/bin/conda init bash</span><br><span class="line">~/miniconda3/bin/conda init zsh</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h4 id="3-新建代码运行环境"><a href="#3-新建代码运行环境" class="headerlink" title="3. 新建代码运行环境"></a>3. 新建代码运行环境</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 基于minconda新建一个名称为dbgpt_env的基础环境, 且python版本为3.10</span></span><br><span class="line">conda create -n dbgpt_env python=3.10</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>Conda 环境常用命令 :</p>
+<ul>
+<li>列出所有的环境 <code>conda env list </code></li>
+<li>激活指定环境 <code>conda activate xxxx</code>|xxx 为环境名称</li>
+<li>退出当前环境 <code>conda deactivate</code>| 默认环境为:<code>base</code></li>
+<li>查看当前环境的基础信息 <code>conda info</code> | 主要检查 python 版本，安装库的路径，<code>conda源地址</code></li>
+</ul>
+</li>
+<li><p>清华源地址</p>
+<ul>
+<li><code>https://pypi.tuna.tsinghua.edu.cn/simple</code></li>
+</ul>
+</li>
+<li><p>修改 pip 下载源的地址</p>
+<ul>
+<li><code>https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="4-安装项目所需依赖包-库"><a href="#4-安装项目所需依赖包-库" class="headerlink" title="4. 安装项目所需依赖包/库"></a>4. 安装项目所需依赖包 / 库</h4><ul>
+<li>DB-GPT 下有 setup.py, 为作者写的安装依赖脚本 </li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">pip install -e <span class="string">".[default]"</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h4 id="5-安装可以远程访问模型的软件"><a href="#5-安装可以远程访问模型的软件" class="headerlink" title="5. 安装可以远程访问模型的软件"></a>5. 安装可以远程访问模型的软件</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">apt-get install git-lfs</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h4 id="6-调用在线Qwen接口进行访问"><a href="#6-调用在线Qwen接口进行访问" class="headerlink" title="6. 调用在线Qwen接口进行访问"></a>6. 调用在线 <code>Qwen</code> 接口进行访问</h4><ul>
+<li>安装 <code>qwen</code> 接口所需依赖<ul>
+<li><code>pip install dashscope</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="7-下载Embedding模型"><a href="#7-下载Embedding模型" class="headerlink" title="7 .下载Embedding模型"></a>7 . 下载 Embedding 模型</h4><ul>
+<li><p>在 DB-GPT 项目下，新建文件夹 <code>models</code>| 用于放置 Embedding 模型</p>
+<ul>
+<li><code>mkdir models</code> </li>
+<li><code>cd models</code></li>
+</ul>
+</li>
+<li><p>在线下载 Embedding 模型 | 目前好用的有:<strong>m3e-large</strong>, <strong>text2vec-large-chinese</strong> 等</p>
+<ul>
+<li><p><code>git clone https://huggingface.co/GanymedeNil/text2vec-large-chinese</code></p>
+</li>
+<li><p><code>git clone https://huggingface.co/moka-ai/m3e-large</code></p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="8-配置模型"><a href="#8-配置模型" class="headerlink" title="8. 配置模型"></a>8. 配置模型</h4><ul>
+<li><p>在 DB-GPT 根目录处，复制环境 <code>cp .env.template  .env</code></p>
+</li>
+<li><p>编辑 <code>VIM .env</code></p>
+</li>
+<li><p>按照文档进行修改</p>
+ <figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">LLM<span class="built_in">_</span>model=deepseek<span class="built_in">_</span>proxyllm</span><br><span class="line">DEEPSEEK<span class="built_in">_</span>MODEL<span class="built_in">_</span>VERSION=deepseek-chat</span><br><span class="line">DEEPSEEK<span class="built_in">_</span>API<span class="built_in">_</span>BASE=https://api.deepseek.com/v1</span><br><span class="line">DEEPSEEK<span class="built_in">_</span>API<span class="built_in">_</span>KEY=api<span class="built_in">_</span>key</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>具体的模型名称可查看 <code>cat /home/ubuntu/DB-GPT/dbgpt/configs/model_config.py</code> 文件</p>
+</li>
+</ul>
+<h4 id="9-安装SQLite"><a href="#9-安装SQLite" class="headerlink" title="9. 安装SQLite"></a>9. 安装 SQLite</h4><ul>
+<li><code>sudo apt install sqlite</code></li>
+</ul>
+<h4 id="10-运行服务"><a href="#10-运行服务" class="headerlink" title="10. 运行服务"></a>10. 运行服务</h4><ul>
+<li><pre><code class="python"># 在DB-GPT根目录运行
+python dbgpt/app/dbgpt_server.py
+</code></pre>
+</li>
+<li><p>在浏览器输入:<code>http://localhost:5670/</code> 可查看 web 网站</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器免密配置教程 - 1</title>
+    <url>/2024/07/15/20240701_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
+    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
+<p><img src="/../img/image-20240710103927738.png" alt="show ip"></p>
+<span id="more"></span>
+
+<blockquote>
+<p>[!NOTE]</p>
+<p>该手册一共 2 个版本，此文档为第一版。</p>
+</blockquote>
+<h2 id="1-获取密钥"><a href="#1-获取密钥" class="headerlink" title="1. 获取密钥"></a>1. 获取密钥</h2>   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -f /root/.ssh/rsa</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2-验证"><a href="#2-验证" class="headerlink" title="2. 验证"></a>2. 验证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> id_rsa.pub authorized_keys</span><br><span class="line"><span class="comment"># authorized_keys是用于 SSH 服务器验证远程用户身份</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-配置StrictHostKeyChecking"><a href="#3-配置StrictHostKeyChecking" class="headerlink" title="3. 配置StrictHostKeyChecking"></a>3. 配置 <code>StrictHostKeyChecking</code></h2><ul>
+<li>创建 config 文件 <code>vim config</code></li>
+</ul>
+<figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">StrictHostKeyChecking no</span><br><span class="line"><span class="params">#</span> 设置 StrictHostKeyChecking no 意味着SSH客户端在连接到远程主机时不会检查该主机的公钥，也不会将新的主机密钥添加到已知主机列表中。这意味着所有远程主机的密钥将被自动接受，而不会进行任何验证。</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="4-准备ip文件"><a href="#4-准备ip文件" class="headerlink" title="4. 准备ip文件"></a>4. 准备 ip 文件</h2><ul>
+<li><p>创建 ip.txt <code>vim ip.txt</code></p>
+</li>
+<li><p>将需要免密的机器 <code>ip</code> 写入</p>
+<p><img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738"></p>
+</li>
+</ul>
+<h2 id="5-创建脚本"><a href="#5-创建脚本" class="headerlink" title="5. 创建脚本"></a>5. 创建脚本</h2><ul>
+<li>需要手动写登录密码 <code>password</code></li>
+<li>前提安装 <code>expect</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 IP 地址列表</span></span><br><span class="line">servers=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    servers+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地 .ssh 目录路径</span></span><br><span class="line">ssh_dir=<span class="string">"<span class="variable">$HOME</span>/.ssh"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 expect 进行 scp 并自动输入密码</span></span><br><span class="line"><span class="keyword">for</span> server <span class="keyword">in</span> <span class="string">"<span class="variable">${servers[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Copying SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    expect &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">spawn scp -r $ssh_dir root@$server:/root/</span></span><br><span class="line"><span class="string">expect {</span></span><br><span class="line"><span class="string">    "password:" {</span></span><br><span class="line"><span class="string">        send "your password\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    "yes/no" {</span></span><br><span class="line"><span class="string">        send "yes\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    eof {</span></span><br><span class="line"><span class="string">        exit</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">}</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">    <span class="keyword">if</span> [ $? -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Successfully copied SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Failed to copy SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"All servers have been updated with SSH keys."</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<p>补充安装 expect 包教程</p>
+<h3 id="在Ubuntu上安装Expect"><a href="#在Ubuntu上安装Expect" class="headerlink" title="在Ubuntu上安装Expect"></a>在 Ubuntu 上安装 Expect</h3><ol>
+<li><p><strong>更新包列表</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>安装 Expect</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install expect</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>验证安装</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这将显示已安装的 <code>expect</code> 版本。</p>
+</li>
+</ol>
+<h3 id="在CentOS上安装Expect"><a href="#在CentOS上安装Expect" class="headerlink" title="在CentOS上安装Expect"></a>在 CentOS 上安装 Expect</h3><ol>
+<li><p><strong>更新包列表</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>安装 Expect</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install expect</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>验证安装</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这将显示已安装的 <code>expect</code> 版本。</p>
+<hr>
+<p>完成这些步骤后，你的系统上就会安装 Expect 工具。Expect 是一种用于自动化交互任务的工具，常用于自动化 SSH 登录、FTP 等需要用户交互的任务。</p>
+</li>
+</ol>
+</blockquote>
 <hr>
 <blockquote>
 <p>[!TIP]</p>
@@ -1139,186 +1202,42 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>DB-GPT 源代码部署</title>
-    <url>/2024/07/23/20240724_DB-GPT%E6%BA%90%E4%BB%A3%E7%A0%81%E9%83%A8%E7%BD%B2/</url>
-    <content><![CDATA[<p>源代码部署 DB-GPT 操作流程，含测试，部署，注意事项等。</p>
-<p><img src="/../img/dbgpt.png" alt="dbgpt"></p>
+    <title>多机配置 hosts 及 hostname</title>
+    <url>/2024/07/15/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
+    <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
 <span id="more"></span>
 
-<h4 id="1-下载源码"><a href="#1-下载源码" class="headerlink" title="1. 下载源码"></a>1. 下载源码</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/eosphoros-ai/DB-GPT.git</span><br></pre></td></tr></tbody></table></figure>
-
-
-<h4 id="2-安装Minconda-运行环境"><a href="#2-安装Minconda-运行环境" class="headerlink" title="2. 安装Minconda(运行环境)"></a>2. 安装 Minconda (运行环境)</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 新建文件夹</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/miniconda3</span><br><span class="line"><span class="comment"># 在线下载minconda安装包</span></span><br><span class="line">wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O ~/miniconda3/miniconda.sh</span><br><span class="line"><span class="comment"># 运行安装程序</span></span><br><span class="line">bash ~/miniconda3/miniconda.sh -b -u -p ~/miniconda3</span><br><span class="line"><span class="comment"># 删除安装包</span></span><br><span class="line"><span class="built_in">rm</span> -rf ~/miniconda3/miniconda.sh</span><br></pre></td></tr></tbody></table></figure>
-
+<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
+<li>把 <code>ip</code> 复制到文本内</li>
+</ul>
+<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<hr>
 <blockquote>
-<p>[!NOTE]</p>
-<p>安装 <code>Minconda</code> 软件后重新连接终端，用于激活.</p>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
 </blockquote>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">初始化</span><br><span class="line">~/miniconda3/bin/conda init bash</span><br><span class="line">~/miniconda3/bin/conda init zsh</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h4 id="3-新建代码运行环境"><a href="#3-新建代码运行环境" class="headerlink" title="3. 新建代码运行环境"></a>3. 新建代码运行环境</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 基于minconda新建一个名称为dbgpt_env的基础环境, 且python版本为3.10</span></span><br><span class="line">conda create -n dbgpt_env python=3.10</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p>Conda 环境常用命令 :</p>
-<ul>
-<li>列出所有的环境 <code>conda env list </code></li>
-<li>激活指定环境 <code>conda activate xxxx</code>|xxx 为环境名称</li>
-<li>退出当前环境 <code>conda deactivate</code>| 默认环境为:<code>base</code></li>
-<li>查看当前环境的基础信息 <code>conda info</code> | 主要检查 python 版本，安装库的路径，<code>conda源地址</code></li>
-</ul>
-</li>
-<li><p>清华源地址</p>
-<ul>
-<li><code>https://pypi.tuna.tsinghua.edu.cn/simple</code></li>
-</ul>
-</li>
-<li><p>修改 pip 下载源的地址</p>
-<ul>
-<li><code>https://mirrors.tuna.tsinghua.edu.cn/help/anaconda/</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="4-安装项目所需依赖包-库"><a href="#4-安装项目所需依赖包-库" class="headerlink" title="4. 安装项目所需依赖包/库"></a>4. 安装项目所需依赖包 / 库</h4><ul>
-<li>DB-GPT 下有 setup.py, 为作者写的安装依赖脚本 </li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">pip install -e <span class="string">".[default]"</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h4 id="5-安装可以远程访问模型的软件"><a href="#5-安装可以远程访问模型的软件" class="headerlink" title="5. 安装可以远程访问模型的软件"></a>5. 安装可以远程访问模型的软件</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">apt-get install git-lfs</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h4 id="6-调用在线Qwen接口进行访问"><a href="#6-调用在线Qwen接口进行访问" class="headerlink" title="6. 调用在线Qwen接口进行访问"></a>6. 调用在线 <code>Qwen</code> 接口进行访问</h4><ul>
-<li>安装 <code>qwen</code> 接口所需依赖<ul>
-<li><code>pip install dashscope</code></li>
-</ul>
-</li>
-</ul>
-<h4 id="7-下载Embedding模型"><a href="#7-下载Embedding模型" class="headerlink" title="7 .下载Embedding模型"></a>7 . 下载 Embedding 模型</h4><ul>
-<li><p>在 DB-GPT 项目下，新建文件夹 <code>models</code>| 用于放置 Embedding 模型</p>
-<ul>
-<li><code>mkdir models</code> </li>
-<li><code>cd models</code></li>
-</ul>
-</li>
-<li><p>在线下载 Embedding 模型 | 目前好用的有:<strong>m3e-large</strong>, <strong>text2vec-large-chinese</strong> 等</p>
-<ul>
-<li><p><code>git clone https://huggingface.co/GanymedeNil/text2vec-large-chinese</code></p>
-</li>
-<li><p><code>git clone https://huggingface.co/moka-ai/m3e-large</code></p>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="8-配置模型"><a href="#8-配置模型" class="headerlink" title="8. 配置模型"></a>8. 配置模型</h4><ul>
-<li><p>在 DB-GPT 根目录处，复制环境 <code>cp .env.template  .env</code></p>
-</li>
-<li><p>编辑 <code>VIM .env</code></p>
-</li>
-<li><p>按照文档进行修改</p>
- <figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">LLM<span class="built_in">_</span>model=deepseek<span class="built_in">_</span>proxyllm</span><br><span class="line">DEEPSEEK<span class="built_in">_</span>MODEL<span class="built_in">_</span>VERSION=deepseek-chat</span><br><span class="line">DEEPSEEK<span class="built_in">_</span>API<span class="built_in">_</span>BASE=https://api.deepseek.com/v1</span><br><span class="line">DEEPSEEK<span class="built_in">_</span>API<span class="built_in">_</span>KEY=api<span class="built_in">_</span>key</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>具体的模型名称可查看 <code>cat /home/ubuntu/DB-GPT/dbgpt/configs/model_config.py</code> 文件</p>
-</li>
-</ul>
-<h4 id="9-安装SQLite"><a href="#9-安装SQLite" class="headerlink" title="9. 安装SQLite"></a>9. 安装 SQLite</h4><ul>
-<li><code>sudo apt install sqlite</code></li>
-</ul>
-<h4 id="10-运行服务"><a href="#10-运行服务" class="headerlink" title="10. 运行服务"></a>10. 运行服务</h4><ul>
-<li><pre><code class="python"># 在DB-GPT根目录运行
-python dbgpt/app/dbgpt_server.py
-</code></pre>
-</li>
-<li><p>在浏览器输入:<code>http://localhost:5670/</code> 可查看 web 网站</p>
-</li>
-</ul>
 ]]></content>
       <tags>
-        <tag>LLM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>什么是 RoCE/IB/RDMA</title>
-    <url>/2024/07/26/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/</url>
-    <content><![CDATA[<p> 在分布式存储网络中，我们使用的协议有 <strong>RoCE</strong>、<strong>Infiniband（IB）</strong>和 <strong>TCP/IP</strong>。其中 RoCE 和 IB 属于 <strong>RDMA (RemoteDirect Memory Access) 技术</strong>，他和传统的 TCP/IP 有什么区别呢，接下来我们将做详细对比。</p>
-<p><img src="/../img/RDMA.png" alt="RDMA API"></p>
-<span id="more"></span>
-
-<h2 id="RoCE和IB，RDMA通述"><a href="#RoCE和IB，RDMA通述" class="headerlink" title="RoCE和IB，RDMA通述"></a>RoCE 和 IB，RDMA 通述</h2><h3 id="什么是RoCE"><a href="#什么是RoCE" class="headerlink" title="什么是RoCE"></a>什么是 RoCE</h3><ul>
-<li>RoCE (译为” 基于融合以太网的 RDMA”, 英文全称: RDMA over Converged Ethernet) 是一个网络协议，允许在一个<a href="https://zh.wikipedia.org/wiki/%E4%BB%A5%E5%A4%AA%E7%BD%91">以太网</a>网络上使用<a href="https://zh.wikipedia.org/wiki/%E8%BF%9C%E7%A8%8B%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE">远程直接内存访问</a>（RDMA）。RoCE 有 RoCE v1 和 RoCE v2 两个版本。RoCE v1 是一个以太网<a href="https://zh.wikipedia.org/wiki/%E9%93%BE%E8%B7%AF%E5%B1%82">链路层</a>协议，因此允许同一个以太网<a href="https://zh.wikipedia.org/wiki/%E5%B9%BF%E6%92%AD%E5%9F%9F">广播域</a>中的任意两台主机间进行通信。RoCE v2 是一个<a href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%BB%9C%E5%B1%82">网络层</a>协议，因而 RoCE v2 数据包可以被路由。虽然 RoCE 协议受益于<a href="https://zh.wikipedia.org/w/index.php?title=Data_center_bridging&amp;action=edit&amp;redlink=1">融合以太网网络</a>的特征，但该协议也可用于传统或非融合的以太网网络。</li>
-</ul>
-<h3 id="什么是IB"><a href="#什么是IB" class="headerlink" title="什么是IB"></a>什么是 IB</h3><ul>
-<li>InfiniBand (直译为 “无限带宽” 技术，缩写为 IB) 是一个用于<a href="https://baike.baidu.com/item/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97/0?fromModule=lemma_inlink">高性能计算</a>的计算机网络通信标准，它具有极高的<a href="https://baike.baidu.com/item/%E5%90%9E%E5%90%90%E9%87%8F/0?fromModule=lemma_inlink">吞吐量</a>和极低的<a href="https://baike.baidu.com/item/%E5%BB%B6%E8%BF%9F/0?fromModule=lemma_inlink">延迟</a>，用于计算机与计算机之间的数据互连。InfiniBand 也用作服务器与存储系统之间的直接或交换互连，以及存储系统之间的互连。</li>
-</ul>
-<h3 id="什么是RDMA"><a href="#什么是RDMA" class="headerlink" title="什么是RDMA"></a>什么是 RDMA</h3><ul>
-<li>RDMA (译为” 远程直接内存访问”, 英文全称：remote direct memory access) 是一种绕过远程主机操作系统内核访问其内存中数据的技术。由于不经过操作系统，不仅节省了大量 CPU 资源，同样也提高了系统吞吐量、降低了系统的网络通信<a href="https://zh.wikipedia.org/wiki/Latency_(engineering)">延迟</a>，尤其适合在大规模并行<a href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%9B%86%E7%BE%A4">计算机集群</a>中有广泛应用。</li>
-</ul>
-<p><img src="/../img/download.png" alt="TCP/RDMA"></p>
-<blockquote>
-<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>传统应用要发送数据，‍‍需要通过 OS 封装 TCP/IP，‍‍然后依次经过主缓存、网卡缓存，‍‍再发出去。‍‍这样会导致两个限制。</p>
-<p>限制一：TCP/IP 协议栈处理会带来数 10 微秒的时延。‍‍TCP 协议栈在接收发送报文时，‍‍内核需要做多次上下文的切换，‍‍每次切换需要耗费 5-10 微秒。‍另外还需要至少三次的数据拷贝‍‍和依赖 CPU 进行协议工作，‍‍这导致仅仅协议上处理就会带来数 10 微秒的‍‍固定时延，‍‍协议栈时延成为最明显的瓶颈。‍‍</p>
-<p>限制二：TCP 协议栈处理导致服务器 CPU 负载‍‍居高不下。‍‍除了固定时延较长的问题，TCP/IP 网络需要主机 CPU‍‍多次参与协议的内存拷贝，‍‍网络规模越大，‍‍网络带宽越高，‍‍CPU 在收发数据时的调度负担越大，‍‍导致 CPU 持续高负载。‍‍</p>
-<p>在数据中心内部，超大规模分布式计算存储资源之间，如果使用传统的 TCP/IP 进行网络互连，将占用系统大量的计算资源，造成 IO 瓶颈，无法满足更高吞吐，更低时延的网络需求。</p>
-</blockquote>
-<hr>
-<h2 id="RoCE优缺点及关键技术"><a href="#RoCE优缺点及关键技术" class="headerlink" title="RoCE优缺点及关键技术"></a>RoCE 优缺点及关键技术</h2><h3 id="使用RoCE的优势"><a href="#使用RoCE的优势" class="headerlink" title="使用RoCE的优势"></a>使用 RoCE 的优势</h3><ul>
-<li><p><strong>成本效益：</strong> </p>
-<p>利用现有以太网基础设施：RoCE 可以在现有的以太网基础设施上运行，降低了部署和维护成本。 通用设备：使用通用的以太网交换机和网卡，设备成本较低。</p>
-</li>
-<li><p>** 兼容性和灵活性： **</p>
-<p>广泛兼容：RoCE 基于以太网，兼容性和通用性好，可以与其他网络设备和协议无缝集成。 灵活部署：可以灵活地部署在不同的网络拓扑和环境中。 </p>
-</li>
-<li><p><strong>易于管理：</strong></p>
-<p>统一管理：由于 RoCE 基于以太网，可以使用现有的网络管理工具和协议进行管理，简化了管理流程。</p>
-</li>
-</ul>
-<h3 id="RoCE的缺点"><a href="#RoCE的缺点" class="headerlink" title="RoCE的缺点"></a>RoCE 的缺点</h3><ul>
-<li><p><strong>性能：</strong></p>
-<p>较高的延迟：尽管 RoCE 能够提供低延迟，但通常不如 IB 网络，在极端低延迟需求的应用中可能不如 IB 表现优秀。 网络拥塞：在共享以太网上运行时，可能受到其他网络流量的影响，导致性能下降。 </p>
-</li>
-<li><p><strong>可靠性：</strong></p>
-<p>依赖于以太网质量：RoCE 的性能和可靠性依赖于以太网的质量，如果以太网网络质量不佳，可能会影响 RoCE 的表现。</p>
-</li>
-</ul>
-<h3 id="RoCE对比IB总结"><a href="#RoCE对比IB总结" class="headerlink" title="RoCE对比IB总结"></a>RoCE 对比 IB 总结</h3><ul>
-<li>IB 和 RoCE 的区别为链路层一个为 IB 协议，一个为 Ethernet 协议，其中 Ethernet 协议更具有普适性，且大部分场景 RoCE 时延更低、带宽更高。</li>
-</ul>
-<h3 id="RoCE的关键技术"><a href="#RoCE的关键技术" class="headerlink" title="RoCE的关键技术"></a>RoCE 的关键技术</h3><ul>
-<li><p>由于 RDMA 要求承载网络无丢包，否则效率就会急剧下降，所以 RoCE 技术如果选用以太网进行承载，就需要通过 PFC，ECN 以及 DCQCN 等技术对传统以太网络改造，打造无损以太网络，以确保零丢包。</p>
-<p><img src="/../img/36a8e300fd6759f17464122ef108e37b.png" alt="PEC&amp;ECN"></p>
-</li>
-<li><p><strong>PFC:</strong></p>
-<p>基于优先级的流量控制。PFC 为多种类型的流量提供基于每跳优先级的流量控制。设备在转发报文时，通过在优先级映射表中查找报文的优先级，将报文分配到队列中进行调度和转发。当 802.1p 优先级报文的发送速率超过接收速率且接收端的数据缓存空间不足时，接收端向发送端发送 PFC 暂停帧。当发送端收到 PFC 暂停帧时，发送端停止发送具有指定 802.1p 优先级的报文，直到发送端收到 PFC XON 帧或老化定时器超时。配置 PFC 时，特定类型报文的拥塞不影响其他类型报文的正常转发。</p>
-</li>
-<li><p><strong>ECN：</strong></p>
-<p>显式拥塞通知。ECN 定义了基于 IP 层和传输层的流量控制和端到端拥塞通知机制。当设备拥塞时，ECN 会在数据包的 IP 头中标记 ECN 字段。接收端发送拥塞通知包（CNP）通知发送端放慢发送速度。ECN 实现端到端的拥塞管理，减少拥塞的扩散和加剧。</p>
-</li>
-</ul>
-<hr>
-<h2 id="RoCE应用趋势"><a href="#RoCE应用趋势" class="headerlink" title="RoCE应用趋势"></a>RoCE 应用趋势</h2><ul>
-<li><p>当比较 RoCE 与其他类似的策略时，例如 iWARP（Internet Wide Area RDMA Protocol）和传统的 InfiniBand 网络，我们可以看到一些显著的区别。</p>
-<p><img src="/../img/RDMA.png" alt="RDMA"></p>
-</li>
-<li><p>iWARP 是一种通过 TCP/IP 协议栈实现 RDMA 的技术。虽然它可以在标准的三层网络中运行，但它的实现通常比 RoCE 复杂，并且可能需要更多的 CPU 资源来处理额外的软件堆栈。此外，iWARP 在网络性能方面可能不如 RoCE，尤其是在低延迟和高带宽的应用场景中。</p>
-</li>
-<li><p>InfiniBand 是一种专为高性能计算设计的网络技术，它提供了极低的延迟和非常高的带宽。尽管 InfiniBand 在性能上优于 RoCE，但它通常也更昂贵，并且需要专用的硬件。相比之下，RoCE 可以在现有的以太网基础设施上运行，降低了部署成本。</p>
-<p><img src="/../img/RoCE_Header_format.png"></p>
-</li>
-<li><p>随着 RoCEv2 的成熟和普及，它已成为数据中心网络中的一个主要趋势。越来越多的企业开始采用 RoCEv2 来支持高性能计算、机器学习和大规模存储集群等应用。RoCEv2 的优势在于它能够在标准以太网上实现低延迟和高带宽的 RDMA 通信，同时保持较低的成本。</p>
-</li>
-<li><p>未来，随着对数据密集型应用需求的增长，RoCEv2 将继续在其核心市场中发挥重要作用。随着技术的进步和新的应用场景的出现，RoCEv2 可能会进一步优化以支持更广泛的用例，包括边缘计算和物联网（IoT）领域中的实时数据处理。</p>
-</li>
-<li><p>RoCEv2 凭借其在性能和成本之间的平衡，正在成为数据中心网络架构中的关键技术之一，而 RoCEv1 则由于其局限性而在实际应用中逐渐被淘汰。随着网络技术和市场需求的不断发展，RoCEv2 有望在未来的数据中心和高性能计算环境中扮演更加重要的角色。</p>
-</li>
-</ul>
-]]></content>
-      <tags>
-        <tag>work</tag>
         <tag>Ops</tag>
-        <tag>网络</tag>
       </tags>
   </entry>
   <entry>
@@ -1422,48 +1341,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>K8s 常用命令</title>
-    <url>/2024/07/17/Kubenets%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
-<span id="more"></span>
-
-
-<ul>
-<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
-  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看容器内日志</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看所有镜像</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>进入容器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除 pods</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>从 pod 中复制文件到本地服务器上</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看 pod 详细信息</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-]]></content>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Jupyter Notebook 快捷指令</title>
     <url>/2021/01/15/Jupyter%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
     <content><![CDATA[<p>以下是 Jupyter Notebook 的一些常用快捷操作：</p>
@@ -1507,6 +1384,129 @@ python dbgpt/app/dbgpt_server.py
 ]]></content>
       <tags>
         <tag>Jupyter Notebook</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>什么是 RoCE/IB/RDMA</title>
+    <url>/2024/07/26/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/</url>
+    <content><![CDATA[<p> 在分布式存储网络中，我们使用的协议有 <strong>RoCE</strong>、<strong>Infiniband（IB）</strong>和 <strong>TCP/IP</strong>。其中 RoCE 和 IB 属于 <strong>RDMA (RemoteDirect Memory Access) 技术</strong>，他和传统的 TCP/IP 有什么区别呢，接下来我们将做详细对比。</p>
+<p><img src="/../img/RDMA.png" alt="RDMA API"></p>
+<span id="more"></span>
+
+<h2 id="RoCE和IB，RDMA通述"><a href="#RoCE和IB，RDMA通述" class="headerlink" title="RoCE和IB，RDMA通述"></a>RoCE 和 IB，RDMA 通述</h2><h3 id="什么是RoCE"><a href="#什么是RoCE" class="headerlink" title="什么是RoCE"></a>什么是 RoCE</h3><ul>
+<li>RoCE (译为” 基于融合以太网的 RDMA”, 英文全称: RDMA over Converged Ethernet) 是一个网络协议，允许在一个<a href="https://zh.wikipedia.org/wiki/%E4%BB%A5%E5%A4%AA%E7%BD%91">以太网</a>网络上使用<a href="https://zh.wikipedia.org/wiki/%E8%BF%9C%E7%A8%8B%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE">远程直接内存访问</a>（RDMA）。RoCE 有 RoCE v1 和 RoCE v2 两个版本。RoCE v1 是一个以太网<a href="https://zh.wikipedia.org/wiki/%E9%93%BE%E8%B7%AF%E5%B1%82">链路层</a>协议，因此允许同一个以太网<a href="https://zh.wikipedia.org/wiki/%E5%B9%BF%E6%92%AD%E5%9F%9F">广播域</a>中的任意两台主机间进行通信。RoCE v2 是一个<a href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%BB%9C%E5%B1%82">网络层</a>协议，因而 RoCE v2 数据包可以被路由。虽然 RoCE 协议受益于<a href="https://zh.wikipedia.org/w/index.php?title=Data_center_bridging&amp;action=edit&amp;redlink=1">融合以太网网络</a>的特征，但该协议也可用于传统或非融合的以太网网络。</li>
+</ul>
+<h3 id="什么是IB"><a href="#什么是IB" class="headerlink" title="什么是IB"></a>什么是 IB</h3><ul>
+<li>InfiniBand (直译为 “无限带宽” 技术，缩写为 IB) 是一个用于<a href="https://baike.baidu.com/item/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97/0?fromModule=lemma_inlink">高性能计算</a>的计算机网络通信标准，它具有极高的<a href="https://baike.baidu.com/item/%E5%90%9E%E5%90%90%E9%87%8F/0?fromModule=lemma_inlink">吞吐量</a>和极低的<a href="https://baike.baidu.com/item/%E5%BB%B6%E8%BF%9F/0?fromModule=lemma_inlink">延迟</a>，用于计算机与计算机之间的数据互连。InfiniBand 也用作服务器与存储系统之间的直接或交换互连，以及存储系统之间的互连。</li>
+</ul>
+<h3 id="什么是RDMA"><a href="#什么是RDMA" class="headerlink" title="什么是RDMA"></a>什么是 RDMA</h3><ul>
+<li>RDMA (译为” 远程直接内存访问”, 英文全称：remote direct memory access) 是一种绕过远程主机操作系统内核访问其内存中数据的技术。由于不经过操作系统，不仅节省了大量 CPU 资源，同样也提高了系统吞吐量、降低了系统的网络通信<a href="https://zh.wikipedia.org/wiki/Latency_(engineering)">延迟</a>，尤其适合在大规模并行<a href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%9B%86%E7%BE%A4">计算机集群</a>中有广泛应用。</li>
+</ul>
+<p><img src="/../img/download.png" alt="TCP/RDMA"></p>
+<blockquote>
+<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>传统应用要发送数据，‍‍需要通过 OS 封装 TCP/IP，‍‍然后依次经过主缓存、网卡缓存，‍‍再发出去。‍‍这样会导致两个限制。</p>
+<p>限制一：TCP/IP 协议栈处理会带来数 10 微秒的时延。‍‍TCP 协议栈在接收发送报文时，‍‍内核需要做多次上下文的切换，‍‍每次切换需要耗费 5-10 微秒。‍另外还需要至少三次的数据拷贝‍‍和依赖 CPU 进行协议工作，‍‍这导致仅仅协议上处理就会带来数 10 微秒的‍‍固定时延，‍‍协议栈时延成为最明显的瓶颈。‍‍</p>
+<p>限制二：TCP 协议栈处理导致服务器 CPU 负载‍‍居高不下。‍‍除了固定时延较长的问题，TCP/IP 网络需要主机 CPU‍‍多次参与协议的内存拷贝，‍‍网络规模越大，‍‍网络带宽越高，‍‍CPU 在收发数据时的调度负担越大，‍‍导致 CPU 持续高负载。‍‍</p>
+<p>在数据中心内部，超大规模分布式计算存储资源之间，如果使用传统的 TCP/IP 进行网络互连，将占用系统大量的计算资源，造成 IO 瓶颈，无法满足更高吞吐，更低时延的网络需求。</p>
+</blockquote>
+<hr>
+<h2 id="RoCE优缺点及关键技术"><a href="#RoCE优缺点及关键技术" class="headerlink" title="RoCE优缺点及关键技术"></a>RoCE 优缺点及关键技术</h2><h3 id="使用RoCE的优势"><a href="#使用RoCE的优势" class="headerlink" title="使用RoCE的优势"></a>使用 RoCE 的优势</h3><ul>
+<li><p><strong>成本效益：</strong> </p>
+<p>利用现有以太网基础设施：RoCE 可以在现有的以太网基础设施上运行，降低了部署和维护成本。 通用设备：使用通用的以太网交换机和网卡，设备成本较低。</p>
+</li>
+<li><p>** 兼容性和灵活性： **</p>
+<p>广泛兼容：RoCE 基于以太网，兼容性和通用性好，可以与其他网络设备和协议无缝集成。 灵活部署：可以灵活地部署在不同的网络拓扑和环境中。 </p>
+</li>
+<li><p><strong>易于管理：</strong></p>
+<p>统一管理：由于 RoCE 基于以太网，可以使用现有的网络管理工具和协议进行管理，简化了管理流程。</p>
+</li>
+</ul>
+<h3 id="RoCE的缺点"><a href="#RoCE的缺点" class="headerlink" title="RoCE的缺点"></a>RoCE 的缺点</h3><ul>
+<li><p><strong>性能：</strong></p>
+<p>较高的延迟：尽管 RoCE 能够提供低延迟，但通常不如 IB 网络，在极端低延迟需求的应用中可能不如 IB 表现优秀。 网络拥塞：在共享以太网上运行时，可能受到其他网络流量的影响，导致性能下降。 </p>
+</li>
+<li><p><strong>可靠性：</strong></p>
+<p>依赖于以太网质量：RoCE 的性能和可靠性依赖于以太网的质量，如果以太网网络质量不佳，可能会影响 RoCE 的表现。</p>
+</li>
+</ul>
+<h3 id="RoCE对比IB总结"><a href="#RoCE对比IB总结" class="headerlink" title="RoCE对比IB总结"></a>RoCE 对比 IB 总结</h3><ul>
+<li>IB 和 RoCE 的区别为链路层一个为 IB 协议，一个为 Ethernet 协议，其中 Ethernet 协议更具有普适性，且大部分场景 RoCE 时延更低、带宽更高。</li>
+</ul>
+<h3 id="RoCE的关键技术"><a href="#RoCE的关键技术" class="headerlink" title="RoCE的关键技术"></a>RoCE 的关键技术</h3><ul>
+<li><p>由于 RDMA 要求承载网络无丢包，否则效率就会急剧下降，所以 RoCE 技术如果选用以太网进行承载，就需要通过 PFC，ECN 以及 DCQCN 等技术对传统以太网络改造，打造无损以太网络，以确保零丢包。</p>
+<p><img src="/../img/36a8e300fd6759f17464122ef108e37b.png" alt="PEC&amp;ECN"></p>
+</li>
+<li><p><strong>PFC:</strong></p>
+<p>基于优先级的流量控制。PFC 为多种类型的流量提供基于每跳优先级的流量控制。设备在转发报文时，通过在优先级映射表中查找报文的优先级，将报文分配到队列中进行调度和转发。当 802.1p 优先级报文的发送速率超过接收速率且接收端的数据缓存空间不足时，接收端向发送端发送 PFC 暂停帧。当发送端收到 PFC 暂停帧时，发送端停止发送具有指定 802.1p 优先级的报文，直到发送端收到 PFC XON 帧或老化定时器超时。配置 PFC 时，特定类型报文的拥塞不影响其他类型报文的正常转发。</p>
+</li>
+<li><p><strong>ECN：</strong></p>
+<p>显式拥塞通知。ECN 定义了基于 IP 层和传输层的流量控制和端到端拥塞通知机制。当设备拥塞时，ECN 会在数据包的 IP 头中标记 ECN 字段。接收端发送拥塞通知包（CNP）通知发送端放慢发送速度。ECN 实现端到端的拥塞管理，减少拥塞的扩散和加剧。</p>
+</li>
+</ul>
+<hr>
+<h2 id="RoCE应用趋势"><a href="#RoCE应用趋势" class="headerlink" title="RoCE应用趋势"></a>RoCE 应用趋势</h2><ul>
+<li><p>当比较 RoCE 与其他类似的策略时，例如 iWARP（Internet Wide Area RDMA Protocol）和传统的 InfiniBand 网络，我们可以看到一些显著的区别。</p>
+<p><img src="/../img/RDMA.png" alt="RDMA"></p>
+</li>
+<li><p>iWARP 是一种通过 TCP/IP 协议栈实现 RDMA 的技术。虽然它可以在标准的三层网络中运行，但它的实现通常比 RoCE 复杂，并且可能需要更多的 CPU 资源来处理额外的软件堆栈。此外，iWARP 在网络性能方面可能不如 RoCE，尤其是在低延迟和高带宽的应用场景中。</p>
+</li>
+<li><p>InfiniBand 是一种专为高性能计算设计的网络技术，它提供了极低的延迟和非常高的带宽。尽管 InfiniBand 在性能上优于 RoCE，但它通常也更昂贵，并且需要专用的硬件。相比之下，RoCE 可以在现有的以太网基础设施上运行，降低了部署成本。</p>
+<p><img src="/../img/RoCE_Header_format.png"></p>
+</li>
+<li><p>随着 RoCEv2 的成熟和普及，它已成为数据中心网络中的一个主要趋势。越来越多的企业开始采用 RoCEv2 来支持高性能计算、机器学习和大规模存储集群等应用。RoCEv2 的优势在于它能够在标准以太网上实现低延迟和高带宽的 RDMA 通信，同时保持较低的成本。</p>
+</li>
+<li><p>未来，随着对数据密集型应用需求的增长，RoCEv2 将继续在其核心市场中发挥重要作用。随着技术的进步和新的应用场景的出现，RoCEv2 可能会进一步优化以支持更广泛的用例，包括边缘计算和物联网（IoT）领域中的实时数据处理。</p>
+</li>
+<li><p>RoCEv2 凭借其在性能和成本之间的平衡，正在成为数据中心网络架构中的关键技术之一，而 RoCEv1 则由于其局限性而在实际应用中逐渐被淘汰。随着网络技术和市场需求的不断发展，RoCEv2 有望在未来的数据中心和高性能计算环境中扮演更加重要的角色。</p>
+</li>
+</ul>
+]]></content>
+      <tags>
+        <tag>work</tag>
+        <tag>Ops</tag>
+        <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>K8s 常用命令</title>
+    <url>/2024/07/17/Kubenets%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
+<span id="more"></span>
+
+
+<ul>
+<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
+  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看容器内日志</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看所有镜像</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>进入容器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除 pods</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>从 pod 中复制文件到本地服务器上</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看 pod 详细信息</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+]]></content>
+      <tags>
+        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
