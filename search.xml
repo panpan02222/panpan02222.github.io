@@ -282,48 +282,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>局域网远程桌面</title>
-    <url>/2021/01/14/Config/20210114_%E5%B1%80%E5%9F%9F%E7%BD%91%E9%93%BE%E6%8E%A5/</url>
-    <content><![CDATA[<p>内网远程桌面连接方法</p>
-<span id="more"></span>
-
-
-<h4 id="依次执行以下命令："><a href="#依次执行以下命令：" class="headerlink" title="依次执行以下命令："></a>依次执行以下命令：</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">win+r</span><br><span class="line"></span><br><span class="line">mstsc</span><br><span class="line"></span><br><span class="line"><span class="comment">#输入需要链接的主机ip</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查询win+r--&gt;"cmd"--&gt;"ipconfig"</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>work</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>修改远程桌面端口步骤</title>
-    <url>/2021/01/11/Config/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4%20/</url>
-    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
-<span id="more"></span>
-
-
-<ol>
-<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
-</li>
-<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
-</li>
-<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
-</li>
-<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
-</li>
-<li><p>重启电脑</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>work</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>自研训练大语言模型显存计算器</title>
     <url>/2024/07/24/AI/20240724_%E8%87%AA%E7%A0%94%E8%AE%AD%E7%BB%83%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%98%BE%E5%AD%98%E8%AE%A1%E7%AE%97%E5%99%A8/</url>
     <content><![CDATA[<p>计算全量训练一个大语言模型时，所需的算力卡显存.</p>
@@ -516,6 +474,48 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
+    <title>修改远程桌面端口步骤</title>
+    <url>/2021/01/11/Config/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4%20/</url>
+    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
+<span id="more"></span>
+
+
+<ol>
+<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
+</li>
+<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
+</li>
+<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
+</li>
+<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
+</li>
+<li><p>重启电脑</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>work</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>局域网远程桌面</title>
+    <url>/2021/01/14/Config/20210114_%E5%B1%80%E5%9F%9F%E7%BD%91%E9%93%BE%E6%8E%A5/</url>
+    <content><![CDATA[<p>内网远程桌面连接方法</p>
+<span id="more"></span>
+
+
+<h4 id="依次执行以下命令："><a href="#依次执行以下命令：" class="headerlink" title="依次执行以下命令："></a>依次执行以下命令：</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">win+r</span><br><span class="line"></span><br><span class="line">mstsc</span><br><span class="line"></span><br><span class="line"><span class="comment">#输入需要链接的主机ip</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查询win+r--&gt;"cmd"--&gt;"ipconfig"</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>work</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Proxychains install</title>
     <url>/2022/07/17/Config/20220707_Proxychains%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
@@ -534,6 +534,83 @@ python dbgpt/app/dbgpt_server.py
 </ul>
 <blockquote>
 <p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置 Anaconda3 的 conda 源</title>
+    <url>/2024/04/25/Config/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
+    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
+
+<h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="修改hosts文件-etc-hosts"><a href="#修改hosts文件-etc-hosts" class="headerlink" title="修改hosts文件 /etc/hosts"></a>修改 hosts 文件 /etc/hosts</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为"><a href="#修改为" class="headerlink" title="修改为:"></a>修改为:</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line">101.6.15.130  mirrors.tuna.tsinghua.edu.cn</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="配置conda源为清华源"><a href="#配置conda源为清华源" class="headerlink" title="配置conda源为清华源"></a>配置 conda 源为清华源</h3><ol>
+<li>查看 conda 配置文件的位置：<code>whereis conda</code></li>
+<li>编辑配置文件：<code>vim /root/.condarc</code></li>
+<li>将配置文件中的内容替换为：<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/</span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行 <code>conda clean -i </code>清除索引缓存</li>
+<li>创建新环境 <code>conda create -n myenv python==3.10</code> 验证 conda 源是否配置成功</li>
+</ol>
+</b>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>anaconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置 VNC 教程</title>
+    <url>/2024/07/17/Config/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
+<p>VNC（Virtual Network Computing），为一种使用 RFB 协议的屏幕画面分享及远程操作软件。此软件借由网络，可发送键盘与鼠标的动作及即时的屏幕画面。</p>
+<p>VNC 与操作系统无关，因此可跨平台使用，例如可用 Windows 连线到某 Linux 的电脑，反之亦同。甚至在没有安装客户端程序的电脑中，只要有支持 JAVA 的浏览器，也可使用。</p>
+<span id="more"></span>
+
+<ol>
+<li><h2 id="两台-windows电脑内下载并安装"><a href="#两台-windows电脑内下载并安装" class="headerlink" title="两台 windows电脑内下载并安装"></a><strong>两台</strong> windows 电脑内下载并安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">TightVNC官网地址</span><br><span class="line">https://www.tightvnc.com/download.php</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-26-43-1718673923532.jpg" alt="" width="563" data-align="center">
+
+<hr>
+<ol start="2">
+<li><h2 id="TightVNC-服务端-被连接端-配置"><a href="#TightVNC-服务端-被连接端-配置" class="headerlink" title="TightVNC 服务端(被连接端) 配置"></a>TightVNC <strong>服务端</strong> (被连接端) 配置</h2><ul>
+<li><p>默认端口号 5900</p>
+</li>
+<li><p>注意自己设置连接密码</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-36-02-image.png" alt="" width="337" data-align="left">
+
+<p><strong>如果找不到配置界面，在任务栏右下角图标内右键 或点击 ‘开始菜单’-‘所有应用’-‘TightVNC’-‘Run TightVNC Service’</strong></p>
+<hr>
+</li>
+</ul>
+</li>
+<li><h2 id="TightVNC-客户端-连接端-配置"><a href="#TightVNC-客户端-连接端-配置" class="headerlink" title="TightVNC 客户端(连接端) 配置"></a>TightVNC <strong>客户端</strong> (连接端) 配置</h2><ul>
+<li>进入方式：开始菜单 - 所有应用 - TightVNC-TightVNC Viewer</li>
+</ul>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-48-42-image.png" alt="" width="341" data-align="left">
+
+<ul>
+<li><p> 输入服务器的 <strong>ip 地址</strong>和<strong>端口</strong> , 并连接</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-57-49-image.png" alt="" width="412"></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p> <a href="https://cloud.baidu.com/article/3002603">参考博客 - 1</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
 </blockquote>
 ]]></content>
       <categories>
@@ -646,66 +723,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>服务器免密配置教程 - 2</title>
-    <url>/2024/07/15/Config/20240709_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
-    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
-<span id="more"></span>
-
-
-<blockquote>
-<p>[!NOTE]</p>
-<p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
-</blockquote>
-<h2 id="1-准备ip文件"><a href="#1-准备ip文件" class="headerlink" title="1. 准备ip文件"></a>1. 准备 ip 文件</h2><ul>
-<li><p>创建 ip.txt <code>vim ip.txt</code></p>
-</li>
-<li><p>将需要免密的机器 <code>ip</code> 写入</p>
-</li>
-</ul>
-<h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
-<li><code>vim set_key.sh</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否已经生成了SSH密钥对</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f ~/.ssh/id_rsa.pub ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Generating SSH key pair..."</span></span><br><span class="line">  ssh-keygen -t rsa -N <span class="string">""</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公钥复制到每台目标机器</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> -r ip; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Configuring SSH key authentication for <span class="variable">$ip</span>..."</span></span><br><span class="line">  ssh-copy-id root@<span class="variable">$ip</span></span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"><span class="built_in">echo</span> </span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p><code>chmod +x set_key.sh</code></p>
-</li>
-<li><p><code>./set_key.sh</code></p>
-</li>
-</ul>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>服务器配置永久修改 DNS</title>
     <url>/2024/07/15/Config/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
     <content><![CDATA[<p>服务器内配置 DNS</p>
@@ -768,186 +785,6 @@ Domains=domain.com
       </categories>
       <tags>
         <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>配置 VNC 教程</title>
-    <url>/2024/07/17/Config/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
-<p>VNC（Virtual Network Computing），为一种使用 RFB 协议的屏幕画面分享及远程操作软件。此软件借由网络，可发送键盘与鼠标的动作及即时的屏幕画面。</p>
-<p>VNC 与操作系统无关，因此可跨平台使用，例如可用 Windows 连线到某 Linux 的电脑，反之亦同。甚至在没有安装客户端程序的电脑中，只要有支持 JAVA 的浏览器，也可使用。</p>
-<span id="more"></span>
-
-<ol>
-<li><h2 id="两台-windows电脑内下载并安装"><a href="#两台-windows电脑内下载并安装" class="headerlink" title="两台 windows电脑内下载并安装"></a><strong>两台</strong> windows 电脑内下载并安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">TightVNC官网地址</span><br><span class="line">https://www.tightvnc.com/download.php</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-26-43-1718673923532.jpg" alt="" width="563" data-align="center">
-
-<hr>
-<ol start="2">
-<li><h2 id="TightVNC-服务端-被连接端-配置"><a href="#TightVNC-服务端-被连接端-配置" class="headerlink" title="TightVNC 服务端(被连接端) 配置"></a>TightVNC <strong>服务端</strong> (被连接端) 配置</h2><ul>
-<li><p>默认端口号 5900</p>
-</li>
-<li><p>注意自己设置连接密码</p>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-36-02-image.png" alt="" width="337" data-align="left">
-
-<p><strong>如果找不到配置界面，在任务栏右下角图标内右键 或点击 ‘开始菜单’-‘所有应用’-‘TightVNC’-‘Run TightVNC Service’</strong></p>
-<hr>
-</li>
-</ul>
-</li>
-<li><h2 id="TightVNC-客户端-连接端-配置"><a href="#TightVNC-客户端-连接端-配置" class="headerlink" title="TightVNC 客户端(连接端) 配置"></a>TightVNC <strong>客户端</strong> (连接端) 配置</h2><ul>
-<li>进入方式：开始菜单 - 所有应用 - TightVNC-TightVNC Viewer</li>
-</ul>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-48-42-image.png" alt="" width="341" data-align="left">
-
-<ul>
-<li><p> 输入服务器的 <strong>ip 地址</strong>和<strong>端口</strong> , 并连接</p>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-57-49-image.png" alt="" width="412"></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p> <a href="https://cloud.baidu.com/article/3002603">参考博客 - 1</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>配置 Anaconda3 的 conda 源</title>
-    <url>/2024/04/25/Config/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
-    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
-
-<h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="修改hosts文件-etc-hosts"><a href="#修改hosts文件-etc-hosts" class="headerlink" title="修改hosts文件 /etc/hosts"></a>修改 hosts 文件 /etc/hosts</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<h4 id="修改为"><a href="#修改为" class="headerlink" title="修改为:"></a>修改为:</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line">101.6.15.130  mirrors.tuna.tsinghua.edu.cn</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="配置conda源为清华源"><a href="#配置conda源为清华源" class="headerlink" title="配置conda源为清华源"></a>配置 conda 源为清华源</h3><ol>
-<li>查看 conda 配置文件的位置：<code>whereis conda</code></li>
-<li>编辑配置文件：<code>vim /root/.condarc</code></li>
-<li>将配置文件中的内容替换为：<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/</span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行 <code>conda clean -i </code>清除索引缓存</li>
-<li>创建新环境 <code>conda create -n myenv python==3.10</code> 验证 conda 源是否配置成功</li>
-</ol>
-</b>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>anaconda</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>基于 Openai API 进行接口移植</title>
-    <url>/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<p>记录一下 基于 Openai API 进行接口移植的过程，从引用 api 到测试到最后转接口使用</p>
-<span id="more"></span>
-
-
-
-<blockquote>
-<h3 id="注册Openai-API账号"><a href="#注册Openai-API账号" class="headerlink" title="注册Openai API账号"></a>注册 Openai API 账号</h3><ul>
-<li>老生常谈的问题 ，首先我们需要注册一个 Openai API 账号，并申请一个 API key，或者购买一个 API_KEY。</li>
-<li><strong>申请点击此链接:<a href="https://platform.openai.com/login?launch">openai API 官网链接</a></strong></li>
-</ul>
-</blockquote>
-<hr>
-<h3 id="1-调用openai的GPT-4o模型接口"><a href="#1-调用openai的GPT-4o模型接口" class="headerlink" title="1.调用openai的GPT-4o模型接口"></a>1. 调用 openai 的 GPT-4o 模型接口</h3><ul>
-<li><p>OK 还是最常见的 chat_generate，这里直接放代码了</p>
- <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">client = OpenAI(</span><br><span class="line">    api_key=<span class="comment">#这里就放入刚刚购买到的key就可以啦</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> opneai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gpt_generate_text</span>(<span class="params">prompt, messages_list</span>):</span><br><span class="line">    messages = <span class="string">''</span></span><br><span class="line">    <span class="keyword">if</span> messages_list:</span><br><span class="line">        messages = <span class="string">'以下是你和用户的当前会话消息：\n\n'</span> + <span class="string">'\n'</span>.join(messages_list)</span><br><span class="line">    stream = client.chat.completions.create(</span><br><span class="line">        <span class="comment"># model="gpt-4-turbo-preview",</span></span><br><span class="line">        model=<span class="string">"gpt-4o"</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: messages},</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: prompt},</span><br><span class="line">        ],</span><br><span class="line">        stream=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line">    text = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> stream:</span><br><span class="line">        <span class="keyword">if</span> chunk.choices[<span class="number">0</span>].delta.content <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(chunk.choices[<span class="number">0</span>].delta.content, end=<span class="string">""</span>)</span><br><span class="line">            text += chunk.choices[<span class="number">0</span>].delta.content</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>这里是<strong>路由函数</strong>的撰写</p>
-<ul>
-<li><p>可以看到这里可以通过 GET 和 POST （GET 不可以用哦）, 这里调用我们的 gpt_generate_text 函数，传入 prompt 和 messages_list，然后返回生成的文本。</p>
-  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/chatgpt"</span>, methods=[<span class="string">'GET'</span>, <span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">chat_with_gpt</span>():</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'chatgpt GET 请求'</span></span><br><span class="line">    <span class="keyword">elif</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        data = request.json</span><br><span class="line">        prompt = data[<span class="string">'prompt'</span>]</span><br><span class="line">        messages_list = data.get(<span class="string">'messages'</span>, [])</span><br><span class="line">        text = gpt_generate_text(prompt, messages_list)</span><br><span class="line"></span><br><span class="line">        timestamp = <span class="built_in">str</span>(time.time()).split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> text:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成成功'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: text}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">2</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成失败'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: <span class="literal">None</span>}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">return</span> jsonify(response_data)</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="2-调用Openai的whisper-1模型接口"><a href="#2-调用Openai的whisper-1模型接口" class="headerlink" title="2.调用Openai的whisper-1模型接口"></a>2. 调用 Openai 的 whisper-1 模型接口</h2><ul>
-<li>2.1 同理这里是调用的 openai 的 <strong>whisper-1</strong> 模型进行音频转文本的函数撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_audio</span>(<span class="params">audio_file</span>):</span><br><span class="line">    audio=<span class="built_in">open</span>(audio_file, <span class="string">"rb"</span>)</span><br><span class="line">    transcription = client.audio.transcriptions.create(model=<span class="string">"whisper-1"</span>,file=audio)</span><br><span class="line">    text = transcription.text</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
-<li>2.2 这里是最后<strong>路由函数</strong>的撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/transcribe"</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'file'</span> <span class="keyword">not</span> <span class="keyword">in</span> request.files:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No file part"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    audio_file = request.files[<span class="string">'file'</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file.filename == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No selected file"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file:</span><br><span class="line">        <span class="comment"># 保存文件到临时位置</span></span><br><span class="line">        temp_file_path = os.path.join(<span class="string">"temp"</span>, audio_file.filename)</span><br><span class="line">        audio_file.save(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 调用转录函数</span></span><br><span class="line">        transcription_text = transcribe_audio(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除临时文件</span></span><br><span class="line">        os.remove(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"text"</span>: transcription_text})</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<blockquote>
-<ul>
-<li>首先我们要确定返回的请求中是否包含文件和文件名，如果没有，则返回错误信息和 400，</li>
-<li>其次，我们需要保存文件到临时位置，然后调用我们写好的转录函数进行转录，最后删除临时文件。</li>
-<li>最后返回转录后的文本给客户端 供使用。</li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="3-调用Openai的TTS-1模型接口"><a href="#3-调用Openai的TTS-1模型接口" class="headerlink" title="3.调用Openai的TTS-1模型接口"></a>3. 调用 Openai 的 TTS-1 模型接口</h2><ul>
-<li>3.1 调用 openai 的 API，将文本转换为语音 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">def text_to_speech(text, vocie, model, path):</span><br><span class="line">    </span><br><span class="line">    response = client.audio.speech.create(</span><br><span class="line">        model=model,</span><br><span class="line">        voice=vocie,</span><br><span class="line">        input=text</span><br><span class="line">    )</span><br><span class="line">    speech_file_path = Path(path)</span><br><span class="line">    with open(speech_file_path, 'wb') as file:</span><br><span class="line">        file.write(response.content)</span><br><span class="line"></span><br><span class="line">    print(f'文件已保存到: {speech_file_path}')</span><br><span class="line">    return speech_file_path</span><br></pre></td></tr></tbody></table></figure></li>
-<li>3.2 文本转语音 text-to-speech 路由撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line">server_ip = <span class="string">""</span>  <span class="comment"># 替换为你的服务器IP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">'/text-to-speech'</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_to_speech_endpoint</span>():</span><br><span class="line">    data = request.json</span><br><span class="line">    text = data.get(<span class="string">'text'</span>)</span><br><span class="line">    voice = data.get(<span class="string">'voice'</span>)</span><br><span class="line">    model = data.get(<span class="string">'model'</span>)</span><br><span class="line">    output_path = <span class="string">'./output.mp3'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text <span class="keyword">or</span> <span class="keyword">not</span> voice <span class="keyword">or</span> <span class="keyword">not</span> model:</span><br><span class="line">        <span class="keyword">return</span> {<span class="string">'error'</span>: <span class="string">'Missing required parameters'</span>}, <span class="number">400</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Define the directory where you want to save the files</span></span><br><span class="line">        output_dir = Path(<span class="string">'./audio_files'</span>)</span><br><span class="line">        output_dir.mkdir(exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate a unique filename using UUID</span></span><br><span class="line">        unique_filename = <span class="string">f"<span class="subst">{uuid.uuid4()}</span>.mp3"</span></span><br><span class="line">        output_path = output_dir / unique_filename</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate the speech and save the file</span></span><br><span class="line">        speech_file_path = text_to_speech(text, voice, model, output_path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Create the file URL</span></span><br><span class="line">        file_url = <span class="string">f"http://<span class="subst">{server_ip}</span>/root/xxx/<span class="subst">{speech_file_path}</span>"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Return the file URL as a response</span></span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'file_url'</span>: file_url}), <span class="number">200</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'error'</span>: <span class="built_in">str</span>(e)}), <span class="number">500</span></span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<ul>
-<li>首先我们要在后端代码中写入 我们的服务器 ip 地址</li>
-<li>我们要确保我们的 json 数据存在 四个键 text ， voice ， model ， output_path ，</li>
-<li>其次我们调用 text_to_speech 函数，传入 text，voice，model，output_path，</li>
-<li>然后我们生成一个唯一的 filename，保存到 output_dir 目录下</li>
-<li>最后我们生成一个 file_url，然后返回给客户端。</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<hr>
-<h2 id="4-测试使用"><a href="#4-测试使用" class="headerlink" title="4.测试使用"></a>4. 测试使用</h2><ul>
-<li>4.1 我们可以使用以下方式，这种方式在我们的 py 脚本下直接测试，传参切记</li>
-</ul>
-<p>​	 <code>if __name__ == "__main__":</code><br>​	    	<code>main()</code></p>
-<ul>
-<li><p>4.2 使用 命令行在我们的服务器上测试 GET <a href="http://xxxx/">http://xxxx</a> {“xx”:”xx”}</p>
-</li>
-<li><p>4.3 使用 postman 、apifox 等等工具测试</p>
-</li>
-</ul>
-<p>​	本人这里使用的是第三种方法 apifox 这个工具，本人良心推荐大家使用，附<a href="https://apifox.com/help/">官方文档链接</a></p>
-<ul>
-<li><p> 4.4 测试截图及测试数据</p>
-<h3 id="测试用例一-chatgpt"><a href="#测试用例一-chatgpt" class="headerlink" title="测试用例一: /chatgpt"></a>测试用例一: /chatgpt</h3><ul>
-<li>测试数据 </li>
-</ul>
-  <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"code"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"data"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span> <span class="string">"你好！我是一个由人工智能驱动的助手，设计用于帮助回答问题、提供信息以及协助完成各种任务。有什么我可以帮你的吗？"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"message"</span><span class="punctuation">:</span> <span class="string">"内容生成成功"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"time"</span><span class="punctuation">:</span> <span class="string">"1721808765"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>响应截图</li>
-</ul>
-<p>  <img src="/../img/api-1.jpg" alt="gpt4o"></p>
-<hr>
-<h3 id="测试用例二-transcribe"><a href="#测试用例二-transcribe" class="headerlink" title="测试用例二: /transcribe"></a>测试用例二: /transcribe</h3><ul>
-<li>测试数据</li>
-</ul>
-<p>  <img src="/../img/api-2-1.jpg" alt="音频文件截图"></p>
-<ul>
-<li>响应截图</li>
-</ul>
-<p>  <img src="/../img/api-2.jpg" alt="gpt4o"></p>
-<hr>
-<h3 id="测试用例三-transcribe"><a href="#测试用例三-transcribe" class="headerlink" title="测试用例三: /transcribe"></a>测试用例三: /transcribe</h3><ul>
-<li><p>测试数据</p>
-   <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"model"</span><span class="punctuation">:</span><span class="string">"tts-1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"voice"</span><span class="punctuation">:</span><span class="string">"echo"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span><span class="string">"今天中午吃什么?"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>响应截图</p>
-<p><img src="/../img/api-3.jpg" alt="gpt4o"></p>
-</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>LLM</tag>
       </tags>
   </entry>
   <entry>
@@ -1048,6 +885,66 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
+    <title>服务器免密配置教程 - 2</title>
+    <url>/2024/07/15/Config/20240709_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
+    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
+<span id="more"></span>
+
+
+<blockquote>
+<p>[!NOTE]</p>
+<p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
+</blockquote>
+<h2 id="1-准备ip文件"><a href="#1-准备ip文件" class="headerlink" title="1. 准备ip文件"></a>1. 准备 ip 文件</h2><ul>
+<li><p>创建 ip.txt <code>vim ip.txt</code></p>
+</li>
+<li><p>将需要免密的机器 <code>ip</code> 写入</p>
+</li>
+</ul>
+<h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
+<li><code>vim set_key.sh</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否已经生成了SSH密钥对</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f ~/.ssh/id_rsa.pub ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Generating SSH key pair..."</span></span><br><span class="line">  ssh-keygen -t rsa -N <span class="string">""</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公钥复制到每台目标机器</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> -r ip; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Configuring SSH key authentication for <span class="variable">$ip</span>..."</span></span><br><span class="line">  ssh-copy-id root@<span class="variable">$ip</span></span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"><span class="built_in">echo</span> </span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p><code>chmod +x set_key.sh</code></p>
+</li>
+<li><p><code>./set_key.sh</code></p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>获取 NVIDIA 驱动问题的全流程</title>
     <url>/2024/05/23/In%20Linux/20240523_%E8%8E%B7%E5%8F%96nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97/</url>
     <content><![CDATA[<p>获取 NVIDIA 驱动问题的全流程</p>
@@ -1085,211 +982,6 @@ Domains=domain.com
       <tags>
         <tag>Ops</tag>
         <tag>NVIDIA</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>批量加载 docker 镜像 &amp; 镜像重命名</title>
-    <url>/2024/07/15/In%20Linux/20240711_%E6%89%B9%E9%87%8F%E5%8A%A0%E8%BD%BDdocker%E9%95%9C%E5%83%8F&amp;%E9%95%9C%E5%83%8F%E9%87%8D%E5%91%BD%E5%90%8D/</url>
-    <content><![CDATA[<p>多台服务器同时批量加载 docker 镜像 + 重命名，并创建容器。</p>
-<span id="more"></span>
-
-
-<h2 id="1-加载镜像"><a href="#1-加载镜像" class="headerlink" title="1. 加载镜像"></a>1. 加载镜像</h2><ul>
-<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
-</li>
-<li><p>单机执行命令：<code>docker load -i /mnt/hcufs/pytorch.tar</code></p>
-</li>
-<li><p>多机命令: </p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"nohup docker load -i /mnt/hcufs/pytorch.tar &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证是否加载镜像</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">for i in $(cat serivce.txt); do ssh $i "docker images"</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h2 id="2-重命名镜像"><a href="#2-重命名镜像" class="headerlink" title="2. 重命名镜像"></a>2. 重命名镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 此处的3f0为镜像的ID</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker tags 3f0 pytorch:1.0"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-创建容器"><a href="#3-创建容器" class="headerlink" title="3. 创建容器"></a>3. 创建容器</h2><ul>
-<li><p>单机命令 <code>docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash</code></p>
-</li>
-<li><p>多机创建:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash &amp;&amp; exit"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <categories>
-        <category>In Linux</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>什么是 RoCE/IB/RDMA</title>
-    <url>/2024/07/26/Knowledge/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/</url>
-    <content><![CDATA[<p> 在分布式存储网络中，我们使用的协议有 <strong>RoCE</strong>、<strong>Infiniband（IB）</strong>和 <strong>TCP/IP</strong>。其中 RoCE 和 IB 属于 <strong>RDMA (RemoteDirect Memory Access) 技术</strong>，他和传统的 TCP/IP 有什么区别呢，接下来我们将做详细对比。</p>
-<p><img src="/../img/RDMA.png" alt="RDMA API"></p>
-<span id="more"></span>
-
-<h2 id="RoCE和IB，RDMA通述"><a href="#RoCE和IB，RDMA通述" class="headerlink" title="RoCE和IB，RDMA通述"></a>RoCE 和 IB，RDMA 通述</h2><h3 id="什么是RoCE"><a href="#什么是RoCE" class="headerlink" title="什么是RoCE"></a>什么是 RoCE</h3><ul>
-<li>RoCE (译为” 基于融合以太网的 RDMA”, 英文全称: RDMA over Converged Ethernet) 是一个网络协议，允许在一个<a href="https://zh.wikipedia.org/wiki/%E4%BB%A5%E5%A4%AA%E7%BD%91">以太网</a>网络上使用<a href="https://zh.wikipedia.org/wiki/%E8%BF%9C%E7%A8%8B%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE">远程直接内存访问</a>（RDMA）。RoCE 有 RoCE v1 和 RoCE v2 两个版本。RoCE v1 是一个以太网<a href="https://zh.wikipedia.org/wiki/%E9%93%BE%E8%B7%AF%E5%B1%82">链路层</a>协议，因此允许同一个以太网<a href="https://zh.wikipedia.org/wiki/%E5%B9%BF%E6%92%AD%E5%9F%9F">广播域</a>中的任意两台主机间进行通信。RoCE v2 是一个<a href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%BB%9C%E5%B1%82">网络层</a>协议，因而 RoCE v2 数据包可以被路由。虽然 RoCE 协议受益于<a href="https://zh.wikipedia.org/w/index.php?title=Data_center_bridging&amp;action=edit&amp;redlink=1">融合以太网网络</a>的特征，但该协议也可用于传统或非融合的以太网网络。</li>
-</ul>
-<h3 id="什么是IB"><a href="#什么是IB" class="headerlink" title="什么是IB"></a>什么是 IB</h3><ul>
-<li>InfiniBand (直译为 “无限带宽” 技术，缩写为 IB) 是一个用于<a href="https://baike.baidu.com/item/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97/0?fromModule=lemma_inlink">高性能计算</a>的计算机网络通信标准，它具有极高的<a href="https://baike.baidu.com/item/%E5%90%9E%E5%90%90%E9%87%8F/0?fromModule=lemma_inlink">吞吐量</a>和极低的<a href="https://baike.baidu.com/item/%E5%BB%B6%E8%BF%9F/0?fromModule=lemma_inlink">延迟</a>，用于计算机与计算机之间的数据互连。InfiniBand 也用作服务器与存储系统之间的直接或交换互连，以及存储系统之间的互连。</li>
-</ul>
-<h3 id="什么是RDMA"><a href="#什么是RDMA" class="headerlink" title="什么是RDMA"></a>什么是 RDMA</h3><ul>
-<li>RDMA (译为” 远程直接内存访问”, 英文全称：remote direct memory access) 是一种绕过远程主机操作系统内核访问其内存中数据的技术。由于不经过操作系统，不仅节省了大量 CPU 资源，同样也提高了系统吞吐量、降低了系统的网络通信<a href="https://zh.wikipedia.org/wiki/Latency_(engineering)">延迟</a>，尤其适合在大规模并行<a href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%9B%86%E7%BE%A4">计算机集群</a>中有广泛应用。</li>
-</ul>
-<p><img src="/../img/download.png" alt="TCP/RDMA"></p>
-<blockquote>
-<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>传统应用要发送数据，‍‍需要通过 OS 封装 TCP/IP，‍‍然后依次经过主缓存、网卡缓存，‍‍再发出去。‍‍这样会导致两个限制。</p>
-<p>限制一：TCP/IP 协议栈处理会带来数 10 微秒的时延。‍‍TCP 协议栈在接收发送报文时，‍‍内核需要做多次上下文的切换，‍‍每次切换需要耗费 5-10 微秒。‍另外还需要至少三次的数据拷贝‍‍和依赖 CPU 进行协议工作，‍‍这导致仅仅协议上处理就会带来数 10 微秒的‍‍固定时延，‍‍协议栈时延成为最明显的瓶颈。‍‍</p>
-<p>限制二：TCP 协议栈处理导致服务器 CPU 负载‍‍居高不下。‍‍除了固定时延较长的问题，TCP/IP 网络需要主机 CPU‍‍多次参与协议的内存拷贝，‍‍网络规模越大，‍‍网络带宽越高，‍‍CPU 在收发数据时的调度负担越大，‍‍导致 CPU 持续高负载。‍‍</p>
-<p>在数据中心内部，超大规模分布式计算存储资源之间，如果使用传统的 TCP/IP 进行网络互连，将占用系统大量的计算资源，造成 IO 瓶颈，无法满足更高吞吐，更低时延的网络需求。</p>
-</blockquote>
-<hr>
-<h2 id="RoCE优缺点及关键技术"><a href="#RoCE优缺点及关键技术" class="headerlink" title="RoCE优缺点及关键技术"></a>RoCE 优缺点及关键技术</h2><h3 id="使用RoCE的优势"><a href="#使用RoCE的优势" class="headerlink" title="使用RoCE的优势"></a>使用 RoCE 的优势</h3><ul>
-<li><p><strong>成本效益：</strong> </p>
-<p>利用现有以太网基础设施：RoCE 可以在现有的以太网基础设施上运行，降低了部署和维护成本。 通用设备：使用通用的以太网交换机和网卡，设备成本较低。</p>
-</li>
-<li><p>** 兼容性和灵活性： **</p>
-<p>广泛兼容：RoCE 基于以太网，兼容性和通用性好，可以与其他网络设备和协议无缝集成。 灵活部署：可以灵活地部署在不同的网络拓扑和环境中。 </p>
-</li>
-<li><p><strong>易于管理：</strong></p>
-<p>统一管理：由于 RoCE 基于以太网，可以使用现有的网络管理工具和协议进行管理，简化了管理流程。</p>
-</li>
-</ul>
-<h3 id="RoCE的缺点"><a href="#RoCE的缺点" class="headerlink" title="RoCE的缺点"></a>RoCE 的缺点</h3><ul>
-<li><p><strong>性能：</strong></p>
-<p>较高的延迟：尽管 RoCE 能够提供低延迟，但通常不如 IB 网络，在极端低延迟需求的应用中可能不如 IB 表现优秀。 网络拥塞：在共享以太网上运行时，可能受到其他网络流量的影响，导致性能下降。 </p>
-</li>
-<li><p><strong>可靠性：</strong></p>
-<p>依赖于以太网质量：RoCE 的性能和可靠性依赖于以太网的质量，如果以太网网络质量不佳，可能会影响 RoCE 的表现。</p>
-</li>
-</ul>
-<h3 id="RoCE对比IB总结"><a href="#RoCE对比IB总结" class="headerlink" title="RoCE对比IB总结"></a>RoCE 对比 IB 总结</h3><ul>
-<li>IB 和 RoCE 的区别为链路层一个为 IB 协议，一个为 Ethernet 协议，其中 Ethernet 协议更具有普适性，且大部分场景 RoCE 时延更低、带宽更高。</li>
-</ul>
-<h3 id="RoCE的关键技术"><a href="#RoCE的关键技术" class="headerlink" title="RoCE的关键技术"></a>RoCE 的关键技术</h3><ul>
-<li><p>由于 RDMA 要求承载网络无丢包，否则效率就会急剧下降，所以 RoCE 技术如果选用以太网进行承载，就需要通过 PFC，ECN 以及 DCQCN 等技术对传统以太网络改造，打造无损以太网络，以确保零丢包。</p>
-<p><img src="/../img/36a8e300fd6759f17464122ef108e37b.png" alt="PEC&amp;ECN"></p>
-</li>
-<li><p><strong>PFC:</strong></p>
-<p>基于优先级的流量控制。PFC 为多种类型的流量提供基于每跳优先级的流量控制。设备在转发报文时，通过在优先级映射表中查找报文的优先级，将报文分配到队列中进行调度和转发。当 802.1p 优先级报文的发送速率超过接收速率且接收端的数据缓存空间不足时，接收端向发送端发送 PFC 暂停帧。当发送端收到 PFC 暂停帧时，发送端停止发送具有指定 802.1p 优先级的报文，直到发送端收到 PFC XON 帧或老化定时器超时。配置 PFC 时，特定类型报文的拥塞不影响其他类型报文的正常转发。</p>
-</li>
-<li><p><strong>ECN：</strong></p>
-<p>显式拥塞通知。ECN 定义了基于 IP 层和传输层的流量控制和端到端拥塞通知机制。当设备拥塞时，ECN 会在数据包的 IP 头中标记 ECN 字段。接收端发送拥塞通知包（CNP）通知发送端放慢发送速度。ECN 实现端到端的拥塞管理，减少拥塞的扩散和加剧。</p>
-</li>
-</ul>
-<hr>
-<h2 id="RoCE应用趋势"><a href="#RoCE应用趋势" class="headerlink" title="RoCE应用趋势"></a>RoCE 应用趋势</h2><ul>
-<li><p>当比较 RoCE 与其他类似的策略时，例如 iWARP（Internet Wide Area RDMA Protocol）和传统的 InfiniBand 网络，我们可以看到一些显著的区别。</p>
-<p><img src="/../img/RDMA.png" alt="RDMA"></p>
-</li>
-<li><p>iWARP 是一种通过 TCP/IP 协议栈实现 RDMA 的技术。虽然它可以在标准的三层网络中运行，但它的实现通常比 RoCE 复杂，并且可能需要更多的 CPU 资源来处理额外的软件堆栈。此外，iWARP 在网络性能方面可能不如 RoCE，尤其是在低延迟和高带宽的应用场景中。</p>
-</li>
-<li><p>InfiniBand 是一种专为高性能计算设计的网络技术，它提供了极低的延迟和非常高的带宽。尽管 InfiniBand 在性能上优于 RoCE，但它通常也更昂贵，并且需要专用的硬件。相比之下，RoCE 可以在现有的以太网基础设施上运行，降低了部署成本。</p>
-<p><img src="/../img/RoCE_Header_format.png"></p>
-</li>
-<li><p>随着 RoCEv2 的成熟和普及，它已成为数据中心网络中的一个主要趋势。越来越多的企业开始采用 RoCEv2 来支持高性能计算、机器学习和大规模存储集群等应用。RoCEv2 的优势在于它能够在标准以太网上实现低延迟和高带宽的 RDMA 通信，同时保持较低的成本。</p>
-</li>
-<li><p>未来，随着对数据密集型应用需求的增长，RoCEv2 将继续在其核心市场中发挥重要作用。随着技术的进步和新的应用场景的出现，RoCEv2 可能会进一步优化以支持更广泛的用例，包括边缘计算和物联网（IoT）领域中的实时数据处理。</p>
-</li>
-<li><p>RoCEv2 凭借其在性能和成本之间的平衡，正在成为数据中心网络架构中的关键技术之一，而 RoCEv1 则由于其局限性而在实际应用中逐渐被淘汰。随着网络技术和市场需求的不断发展，RoCEv2 有望在未来的数据中心和高性能计算环境中扮演更加重要的角色。</p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Knowledge</category>
-      </categories>
-      <tags>
-        <tag>work</tag>
-        <tag>Ops</tag>
-        <tag>网络</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服务器批量安装 Nvidia-Docker</title>
-    <url>/2024/07/15/In%20Linux/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/</url>
-    <content><![CDATA[<p>多台服务器同时安装 Nvidia-docker</p>
-<span id="more"></span>
-<h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>将以上保存到一个文件中，命名 <code>installNGC</code></li>
-</ul>
-<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p>这条命令是在 Linux 系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
-<ul>
-<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号 (SIGHUP)，这意味着即使用户退出当前终端会话，由 <code>nohup</code> 启动的进程仍然会继续运行。</p>
-</li>
-<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code> 脚本或程序将会被运行，它位于 <code>/mnt/hcufs/tools</code> 目录下。</p>
-</li>
-<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到 <code>/dev/null</code> 设备文件。<code>/dev/null</code> 是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让 <code>installNGC</code> 程序的输出显示在终端上。</p>
-</li>
-<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果 <code>installNGC</code> 程序产生任何错误输出，也将被重定向到 <code>/dev/null</code>，同样不会在终端上显示。</p>
-</li>
-<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的 shell 提示符，而不需要等待 <code>installNGC</code> 完成执行。</p>
-</li>
-</ul>
-<p>综上所述，这条命令的意思是：在后台运行 <code>/mnt/hcufs/tools/installNGC</code> 程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
-</li>
-</ul>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <categories>
-        <category>In Linux</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
@@ -1408,6 +1100,183 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
+    <title>批量加载 docker 镜像 &amp; 镜像重命名</title>
+    <url>/2024/07/15/In%20Linux/20240711_%E6%89%B9%E9%87%8F%E5%8A%A0%E8%BD%BDdocker%E9%95%9C%E5%83%8F&amp;%E9%95%9C%E5%83%8F%E9%87%8D%E5%91%BD%E5%90%8D/</url>
+    <content><![CDATA[<p>多台服务器同时批量加载 docker 镜像 + 重命名，并创建容器。</p>
+<span id="more"></span>
+
+
+<h2 id="1-加载镜像"><a href="#1-加载镜像" class="headerlink" title="1. 加载镜像"></a>1. 加载镜像</h2><ul>
+<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
+</li>
+<li><p>单机执行命令：<code>docker load -i /mnt/hcufs/pytorch.tar</code></p>
+</li>
+<li><p>多机命令: </p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"nohup docker load -i /mnt/hcufs/pytorch.tar &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>验证是否加载镜像</strong></p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">for i in $(cat serivce.txt); do ssh $i "docker images"</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h2 id="2-重命名镜像"><a href="#2-重命名镜像" class="headerlink" title="2. 重命名镜像"></a>2. 重命名镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 此处的3f0为镜像的ID</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker tags 3f0 pytorch:1.0"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-创建容器"><a href="#3-创建容器" class="headerlink" title="3. 创建容器"></a>3. 创建容器</h2><ul>
+<li><p>单机命令 <code>docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash</code></p>
+</li>
+<li><p>多机创建:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash &amp;&amp; exit"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器批量安装 Nvidia-Docker</title>
+    <url>/2024/07/15/In%20Linux/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/</url>
+    <content><![CDATA[<p>多台服务器同时安装 Nvidia-docker</p>
+<span id="more"></span>
+<h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>将以上保存到一个文件中，命名 <code>installNGC</code></li>
+</ul>
+<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p>这条命令是在 Linux 系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
+<ul>
+<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号 (SIGHUP)，这意味着即使用户退出当前终端会话，由 <code>nohup</code> 启动的进程仍然会继续运行。</p>
+</li>
+<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code> 脚本或程序将会被运行，它位于 <code>/mnt/hcufs/tools</code> 目录下。</p>
+</li>
+<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到 <code>/dev/null</code> 设备文件。<code>/dev/null</code> 是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让 <code>installNGC</code> 程序的输出显示在终端上。</p>
+</li>
+<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果 <code>installNGC</code> 程序产生任何错误输出，也将被重定向到 <code>/dev/null</code>，同样不会在终端上显示。</p>
+</li>
+<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的 shell 提示符，而不需要等待 <code>installNGC</code> 完成执行。</p>
+</li>
+</ul>
+<p>综上所述，这条命令的意思是：在后台运行 <code>/mnt/hcufs/tools/installNGC</code> 程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器挂载外部存储卷</title>
+    <url>/2024/07/15/In%20Linux/20240712_%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
+    <content><![CDATA[<p>多服务器之间共享文件，需要挂载外部存储卷。从保存数据的服务器上，将共享目录挂载到其他服务器上。</p>
+<!---more-->
+
+<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
+<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
+</li>
+<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
+</li>
+<li><p>批量发送脚本为:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
+<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
+</li>
+<li><p>批量挂脚本：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>多机配置 hosts 及 hostname</title>
     <url>/2024/07/15/In%20Linux/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
     <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
@@ -1441,6 +1310,51 @@ Domains=domain.com
 </li>
 </ul>
 </blockquote>
+]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>K8s 常用命令</title>
+    <url>/2024/07/17/In%20Linux/Kubenets%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
+<span id="more"></span>
+
+
+<ul>
+<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
+  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看容器内日志</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除控制器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
+
+</li>
+<li><p>查看所有镜像</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>进入容器</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>删除 pods</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>从 pod 中复制文件到本地服务器上</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>查看 pod 详细信息</p>
+  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
 ]]></content>
       <categories>
         <category>In Linux</category>
@@ -1499,59 +1413,190 @@ Domains=domain.com
       </tags>
   </entry>
   <entry>
-    <title>服务器挂载外部存储卷</title>
-    <url>/2024/07/15/In%20Linux/20240712_%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%8C%82%E8%BD%BD%E5%A4%96%E9%83%A8%E5%AD%98%E5%82%A8%E5%8D%B7/</url>
-    <content><![CDATA[<p>多服务器之间共享文件，需要挂载外部存储卷。从保存数据的服务器上，将共享目录挂载到其他服务器上。</p>
-<!---more-->
+    <title>什么是 RoCE/IB/RDMA</title>
+    <url>/2024/07/26/Knowledge/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/</url>
+    <content><![CDATA[<p> 在分布式存储网络中，我们使用的协议有 <strong>RoCE</strong>、<strong>Infiniband（IB）</strong>和 <strong>TCP/IP</strong>。其中 RoCE 和 IB 属于 <strong>RDMA (RemoteDirect Memory Access) 技术</strong>，他和传统的 TCP/IP 有什么区别呢，接下来我们将做详细对比。</p>
+<p><img src="/../img/RDMA.png" alt="RDMA API"></p>
+<span id="more"></span>
 
-<h2 id="1-发送key"><a href="#1-发送key" class="headerlink" title="1. 发送key"></a>1. 发送 key</h2><ul>
-<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
-</li>
-<li><p>单机执行命令为:<code>scp -r /root/sec_dir ip地址:/</code></p>
-</li>
-<li><p>批量发送脚本为:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> scp -r /root/sec_dir h800-<span class="variable">$i</span>:/;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+<h2 id="RoCE和IB，RDMA通述"><a href="#RoCE和IB，RDMA通述" class="headerlink" title="RoCE和IB，RDMA通述"></a>RoCE 和 IB，RDMA 通述</h2><h3 id="什么是RoCE"><a href="#什么是RoCE" class="headerlink" title="什么是RoCE"></a>什么是 RoCE</h3><ul>
+<li>RoCE (译为” 基于融合以太网的 RDMA”, 英文全称: RDMA over Converged Ethernet) 是一个网络协议，允许在一个<a href="https://zh.wikipedia.org/wiki/%E4%BB%A5%E5%A4%AA%E7%BD%91">以太网</a>网络上使用<a href="https://zh.wikipedia.org/wiki/%E8%BF%9C%E7%A8%8B%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE">远程直接内存访问</a>（RDMA）。RoCE 有 RoCE v1 和 RoCE v2 两个版本。RoCE v1 是一个以太网<a href="https://zh.wikipedia.org/wiki/%E9%93%BE%E8%B7%AF%E5%B1%82">链路层</a>协议，因此允许同一个以太网<a href="https://zh.wikipedia.org/wiki/%E5%B9%BF%E6%92%AD%E5%9F%9F">广播域</a>中的任意两台主机间进行通信。RoCE v2 是一个<a href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%BB%9C%E5%B1%82">网络层</a>协议，因而 RoCE v2 数据包可以被路由。虽然 RoCE 协议受益于<a href="https://zh.wikipedia.org/w/index.php?title=Data_center_bridging&amp;action=edit&amp;redlink=1">融合以太网网络</a>的特征，但该协议也可用于传统或非融合的以太网网络。</li>
 </ul>
-<h2 id="2-升级key权限"><a href="#2-升级key权限" class="headerlink" title="2. 升级key权限"></a>2. 升级 key 权限</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"chmod 600 /sec_dir/*"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-挂载"><a href="#3-挂载" class="headerlink" title="3. 挂载"></a>3. 挂载</h2><ul>
-<li><p>单机命令：<code>mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs</code></p>
+<h3 id="什么是IB"><a href="#什么是IB" class="headerlink" title="什么是IB"></a>什么是 IB</h3><ul>
+<li>InfiniBand (直译为 “无限带宽” 技术，缩写为 IB) 是一个用于<a href="https://baike.baidu.com/item/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97/0?fromModule=lemma_inlink">高性能计算</a>的计算机网络通信标准，它具有极高的<a href="https://baike.baidu.com/item/%E5%90%9E%E5%90%90%E9%87%8F/0?fromModule=lemma_inlink">吞吐量</a>和极低的<a href="https://baike.baidu.com/item/%E5%BB%B6%E8%BF%9F/0?fromModule=lemma_inlink">延迟</a>，用于计算机与计算机之间的数据互连。InfiniBand 也用作服务器与存储系统之间的直接或交换互连，以及存储系统之间的互连。</li>
+</ul>
+<h3 id="什么是RDMA"><a href="#什么是RDMA" class="headerlink" title="什么是RDMA"></a>什么是 RDMA</h3><ul>
+<li>RDMA (译为” 远程直接内存访问”, 英文全称：remote direct memory access) 是一种绕过远程主机操作系统内核访问其内存中数据的技术。由于不经过操作系统，不仅节省了大量 CPU 资源，同样也提高了系统吞吐量、降低了系统的网络通信<a href="https://zh.wikipedia.org/wiki/Latency_(engineering)">延迟</a>，尤其适合在大规模并行<a href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%9B%86%E7%BE%A4">计算机集群</a>中有广泛应用。</li>
+</ul>
+<p><img src="/../img/download.png" alt="TCP/RDMA"></p>
+<blockquote>
+<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>传统应用要发送数据，‍‍需要通过 OS 封装 TCP/IP，‍‍然后依次经过主缓存、网卡缓存，‍‍再发出去。‍‍这样会导致两个限制。</p>
+<p>限制一：TCP/IP 协议栈处理会带来数 10 微秒的时延。‍‍TCP 协议栈在接收发送报文时，‍‍内核需要做多次上下文的切换，‍‍每次切换需要耗费 5-10 微秒。‍另外还需要至少三次的数据拷贝‍‍和依赖 CPU 进行协议工作，‍‍这导致仅仅协议上处理就会带来数 10 微秒的‍‍固定时延，‍‍协议栈时延成为最明显的瓶颈。‍‍</p>
+<p>限制二：TCP 协议栈处理导致服务器 CPU 负载‍‍居高不下。‍‍除了固定时延较长的问题，TCP/IP 网络需要主机 CPU‍‍多次参与协议的内存拷贝，‍‍网络规模越大，‍‍网络带宽越高，‍‍CPU 在收发数据时的调度负担越大，‍‍导致 CPU 持续高负载。‍‍</p>
+<p>在数据中心内部，超大规模分布式计算存储资源之间，如果使用传统的 TCP/IP 进行网络互连，将占用系统大量的计算资源，造成 IO 瓶颈，无法满足更高吞吐，更低时延的网络需求。</p>
+</blockquote>
+<hr>
+<h2 id="RoCE优缺点及关键技术"><a href="#RoCE优缺点及关键技术" class="headerlink" title="RoCE优缺点及关键技术"></a>RoCE 优缺点及关键技术</h2><h3 id="使用RoCE的优势"><a href="#使用RoCE的优势" class="headerlink" title="使用RoCE的优势"></a>使用 RoCE 的优势</h3><ul>
+<li><p><strong>成本效益：</strong> </p>
+<p>利用现有以太网基础设施：RoCE 可以在现有的以太网基础设施上运行，降低了部署和维护成本。 通用设备：使用通用的以太网交换机和网卡，设备成本较低。</p>
 </li>
-<li><p>批量挂脚本：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 65`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"mkdir -p /mnt/hcufs;nohup mount.hcufs -o skpath=/sec_dir 100.75.34.9@o2ib:100.75.34.10@o2ib:/hcufs /mnt/hcufs &gt;/dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>** 兼容性和灵活性： **</p>
+<p>广泛兼容：RoCE 基于以太网，兼容性和通用性好，可以与其他网络设备和协议无缝集成。 灵活部署：可以灵活地部署在不同的网络拓扑和环境中。 </p>
+</li>
+<li><p><strong>易于管理：</strong></p>
+<p>统一管理：由于 RoCE 基于以太网，可以使用现有的网络管理工具和协议进行管理，简化了管理流程。</p>
+</li>
+</ul>
+<h3 id="RoCE的缺点"><a href="#RoCE的缺点" class="headerlink" title="RoCE的缺点"></a>RoCE 的缺点</h3><ul>
+<li><p><strong>性能：</strong></p>
+<p>较高的延迟：尽管 RoCE 能够提供低延迟，但通常不如 IB 网络，在极端低延迟需求的应用中可能不如 IB 表现优秀。 网络拥塞：在共享以太网上运行时，可能受到其他网络流量的影响，导致性能下降。 </p>
+</li>
+<li><p><strong>可靠性：</strong></p>
+<p>依赖于以太网质量：RoCE 的性能和可靠性依赖于以太网的质量，如果以太网网络质量不佳，可能会影响 RoCE 的表现。</p>
+</li>
+</ul>
+<h3 id="RoCE对比IB总结"><a href="#RoCE对比IB总结" class="headerlink" title="RoCE对比IB总结"></a>RoCE 对比 IB 总结</h3><ul>
+<li>IB 和 RoCE 的区别为链路层一个为 IB 协议，一个为 Ethernet 协议，其中 Ethernet 协议更具有普适性，且大部分场景 RoCE 时延更低、带宽更高。</li>
+</ul>
+<h3 id="RoCE的关键技术"><a href="#RoCE的关键技术" class="headerlink" title="RoCE的关键技术"></a>RoCE 的关键技术</h3><ul>
+<li><p>由于 RDMA 要求承载网络无丢包，否则效率就会急剧下降，所以 RoCE 技术如果选用以太网进行承载，就需要通过 PFC，ECN 以及 DCQCN 等技术对传统以太网络改造，打造无损以太网络，以确保零丢包。</p>
+<p><img src="/../img/36a8e300fd6759f17464122ef108e37b.png" alt="PEC&amp;ECN"></p>
+</li>
+<li><p><strong>PFC:</strong></p>
+<p>基于优先级的流量控制。PFC 为多种类型的流量提供基于每跳优先级的流量控制。设备在转发报文时，通过在优先级映射表中查找报文的优先级，将报文分配到队列中进行调度和转发。当 802.1p 优先级报文的发送速率超过接收速率且接收端的数据缓存空间不足时，接收端向发送端发送 PFC 暂停帧。当发送端收到 PFC 暂停帧时，发送端停止发送具有指定 802.1p 优先级的报文，直到发送端收到 PFC XON 帧或老化定时器超时。配置 PFC 时，特定类型报文的拥塞不影响其他类型报文的正常转发。</p>
+</li>
+<li><p><strong>ECN：</strong></p>
+<p>显式拥塞通知。ECN 定义了基于 IP 层和传输层的流量控制和端到端拥塞通知机制。当设备拥塞时，ECN 会在数据包的 IP 头中标记 ECN 字段。接收端发送拥塞通知包（CNP）通知发送端放慢发送速度。ECN 实现端到端的拥塞管理，减少拥塞的扩散和加剧。</p>
+</li>
 </ul>
 <hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+<h2 id="RoCE应用趋势"><a href="#RoCE应用趋势" class="headerlink" title="RoCE应用趋势"></a>RoCE 应用趋势</h2><ul>
+<li><p>当比较 RoCE 与其他类似的策略时，例如 iWARP（Internet Wide Area RDMA Protocol）和传统的 InfiniBand 网络，我们可以看到一些显著的区别。</p>
+<p><img src="/../img/RDMA.png" alt="RDMA"></p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+<li><p>iWARP 是一种通过 TCP/IP 协议栈实现 RDMA 的技术。虽然它可以在标准的三层网络中运行，但它的实现通常比 RoCE 复杂，并且可能需要更多的 CPU 资源来处理额外的软件堆栈。此外，iWARP 在网络性能方面可能不如 RoCE，尤其是在低延迟和高带宽的应用场景中。</p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+<li><p>InfiniBand 是一种专为高性能计算设计的网络技术，它提供了极低的延迟和非常高的带宽。尽管 InfiniBand 在性能上优于 RoCE，但它通常也更昂贵，并且需要专用的硬件。相比之下，RoCE 可以在现有的以太网基础设施上运行，降低了部署成本。</p>
+<p><img src="/../img/RoCE_Header_format.png"></p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+<li><p>随着 RoCEv2 的成熟和普及，它已成为数据中心网络中的一个主要趋势。越来越多的企业开始采用 RoCEv2 来支持高性能计算、机器学习和大规模存储集群等应用。RoCEv2 的优势在于它能够在标准以太网上实现低延迟和高带宽的 RDMA 通信，同时保持较低的成本。</p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+<li><p>未来，随着对数据密集型应用需求的增长，RoCEv2 将继续在其核心市场中发挥重要作用。随着技术的进步和新的应用场景的出现，RoCEv2 可能会进一步优化以支持更广泛的用例，包括边缘计算和物联网（IoT）领域中的实时数据处理。</p>
 </li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+<li><p>RoCEv2 凭借其在性能和成本之间的平衡，正在成为数据中心网络架构中的关键技术之一，而 RoCEv1 则由于其局限性而在实际应用中逐渐被淘汰。随着网络技术和市场需求的不断发展，RoCEv2 有望在未来的数据中心和高性能计算环境中扮演更加重要的角色。</p>
 </li>
 </ul>
-</blockquote>
 ]]></content>
       <categories>
-        <category>In Linux</category>
+        <category>Knowledge</category>
       </categories>
       <tags>
+        <tag>work</tag>
         <tag>Ops</tag>
+        <tag>网络</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于 Openai API 进行接口移植</title>
+    <url>/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>记录一下 基于 Openai API 进行接口移植的过程，从引用 api 到测试到最后转接口使用</p>
+<span id="more"></span>
+
+
+
+<blockquote>
+<h3 id="注册Openai-API账号"><a href="#注册Openai-API账号" class="headerlink" title="注册Openai API账号"></a>注册 Openai API 账号</h3><ul>
+<li>老生常谈的问题 ，首先我们需要注册一个 Openai API 账号，并申请一个 API key，或者购买一个 API_KEY。</li>
+<li><strong>申请点击此链接:<a href="https://platform.openai.com/login?launch">openai API 官网链接</a></strong></li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1-调用openai的GPT-4o模型接口"><a href="#1-调用openai的GPT-4o模型接口" class="headerlink" title="1.调用openai的GPT-4o模型接口"></a>1. 调用 openai 的 GPT-4o 模型接口</h3><ul>
+<li><p>OK 还是最常见的 chat_generate，这里直接放代码了</p>
+ <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">client = OpenAI(</span><br><span class="line">    api_key=<span class="comment">#这里就放入刚刚购买到的key就可以啦</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> opneai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gpt_generate_text</span>(<span class="params">prompt, messages_list</span>):</span><br><span class="line">    messages = <span class="string">''</span></span><br><span class="line">    <span class="keyword">if</span> messages_list:</span><br><span class="line">        messages = <span class="string">'以下是你和用户的当前会话消息：\n\n'</span> + <span class="string">'\n'</span>.join(messages_list)</span><br><span class="line">    stream = client.chat.completions.create(</span><br><span class="line">        <span class="comment"># model="gpt-4-turbo-preview",</span></span><br><span class="line">        model=<span class="string">"gpt-4o"</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: messages},</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: prompt},</span><br><span class="line">        ],</span><br><span class="line">        stream=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line">    text = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> stream:</span><br><span class="line">        <span class="keyword">if</span> chunk.choices[<span class="number">0</span>].delta.content <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(chunk.choices[<span class="number">0</span>].delta.content, end=<span class="string">""</span>)</span><br><span class="line">            text += chunk.choices[<span class="number">0</span>].delta.content</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>这里是<strong>路由函数</strong>的撰写</p>
+<ul>
+<li><p>可以看到这里可以通过 GET 和 POST （GET 不可以用哦）, 这里调用我们的 gpt_generate_text 函数，传入 prompt 和 messages_list，然后返回生成的文本。</p>
+  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/chatgpt"</span>, methods=[<span class="string">'GET'</span>, <span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">chat_with_gpt</span>():</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'chatgpt GET 请求'</span></span><br><span class="line">    <span class="keyword">elif</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        data = request.json</span><br><span class="line">        prompt = data[<span class="string">'prompt'</span>]</span><br><span class="line">        messages_list = data.get(<span class="string">'messages'</span>, [])</span><br><span class="line">        text = gpt_generate_text(prompt, messages_list)</span><br><span class="line"></span><br><span class="line">        timestamp = <span class="built_in">str</span>(time.time()).split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> text:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成成功'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: text}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">2</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成失败'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: <span class="literal">None</span>}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">return</span> jsonify(response_data)</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="2-调用Openai的whisper-1模型接口"><a href="#2-调用Openai的whisper-1模型接口" class="headerlink" title="2.调用Openai的whisper-1模型接口"></a>2. 调用 Openai 的 whisper-1 模型接口</h2><ul>
+<li>2.1 同理这里是调用的 openai 的 <strong>whisper-1</strong> 模型进行音频转文本的函数撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_audio</span>(<span class="params">audio_file</span>):</span><br><span class="line">    audio=<span class="built_in">open</span>(audio_file, <span class="string">"rb"</span>)</span><br><span class="line">    transcription = client.audio.transcriptions.create(model=<span class="string">"whisper-1"</span>,file=audio)</span><br><span class="line">    text = transcription.text</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
+<li>2.2 这里是最后<strong>路由函数</strong>的撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/transcribe"</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'file'</span> <span class="keyword">not</span> <span class="keyword">in</span> request.files:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No file part"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    audio_file = request.files[<span class="string">'file'</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file.filename == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No selected file"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file:</span><br><span class="line">        <span class="comment"># 保存文件到临时位置</span></span><br><span class="line">        temp_file_path = os.path.join(<span class="string">"temp"</span>, audio_file.filename)</span><br><span class="line">        audio_file.save(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 调用转录函数</span></span><br><span class="line">        transcription_text = transcribe_audio(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除临时文件</span></span><br><span class="line">        os.remove(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"text"</span>: transcription_text})</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<blockquote>
+<ul>
+<li>首先我们要确定返回的请求中是否包含文件和文件名，如果没有，则返回错误信息和 400，</li>
+<li>其次，我们需要保存文件到临时位置，然后调用我们写好的转录函数进行转录，最后删除临时文件。</li>
+<li>最后返回转录后的文本给客户端 供使用。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="3-调用Openai的TTS-1模型接口"><a href="#3-调用Openai的TTS-1模型接口" class="headerlink" title="3.调用Openai的TTS-1模型接口"></a>3. 调用 Openai 的 TTS-1 模型接口</h2><ul>
+<li>3.1 调用 openai 的 API，将文本转换为语音 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">def text_to_speech(text, vocie, model, path):</span><br><span class="line">    </span><br><span class="line">    response = client.audio.speech.create(</span><br><span class="line">        model=model,</span><br><span class="line">        voice=vocie,</span><br><span class="line">        input=text</span><br><span class="line">    )</span><br><span class="line">    speech_file_path = Path(path)</span><br><span class="line">    with open(speech_file_path, 'wb') as file:</span><br><span class="line">        file.write(response.content)</span><br><span class="line"></span><br><span class="line">    print(f'文件已保存到: {speech_file_path}')</span><br><span class="line">    return speech_file_path</span><br></pre></td></tr></tbody></table></figure></li>
+<li>3.2 文本转语音 text-to-speech 路由撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line">server_ip = <span class="string">""</span>  <span class="comment"># 替换为你的服务器IP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">'/text-to-speech'</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_to_speech_endpoint</span>():</span><br><span class="line">    data = request.json</span><br><span class="line">    text = data.get(<span class="string">'text'</span>)</span><br><span class="line">    voice = data.get(<span class="string">'voice'</span>)</span><br><span class="line">    model = data.get(<span class="string">'model'</span>)</span><br><span class="line">    output_path = <span class="string">'./output.mp3'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text <span class="keyword">or</span> <span class="keyword">not</span> voice <span class="keyword">or</span> <span class="keyword">not</span> model:</span><br><span class="line">        <span class="keyword">return</span> {<span class="string">'error'</span>: <span class="string">'Missing required parameters'</span>}, <span class="number">400</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Define the directory where you want to save the files</span></span><br><span class="line">        output_dir = Path(<span class="string">'./audio_files'</span>)</span><br><span class="line">        output_dir.mkdir(exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate a unique filename using UUID</span></span><br><span class="line">        unique_filename = <span class="string">f"<span class="subst">{uuid.uuid4()}</span>.mp3"</span></span><br><span class="line">        output_path = output_dir / unique_filename</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate the speech and save the file</span></span><br><span class="line">        speech_file_path = text_to_speech(text, voice, model, output_path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Create the file URL</span></span><br><span class="line">        file_url = <span class="string">f"http://<span class="subst">{server_ip}</span>/root/xxx/<span class="subst">{speech_file_path}</span>"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Return the file URL as a response</span></span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'file_url'</span>: file_url}), <span class="number">200</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'error'</span>: <span class="built_in">str</span>(e)}), <span class="number">500</span></span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<ul>
+<li>首先我们要在后端代码中写入 我们的服务器 ip 地址</li>
+<li>我们要确保我们的 json 数据存在 四个键 text ， voice ， model ， output_path ，</li>
+<li>其次我们调用 text_to_speech 函数，传入 text，voice，model，output_path，</li>
+<li>然后我们生成一个唯一的 filename，保存到 output_dir 目录下</li>
+<li>最后我们生成一个 file_url，然后返回给客户端。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h2 id="4-测试使用"><a href="#4-测试使用" class="headerlink" title="4.测试使用"></a>4. 测试使用</h2><ul>
+<li>4.1 我们可以使用以下方式，这种方式在我们的 py 脚本下直接测试，传参切记</li>
+</ul>
+<p>​	 <code>if __name__ == "__main__":</code><br>​	    	<code>main()</code></p>
+<ul>
+<li><p>4.2 使用 命令行在我们的服务器上测试 GET <a href="http://xxxx/">http://xxxx</a> {“xx”:”xx”}</p>
+</li>
+<li><p>4.3 使用 postman 、apifox 等等工具测试</p>
+</li>
+</ul>
+<p>​	本人这里使用的是第三种方法 apifox 这个工具，本人良心推荐大家使用，附<a href="https://apifox.com/help/">官方文档链接</a></p>
+<ul>
+<li><p> 4.4 测试截图及测试数据</p>
+<h3 id="测试用例一-chatgpt"><a href="#测试用例一-chatgpt" class="headerlink" title="测试用例一: /chatgpt"></a>测试用例一: /chatgpt</h3><ul>
+<li>测试数据 </li>
+</ul>
+  <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"code"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"data"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span> <span class="string">"你好！我是一个由人工智能驱动的助手，设计用于帮助回答问题、提供信息以及协助完成各种任务。有什么我可以帮你的吗？"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"message"</span><span class="punctuation">:</span> <span class="string">"内容生成成功"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"time"</span><span class="punctuation">:</span> <span class="string">"1721808765"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>响应截图</li>
+</ul>
+<p>  <img src="/../img/api-1.jpg" alt="gpt4o"></p>
+<hr>
+<h3 id="测试用例二-transcribe"><a href="#测试用例二-transcribe" class="headerlink" title="测试用例二: /transcribe"></a>测试用例二: /transcribe</h3><ul>
+<li>测试数据</li>
+</ul>
+<p>  <img src="/../img/api-2-1.jpg" alt="音频文件截图"></p>
+<ul>
+<li>响应截图</li>
+</ul>
+<p>  <img src="/../img/api-2.jpg" alt="gpt4o"></p>
+<hr>
+<h3 id="测试用例三-transcribe"><a href="#测试用例三-transcribe" class="headerlink" title="测试用例三: /transcribe"></a>测试用例三: /transcribe</h3><ul>
+<li><p>测试数据</p>
+   <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"model"</span><span class="punctuation">:</span><span class="string">"tts-1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"voice"</span><span class="punctuation">:</span><span class="string">"echo"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span><span class="string">"今天中午吃什么?"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>响应截图</p>
+<p><img src="/../img/api-3.jpg" alt="gpt4o"></p>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>LLM</tag>
       </tags>
   </entry>
   <entry>
@@ -1642,51 +1687,6 @@ Domains=domain.com
 
 <ul>
 <li>以上只是 Shell 命令中的一些常用的操作，Bash Shell 还支持大量的其他命令和操作，可以通过 man 命令查看命令的 manual 手册来了解更多细节信息和使用方法。</li>
-</ul>
-]]></content>
-      <categories>
-        <category>In Linux</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>K8s 常用命令</title>
-    <url>/2024/07/17/In%20Linux/Kubenets%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>本人工作中使用 k8s，记录一下常用的命令。</p>
-<span id="more"></span>
-
-
-<ul>
-<li><p>重启运行在节点上的 <code>kubelet</code> 服务</p>
-  <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">systemctl restart  kubelet</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看容器内日志</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl logs pod名称 容器名称 -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get deployments.apps -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除控制器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete deployments.apps pod名称  -n 命名空间</span><br></pre></td></tr></tbody></table></figure>
-
-</li>
-<li><p>查看所有镜像</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl get pods -A</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>进入容器</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">exec</span> -it BML副本名称(服务名) bash -n 对应的存储源(上调命令查的)</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>删除 pods</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl delete pod BML副本名称 -n 对应的存储元 bash</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>从 pod 中复制文件到本地服务器上</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl <span class="built_in">cp</span> -n 存储源 服务名：路径 本地路径</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>查看 pod 详细信息</p>
-  <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">kubectl describe pod pod-name</span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
 ]]></content>
       <categories>
