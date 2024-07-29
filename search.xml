@@ -1295,7 +1295,7 @@ Domains=domain.com
 <li><p>点击<strong>虚拟机设置</strong></p>
 </li>
 <li><p>找到<strong>选项</strong></p>
-<p><img src="E:\hexo-site\source\img\vmware-2.jpg"></p>
+<p><img src="/../../img%5Cvmware-2.jpg"></p>
 </li>
 <li><p>选<strong>共享文件夹</strong> , 按图内进行配置</p>
 </li>
@@ -1805,14 +1805,17 @@ Domains=domain.com
 <li> 设置流程如下:</li>
 </ul>
 <p><img src="/../../img/%E7%9B%91%E6%8E%A7-2.jpg" alt="step-1"></p>
-<p><img src="E:\hexo-site\source\img\监控-3.jpg"></p>
-<p><img src="E:\hexo-site\source\img\控制-4.jpg"></p>
-<p><img src="E:\hexo-site\source\img\控制-6.jpg"></p>
+<p><img src="/../../img%5C%E7%9B%91%E6%8E%A7-3.jpg"></p>
+<p><img src="/../../img%5C%E6%8E%A7%E5%88%B6-4.jpg"></p>
+<p><img src="/../../img%5C%E6%8E%A7%E5%88%B6-6.jpg"></p>
 <ul>
 <li> 之后新建 <code>Dashboards</code>, 选择上面新增的 DataSrouce, 按需选择可视化的 Query 即可</li>
 </ul>
-<p><img src="E:\hexo-site\source\img\监控-5.jpg"></p>
+<p><img src="/../../img%5C%E7%9B%91%E6%8E%A7-5.jpg"></p>
 ]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
       <tags>
         <tag>Ops</tag>
         <tag>Linux</tag>
