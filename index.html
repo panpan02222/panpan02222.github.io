@@ -230,7 +230,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2024-08-05 19:44:41 / 修改时间：20:46:13" itemprop="dateCreated datePublished" datetime="2024-08-05T19:44:41+08:00">2024-08-05</time>
+      <time title="创建时间：2024-08-05 19:44:41 / 修改时间：20:50:52" itemprop="dateCreated datePublished" datetime="2024-08-05T19:44:41+08:00">2024-08-05</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -249,14 +249,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>412</span>
+      <span>434</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>1 分钟</span>
+      <span>2 分钟</span>
     </span>
 </div>
 
@@ -267,64 +267,16 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="Docker-Nvidia-docker离线安装安装"><a href="#Docker-Nvidia-docker离线安装安装" class="headerlink" title="Docker&amp;Nvidia-docker离线安装安装"></a>Docker&amp;Nvidia-docker 离线安装安装</h1><h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker 安装</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/chexlong/article/details/127932711">离线安装 docker</a></p>
-<hr>
-<h3 id="nvidia-docker-安装"><a href="#nvidia-docker-安装" class="headerlink" title="nvidia-docker 安装"></a>nvidia-docker 安装</h3><h4 id="1-下载docker执行文件"><a href="#1-下载docker执行文件" class="headerlink" title="1. 下载docker执行文件"></a>1. 下载 docker 执行文件</h4><ul>
-<li>点击以下的<code>下载链接</code>进行下载</li>
-</ul>
-<p>​	<a target="_blank" rel="noopener" href="https://download.docker.com/linux/static/stable/">下载链接</a></p>
-<ul>
-<li> x86_64 目录中的 Docker 可执行文件，适用于大多数使用 GPU 的服务器<br><em>第一步</em><br><img src="/../../img/docker-1.png" alt="step1"><br><em>第二步</em><br><img src="/../../img/docker-3.png" alt="step2"></li>
-</ul>
-<h4 id="2-下载离线安装脚本"><a href="#2-下载离线安装脚本" class="headerlink" title="2.  下载离线安装脚本"></a>2.  下载离线安装脚本</h4><ul>
-<li>点击以下的<code>下载链接</code>进行下载<br><a target="_blank" rel="noopener" href="https://github.com/Jrohy/docker-install/">下载链接</a></li>
-</ul>
-<p><img src="/../../img/docker-2.png"></p>
-<ul>
-<li><p>执行命令</p>
-<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./install.sh -f /root/docker-18.09.6.tgz</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p><strong>把后面的 tgz 包换成自己的刚才下载 docker 离线版本</strong></p>
-</blockquote>
-</li>
-<li><p>下载<strong>对应当前系统</strong>的依赖包，<strong>共需下载 6 个文件</strong></p>
-<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看当前系统版本, 如果是ubuntu系统则下载deb文件,如果是centos7则下载rpm文件</span></span><br><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<p>​	<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/libnvidia-container/tree/gh-pages/stable/rpm">rpm 下载链接</a></p>
-<p>​	<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/libnvidia-container/tree/gh-pages/stable/deb">deb 下载链接</a></p>
-<pre><code># 第1个文件
-https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/libnvidia-container-dev_1.16.1-1_amd64.deb
-
-# 第2个文件
-https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/libnvidia-container-tools_1.16.1-1_amd64.deb
-
-# 第3个文件
-https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/libnvidia-container1-dbg_1.16.1-1_amd64.deb
-
-# 第4个文件
-https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/libnvidia-container1_1.16.1-1_amd64.deb
-
-# 第5个文件
-https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvidia-container-toolkit_1.16.1-1_amd64.deb
-
-# 第6个文件
-https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvidia-container-runtime_3.14.0-1_all.deb
-</code></pre>
-<p><img src="/../../img/docker-4.png"></p>
-<ul>
-<li><p>将下载的文件放在一个文件夹下，运行命令</p>
-<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果是rpm包执行rpm安装</span></span><br><span class="line"><span class="built_in">sudo</span> rpm -Uvh *.rpm --nodeps --force</span><br><span class="line"><span class="comment"># 如果是deb包执行dpkg安装</span></span><br><span class="line"><span class="built_in">sudo</span> dpkg -i *.deb</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<h4 id="3-运行docker"><a href="#3-运行docker" class="headerlink" title="3.  运行docker"></a>3.  运行 docker</h4> <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start docker</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="4-开机自启动docker服务"><a href="#4-开机自启动docker服务" class="headerlink" title="4. 开机自启动docker服务"></a>4. 开机自启动 docker 服务</h4><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable docker</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<blockquote>
-<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Anbi97/article/details/127428249">离线安装 nvidia-docker-1</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/397638816">离线安装 nvidia-docker-2</a></p>
-</blockquote>
-
+          <p><img src="/../../img/docker-5.jpg"></p>
+<p>记录离线安装 Nvidia-Docker 流程手册，2024 年 8 月 5 日 20:48:35.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/08/05/In%20Linux/20240815_docker&nvidia-docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E5%AE%89%E8%A3%85/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
       
     </div>
 
@@ -1337,7 +1289,7 @@ https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvi
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">48 分钟</span>
+    <span title="站点阅读时长">49 分钟</span>
   </span>
 </div>
 <div class="busuanzi-count">

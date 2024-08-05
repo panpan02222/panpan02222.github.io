@@ -1479,7 +1479,11 @@ Domains=domain.com
   <entry>
     <title>离线安装 docker&amp;nvidia-docker</title>
     <url>/2024/08/05/In%20Linux/20240815_docker&amp;nvidia-docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<h1 id="Docker-Nvidia-docker离线安装安装"><a href="#Docker-Nvidia-docker离线安装安装" class="headerlink" title="Docker&amp;Nvidia-docker离线安装安装"></a>Docker&amp;Nvidia-docker 离线安装安装</h1><h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker 安装</h3><p><a href="https://blog.csdn.net/chexlong/article/details/127932711">离线安装 docker</a></p>
+    <content><![CDATA[<p><img src="/../../img/docker-5.jpg"></p>
+<p>记录离线安装 Nvidia-Docker 流程手册，2024 年 8 月 5 日 20:48:35.</p>
+<span id="more"></span>
+
+<h1 id="Docker-Nvidia-docker离线安装安装"><a href="#Docker-Nvidia-docker离线安装安装" class="headerlink" title="Docker&amp;Nvidia-docker离线安装安装"></a>Docker&amp;Nvidia-docker 离线安装安装</h1><h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker 安装</h3><p><a href="https://blog.csdn.net/chexlong/article/details/127932711">离线安装 docker</a></p>
 <hr>
 <h3 id="nvidia-docker-安装"><a href="#nvidia-docker-安装" class="headerlink" title="nvidia-docker 安装"></a>nvidia-docker 安装</h3><h4 id="1-下载docker执行文件"><a href="#1-下载docker执行文件" class="headerlink" title="1. 下载docker执行文件"></a>1. 下载 docker 执行文件</h4><ul>
 <li>点击以下的<code>下载链接</code>进行下载</li>
