@@ -1537,8 +1537,12 @@ https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvi
 <p><a href="https://zhuanlan.zhihu.com/p/397638816">离线安装 nvidia-docker-2</a></p>
 </blockquote>
 ]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
       <tags>
-        <tag>-Ops -docker</tag>
+        <tag>Ops</tag>
+        <tag>docker</tag>
       </tags>
   </entry>
   <entry>
