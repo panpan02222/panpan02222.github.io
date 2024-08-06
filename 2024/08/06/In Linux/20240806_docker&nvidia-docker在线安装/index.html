@@ -21,27 +21,29 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+    <meta name="description" content="记录单机在线安装 docker 及英伟达 docker 的操作，只保留操作命令。选择自适应的操作系统，逐行执行即可.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Hello World">
-<meta property="og:url" content="http://example.com/2024/07/15/hello-world/index.html">
+<meta property="og:title" content="在线安装 docker&amp;nvidia-docker">
+<meta property="og:url" content="http://example.com/2024/08/06/In%20Linux/20240806_docker&nvidia-docker%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85/index.html">
 <meta property="og:site_name" content="潘秉宏的博客">
-<meta property="og:description" content="Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hexo, you can find the answer in troubleshooting or you can ask me on GitHub. Quick">
+<meta property="og:description" content="记录单机在线安装 docker 及英伟达 docker 的操作，只保留操作命令。选择自适应的操作系统，逐行执行即可.">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-07-15T07:53:59.000Z">
-<meta property="article:modified_time" content="2024-08-05T12:54:07.420Z">
+<meta property="article:published_time" content="2024-08-06T00:51:45.000Z">
+<meta property="article:modified_time" content="2024-08-06T01:51:58.047Z">
 <meta property="article:author" content="潘秉宏">
+<meta property="article:tag" content="docker">
+<meta property="article:tag" content="Ops">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="http://example.com/2024/07/15/hello-world/">
+<link rel="canonical" href="http://example.com/2024/08/06/In%20Linux/20240806_docker&nvidia-docker%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/07/15/hello-world/","path":"2024/07/15/hello-world/","title":"Hello World"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/08/06/In%20Linux/20240806_docker&nvidia-docker%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85/","path":"2024/08/06/In Linux/20240806_docker&nvidia-docker在线安装/","title":"在线安装 docker&nvidia-docker"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>Hello World | 潘秉宏的博客</title>
+<title>在线安装 docker&nvidia-docker | 潘秉宏的博客</title>
   
 
 
@@ -139,7 +141,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Quick-Start"><span class="nav-number">1.</span> <span class="nav-text">Quick Start</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Create-a-new-post"><span class="nav-number">1.1.</span> <span class="nav-text">Create a new post</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Run-server"><span class="nav-number">1.2.</span> <span class="nav-text">Run server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Generate-static-files"><span class="nav-number">1.3.</span> <span class="nav-text">Generate static files</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Deploy-to-remote-sites"><span class="nav-number">1.4.</span> <span class="nav-text">Deploy to remote sites</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ubuntu%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85Docker"><span class="nav-number">1.</span> <span class="nav-text">Ubuntu 系统安装 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ubuntu%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85Nvidia-Docker2"><span class="nav-number">2.</span> <span class="nav-text">Ubuntu 系统安装 Nvidia-Docker2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85Docker"><span class="nav-number">3.</span> <span class="nav-text">CentOS 系统安装 Docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CentOS%E7%B3%BB%E7%BB%9F%E5%AE%89%E8%A3%85Nvidia-Docker"><span class="nav-number">4.</span> <span class="nav-text">CentOS 系统安装 Nvidia-Docker</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -206,7 +208,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/15/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/06/In%20Linux/20240806_docker&nvidia-docker%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -219,12 +221,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="Hello World | 潘秉宏的博客">
+      <meta itemprop="name" content="在线安装 docker&nvidia-docker | 潘秉宏的博客">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Hello World
+          在线安装 docker&nvidia-docker
         </h1>
 
         <div class="post-meta-container">
@@ -234,15 +236,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2024-07-15 15:53:59" itemprop="dateCreated datePublished" datetime="2024-07-15T15:53:59+08:00">2024-07-15</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-08-05 20:54:07" itemprop="dateModified" datetime="2024-08-05T20:54:07+08:00">2024-08-05</time>
+      <time title="创建时间：2024-08-06 08:51:45 / 修改时间：09:51:58" itemprop="dateCreated datePublished" datetime="2024-08-06T08:51:45+08:00">2024-08-06</time>
     </span>
 
   
@@ -259,7 +255,7 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>78</span>
+      <span>381</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
@@ -276,19 +272,78 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></tbody></table></figure>
+    <div class="post-body" itemprop="articleBody"><p>记录单机在线安装 docker 及英伟达 docker 的操作，只保留操作命令。选择自适应的操作系统，逐行执行即可.</p>
+<span id="more"></span>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></tbody></table></figure>
+<h2 id="Ubuntu系统安装Docker"><a href="#Ubuntu系统安装Docker" class="headerlink" title="Ubuntu系统安装Docker"></a>Ubuntu 系统安装 Docker</h2><ul>
+<li><p>更新 apt 包</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt update</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装依赖包</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt install apt-transport-https ca-certificates curl gnupg2 software-properties-common</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>添加阿里云的 GPG 密钥</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> curl -fsSL https://mirrors.aliyun.com/docker-ce/linux/ubuntu/gpg | <span class="built_in">sudo</span> apt-key add -</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>添加 Docker 源</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> add-apt-repository <span class="string">"deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu</span></span><br><span class="line"><span class="string"><span class="subst">$(lsb_release -cs)</span> stable"</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装 Docker</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">apt-get install docker-ce docker-ce-cli containerd.io</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>设置开机自动启动</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<h2 id="Ubuntu系统安装Nvidia-Docker2"><a href="#Ubuntu系统安装Nvidia-Docker2" class="headerlink" title="Ubuntu系统安装Nvidia-Docker2"></a>Ubuntu 系统安装 Nvidia-Docker2</h2><ul>
+<li><p>设置 Stable 存储库和密钥</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;<span class="built_in">echo</span> $ID<span class="variable">$VERSION_ID</span>) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | <span class="built_in">sudo</span> apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/<span class="variable">$distribution</span>/nvidia-docker.list | <span class="built_in">sudo</span> <span class="built_in">tee</span></span><br><span class="line">/etc/apt/sources.list.d/nvidia-docker.list</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装 Nvidia-docker2 安装包</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></tbody></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></tbody></table></figure>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install -y nvidia-docker2</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>重启 Docker</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<h2 id="CentOS系统安装Docker"><a href="#CentOS系统安装Docker" class="headerlink" title="CentOS系统安装Docker"></a>CentOS 系统安装 Docker</h2><ul>
+<li><p>添加 yum 源</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install epel-release -y</span><br></pre></td></tr></tbody></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></tbody></table></figure>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum clean all</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装 yum-util</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install -y yum-utils device-mapper-persistent-data lvm2</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>设置 Docker yum 源</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装并运行 Docker</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install docker-ce</span><br></pre></td></tr></tbody></table></figure>
 
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="built_in">enable</span> docker</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<hr>
+<h2 id="CentOS系统安装Nvidia-Docker"><a href="#CentOS系统安装Nvidia-Docker" class="headerlink" title="CentOS系统安装Nvidia-Docker"></a>CentOS 系统安装 Nvidia-Docker</h2><ul>
+<li><p>设置 stable 存储库和密钥</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;<span class="built_in">echo</span> $ID<span class="variable">$VERSION_ID</span>) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/<span class="variable">$distribution</span>/nvidia-docker.repo | <span class="built_in">sudo</span> <span class="built_in">tee</span></span><br><span class="line">/etc/yum.repos.d/nvidia-docker.repo</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DIST=$(sed -n <span class="string">'s/releasever=//p'</span> /etc/yum.conf)</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DIST=<span class="variable">${DIST:-$(. /etc/os-release; echo $VERSION_ID)}</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装 Nvidia-Docker2 安装包</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum makecache</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install nvidia-docker2</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>重启 Docker</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> systemctl restart docker</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
 
     </div>
 
@@ -334,19 +389,20 @@
   </div>
 </div>
 
+          <div class="post-tags">
+              <a href="/tags/docker/" rel="tag"># docker</a>
+              <a href="/tags/Ops/" rel="tag"># Ops</a>
+          </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2024/05/23/In%20Linux/20240523_%E8%8E%B7%E5%8F%96nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97/" rel="prev" title="获取 NVIDIA 驱动问题的全流程">
-                  <i class="fa fa-angle-left"></i> 获取 NVIDIA 驱动问题的全流程
+                <a href="/2024/08/05/In%20Linux/20240815_docker&nvidia-docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/" rel="prev" title="离线安装 docker&nvidia-docker">
+                  <i class="fa fa-angle-left"></i> 离线安装 docker&nvidia-docker
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2024/07/15/Config/20240709_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/" rel="next" title="服务器免密配置教程 - 2">
-                  服务器免密配置教程 - 2 <i class="fa fa-angle-right"></i>
-                </a>
             </div>
           </div>
     </footer>
