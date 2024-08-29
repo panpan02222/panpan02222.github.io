@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ghost-32-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ghost-16-16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="互联网专业名词解释, 大部分从IBM官网搬运.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什么是 [云算 &#x2F; 超算 &#x2F; 智算 &#x2F; 通算]?">
+<meta property="og:url" content="http://example.com/2024/08/16/Knowledge/20240816_%E4%BB%80%E4%B9%88%E6%98%AF[%E4%BA%91%E7%AE%97%E8%B6%85%E7%AE%97%E6%99%BA%E7%AE%97%E9%80%9A%E7%AE%97]/index.html">
+<meta property="og:site_name" content="潘秉宏的博客">
+<meta property="og:description" content="互联网专业名词解释, 大部分从IBM官网搬运.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/it.png">
+<meta property="article:published_time" content="2024-08-16T01:45:19.000Z">
+<meta property="article:modified_time" content="2024-08-29T09:10:16.894Z">
+<meta property="article:author" content="潘秉宏">
+<meta property="article:tag" content="Ops">
+<meta property="article:tag" content="knowledge">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/it.png">
+
+
+<link rel="canonical" href="http://example.com/2024/08/16/Knowledge/20240816_%E4%BB%80%E4%B9%88%E6%98%AF[%E4%BA%91%E7%AE%97%E8%B6%85%E7%AE%97%E6%99%BA%E7%AE%97%E9%80%9A%E7%AE%97]/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/08/16/Knowledge/20240816_%E4%BB%80%E4%B9%88%E6%98%AF[%E4%BA%91%E7%AE%97%E8%B6%85%E7%AE%97%E6%99%BA%E7%AE%97%E9%80%9A%E7%AE%97]/","path":"2024/08/16/Knowledge/20240816_什么是[云算超算智算通算]/","title":"什么是 [云算 / 超算 / 智算 / 通算]?"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>什么是 [云算 / 超算 / 智算 / 通算]? | 潘秉宏的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">潘秉宏的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%91%E8%AE%A1%E7%AE%97"><span class="nav-number">1.</span> <span class="nav-text">什么是云计算？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%B6%85%E7%BA%A7%E8%AE%A1%E7%AE%97"><span class="nav-number">2.</span> <span class="nav-text">什么是超级计算？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97-HPC-%EF%BC%9F"><span class="nav-number">3.</span> <span class="nav-text">什么是高性能计算 (HPC)？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E8%BE%B9%E7%BC%98%E8%AE%A1%E7%AE%97%EF%BC%9F"><span class="nav-number">4.</span> <span class="nav-text">什么是边缘计算？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%89%A9%E8%81%94%E7%BD%91-IoT-%EF%BC%9F"><span class="nav-number">5.</span> <span class="nav-text">什么是物联网 (IoT)？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFKubernetes"><span class="nav-number">6.</span> <span class="nav-text">什么是 Kubernetes?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-Docker%EF%BC%9F"><span class="nav-number">7.</span> <span class="nav-text">什么是 Docker？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%AE%B9%E5%99%A8"><span class="nav-number">8.</span> <span class="nav-text">什么是容器？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD-AI-%EF%BC%9F"><span class="nav-number">9.</span> <span class="nav-text">什么是人工智能 (AI)？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%95%86%E4%B8%9A%E6%99%BA%E8%83%BD%EF%BC%9F"><span class="nav-number">10.</span> <span class="nav-text">什么是商业智能？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E5%AD%97%E5%AD%AA%E7%94%9F-Digital-Twin"><span class="nav-number">11.</span> <span class="nav-text">什么是数字孪生 (Digital Twin)?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E5%AD%97%E5%8C%96%E8%BD%AC%E5%9E%8B%EF%BC%9F"><span class="nav-number">12.</span> <span class="nav-text">什么是数字化转型？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%8C%BA%E5%9D%97%E9%93%BE%EF%BC%9F"><span class="nav-number">13.</span> <span class="nav-text">什么是区块链？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF-SaaS-%E8%BD%AF%E4%BB%B6%E5%8D%B3%E6%9C%8D%E5%8A%A1-%EF%BC%9F"><span class="nav-number">14.</span> <span class="nav-text">什么是 SaaS (软件即服务)？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E9%87%8F%E5%AD%90%E8%AE%A1%E7%AE%97%EF%BC%9F"><span class="nav-number">15.</span> <span class="nav-text">什么是量子计算？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98%EF%BC%9F"><span class="nav-number">16.</span> <span class="nav-text">什么是数据挖掘？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E7%9F%A2%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93%EF%BC%9F"><span class="nav-number">17.</span> <span class="nav-text">什么是矢量数据库？</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#References"><span class="nav-number">17.0.1.</span> <span class="nav-text">References</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="潘秉宏"
+      src="/images/avatar.gif">
+  <!--
+  <p class="site-author-name" itemprop="name">潘秉宏</p>
+  -->
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/panpan02222" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;panpan02222" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://19909442097@163.com/" title="E-Mail → https:&#x2F;&#x2F;19909442097@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/16/Knowledge/20240816_%E4%BB%80%E4%B9%88%E6%98%AF[%E4%BA%91%E7%AE%97%E8%B6%85%E7%AE%97%E6%99%BA%E7%AE%97%E9%80%9A%E7%AE%97]/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="潘秉宏">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="潘秉宏的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="什么是 [云算 / 超算 / 智算 / 通算]? | 潘秉宏的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          什么是 [云算 / 超算 / 智算 / 通算]?
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-08-16 09:45:19" itemprop="dateCreated datePublished" datetime="2024-08-16T09:45:19+08:00">2024-08-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-08-29 17:10:16" itemprop="dateModified" datetime="2024-08-29T17:10:16+08:00">2024-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Knowledge/" itemprop="url" rel="index"><span itemprop="name">Knowledge</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.7k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>6 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>互联网专业名词解释，大部分从 IBM 官网搬运.</p>
+<p><img src="/../../img/it.png"></p>
+<span id="more"></span>
+
+<h2 id="什么是云计算"><a href="#什么是云计算" class="headerlink" title="什么是云计算?"></a>什么是云计算？</h2><p>云计算就是指通过互联网以服务的形式按需提供计算资源（例如存储和基础设施）。这样，个人和企业就无需自行管理物理资源，而且只需为实际使用的资源付费。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/topics/cloud-computing?mhsrc=ibmsearch_a&amp;mhq=cloud">What is cloud computing?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是超级计算"><a href="#什么是超级计算" class="headerlink" title="什么是超级计算?"></a>什么是超级计算？</h2><p>超级计算是一种高性能计算形式，使用功能强大的计算机” 超级计算机” 执行确定或计算，减少总求解时间。</p>
+<blockquote>
+<p> <a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/supercomputing?mhsrc=ibmsearch_a&amp;mhq=supercomputing">What is supercomputing ?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是高性能计算-HPC-？"><a href="#什么是高性能计算-HPC-？" class="headerlink" title="什么是高性能计算 (HPC)？"></a>什么是高性能计算 (HPC)？</h2><p>高性能计算 (HPC) 是一种利用强大处理器集群并行处理海量多维数据集（也称为大数据）并以极高速度解决复杂问题的技术。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/hpc">What is HPC ?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是边缘计算？"><a href="#什么是边缘计算？" class="headerlink" title="什么是边缘计算？"></a>什么是边缘计算？</h2><p>边缘计算是一种分布式计算框架，可使企业应用程序更接近数据源，例如 IoT 设备或本地边缘服务器。通过接近源头数据，可实现强大的业务优势，包括加快洞察过程、缩短响应时间、增强带宽可用性。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/edge-computing">What is edge computing ?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是物联网-IoT-？"><a href="#什么是物联网-IoT-？" class="headerlink" title="什么是物联网 (IoT)？"></a>什么是物联网 (IoT)？</h2><p>物联网 (IoT) 是指由实体设备、车辆、电器和其他实体对象组成的网络，这些实体对象内嵌传感器、软件和网络连接，可以收集和共享数据。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/internet-of-things">what is internet of things?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是Kubernetes"><a href="#什么是Kubernetes" class="headerlink" title="什么是Kubernetes?"></a>什么是 Kubernetes?</h2><p>Kubernetes 也称为 k8s 或 kube，是一个开源<a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/container-orchestration">容器编排</a>平台，用于调度和自动执行容器化应用程序的部署、管理和扩展。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/kubernetes">what’s kubernets?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是-Docker？"><a href="#什么是-Docker？" class="headerlink" title="什么是 Docker？"></a>什么是 Docker？</h2><p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/docker">Docker</a> 是创建和运行 Linux 容器的最流行工具。虽然数十年前人们就已经引入早期形式的容器（使用 FreeBSD Jails 和 AIX Workload Partitions 等技术），但在 2013 年，Docker 通过一种新的开发人员友好型和云友好型实现，将容器推向大众，从而实现了容器的民主化。</p>
+<p>Docker 最初是一个开源项目，但今天，它也指 Docker Inc.，该公司生产 Docker（一个建立在开源项目基础上的商业容器工具包）并将这些改进回馈开源社区。</p>
+<p>Docker 基于传统的 Linux 容器技术构建，但支持更精细的 Linux 内核进程虚拟化，并添加了一些功能，助力开发人员更轻松地构建、部署、管理和保护容器。</p>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/kubernetes">what’s kubernets?</a></p>
+<hr>
+<h2 id="什么是容器"><a href="#什么是容器" class="headerlink" title="什么是容器?"></a>什么是容器？</h2><p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/containers">容器</a>是轻量级可执行应用程序组件，将源代码与在任何环境中运行代码所需的所有操作系统 (OS) 库和依赖关系相结合。</p>
+<p>容器利用操作系统<a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/virtualization">虚拟化</a>形式，通过隔离进程并控制进程可以访问的 CPU、内存和磁盘量，实现多个应用程序共享单个操作系统实例。容器比<a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/virtual-machines">虚拟机</a> (VM) 更小、资源效率更高、更便携，已成为现代云原生应用程序事实上的计算单元。容器的资源效率也更高。它们允许您在更少的机器（<a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/virtual-server">虚拟服务器</a>和物理服务器）上使用更少的操作系统实例运行更多的应用程序。</p>
+<p>由于容器可以在随时随地一致地运行，因此它们对于支持混合多云环境的底层架构至关重要，混合多云环境是本地、<a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/private-cloud">私有云、</a><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/public-cloud">公有云</a>和来自多个云供应商的多个云服务的组合。</p>
+<blockquote>
+<p> <a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/kubernetes">what’s kubernets?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是人工智能-AI-？"><a href="#什么是人工智能-AI-？" class="headerlink" title="什么是人工智能 (AI)？"></a>什么是人工智能 (AI)？</h2><p>人工智能 (AI) 是一种使计算机和机器能够模拟人类智能和解决问题能力的技术。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/artificial-intelligence?Ink=fle">waht is artificial intelligence ?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是商业智能？"><a href="#什么是商业智能？" class="headerlink" title="什么是商业智能？"></a>什么是商业智能？</h2><p>商业智能 (BI) 是一种软件，用来采集业务数据并在用户友好型视图（例如报告、仪表板、图表和图形）中呈现这些数据。分析这些数据可以帮助企业获得切实可行的洞察并为决策提供指导。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/business-intelligence">what is business intelligence ?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是数字孪生-Digital-Twin"><a href="#什么是数字孪生-Digital-Twin" class="headerlink" title="什么是数字孪生(Digital Twin)?"></a>什么是数字孪生 (Digital Twin)?</h2><p>数字孪生是某一对象或系统整个生命周期的虚拟再现，根据实时数据进行更新，并利用模拟、机器学习和推理来辅助决策。</p>
+<blockquote>
+<p> <a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/what-is-a-digital-twin?lnk=fle">what is digital twin ?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是数字化转型？"><a href="#什么是数字化转型？" class="headerlink" title="什么是数字化转型？"></a>什么是数字化转型？</h2><p>数字化转型是指在市场需求和技术的推动下，采用数字优先的客户、业务合作伙伴和员工体验。</p>
+<blockquote>
+<p> <a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/digital-transformation?lnk=fle">what is digital transformation ?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是区块链？"><a href="#什么是区块链？" class="headerlink" title="什么是区块链？"></a>什么是区块链？</h2><p>区块链是一种不可篡改的共享分类账，有助于推动业务网络中记录交易和跟踪资产的过程。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/blockchain?lnk=fle">what is blockchain?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是-SaaS-软件即服务-？"><a href="#什么是-SaaS-软件即服务-？" class="headerlink" title="什么是 SaaS (软件即服务)？"></a>什么是 SaaS (软件即服务)？</h2><p>SaaS (软件即服务) 是托管在云端的应用软件，由 Web 浏览器、移动应用程序或瘦客户端通过互联网连接使用。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/saas">what is SaaS?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是量子计算？"><a href="#什么是量子计算？" class="headerlink" title="什么是量子计算？"></a>什么是量子计算？</h2><p>量子计算利用专门技术（包括计算机硬件和利用量子力学的算法）来解决传统计算机或超级计算机无法解决或无法快速解决的复杂问题。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/quantum-computing">what is Quantum computing ?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是数据挖掘？"><a href="#什么是数据挖掘？" class="headerlink" title="什么是数据挖掘？"></a>什么是数据挖掘？</h2><p>数据挖掘，又称知识发现 (KDD)，是从大量的数据集中发现模式和其他有价值信息的过程。 鉴于<a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/data-warehouse">数据仓储</a>技术的发展和大数据的增长，数据挖掘技术的采用在过去几十年中迅速加快，它通过将原始数据转化为有用的知识来助力公司发展。  然而，尽管该技术不断发展以处理大规模的数据，但领导者仍面临可扩展性和自动化方面的挑战。</p>
+<p>数据挖掘通过透彻的数据分析完善了组织决策。 支持这些分析的数据挖掘技术可分为两大用途；它们既可以描述目标数据集，也可以通过使用<a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/machine-learning">机器学习</a>算法来预测结果。  这些方法用于组织和过滤数据，揭示最有趣的信息，从欺诈检测到用户行为、瓶颈，甚至是安全漏洞。</p>
+<p>当与 <a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/apache-spark">Apache Spark</a> 等数据分析和可视化工具结合使用时，深入探索数据挖掘世界从未如此轻松，提取相关见解的速度也从未如此之快。 <a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/artificial-intelligence">人工智能</a>领域的进步，只会继续加速其在各行各业内的采用。  </p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/data-mining">what is data mining ?</a></p>
+</blockquote>
+<hr>
+<h2 id="什么是矢量数据库？"><a href="#什么是矢量数据库？" class="headerlink" title="什么是矢量数据库？"></a>什么是矢量数据库？</h2><p>矢量数据库旨在高效地存储、管理和索引海量高维矢量数据。</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.ibm.com/cn-zh/topics/vector-database">what is vector database ?</a></p>
+</blockquote>
+<hr>
+<blockquote>
+<h4 id="References"><a href="#References" class="headerlink" title="References"></a>References</h4><p><a target="_blank" rel="noopener" href="https://www.ibm.com/topics">https://www.ibm.com/topics</a></p>
+</blockquote>
+<p>reg add “HKEY_CLASSES_ROOT\Directory\shell\VSCode\command” /t REG_SZ /d “D:\Microsoft VS Code\Code.exe "%1"“ /f</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>可怜可怜作者吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="潘秉宏 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="潘秉宏 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="followme">
+  <span>欢迎加我微信~</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/Weixin.jpg">
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Ops/" rel="tag"># Ops</a>
+              <a href="/tags/knowledge/" rel="tag"># knowledge</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/12/AI/20240812_%E5%9F%BA%E4%BA%8EHuggingface%E9%95%9C%E5%83%8F%E7%BD%91%E7%AB%99%E4%B8%8B%E8%BD%BD%E5%A4%A7%E6%A8%A1%E5%9E%8B%E5%8F%8A%E6%95%B0%E6%8D%AE%E9%9B%86/" rel="prev" title="基于 Huggingface 镜像网站下载大模型及数据集">
+                  <i class="fa fa-angle-left"></i> 基于 Huggingface 镜像网站下载大模型及数据集
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/08/19/Config/20240819_Windows%E4%B9%8Bcmd%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/" rel="next" title="Windows 之 CMD 常用命令">
+                  Windows 之 CMD 常用命令 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">潘秉宏</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">19k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:10</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script type="module">import * as THREE from "/lib/three.js"; window.THREE = THREE;</script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/panpan02222" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

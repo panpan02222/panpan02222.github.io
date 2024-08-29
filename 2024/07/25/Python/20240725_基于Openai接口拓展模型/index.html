@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ghost-32-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ghost-16-16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="记录一下 基于Openai API进行接口移植的过程，从引用api到测试到最后转接口使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于 Openai API 进行接口移植">
+<meta property="og:url" content="http://example.com/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="潘秉宏的博客">
+<meta property="og:description" content="记录一下 基于Openai API进行接口移植的过程，从引用api到测试到最后转接口使用">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/api-1.jpg">
+<meta property="og:image" content="http://example.com/img/api-2-1.jpg">
+<meta property="og:image" content="http://example.com/img/api-2.jpg">
+<meta property="og:image" content="http://example.com/img/api-3.jpg">
+<meta property="article:published_time" content="2024-07-25T06:27:33.000Z">
+<meta property="article:modified_time" content="2024-08-29T09:10:16.896Z">
+<meta property="article:author" content="潘秉宏">
+<meta property="article:tag" content="LLM">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/api-1.jpg">
+
+
+<link rel="canonical" href="http://example.com/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/","path":"2024/07/25/Python/20240725_基于Openai接口拓展模型/","title":"基于 Openai API 进行接口移植"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>基于 Openai API 进行接口移植 | 潘秉宏的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">潘秉宏的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8COpenai-API%E8%B4%A6%E5%8F%B7"><span class="nav-number">1.</span> <span class="nav-text">注册 Openai API 账号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%B0%83%E7%94%A8openai%E7%9A%84GPT-4o%E6%A8%A1%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="nav-number">2.</span> <span class="nav-text">1. 调用 openai 的 GPT-4o 模型接口</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%B0%83%E7%94%A8Openai%E7%9A%84whisper-1%E6%A8%A1%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="nav-number"></span> <span class="nav-text">2. 调用 Openai 的 whisper-1 模型接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%B0%83%E7%94%A8Openai%E7%9A%84TTS-1%E6%A8%A1%E5%9E%8B%E6%8E%A5%E5%8F%A3"><span class="nav-number"></span> <span class="nav-text">3. 调用 Openai 的 TTS-1 模型接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%B5%8B%E8%AF%95%E4%BD%BF%E7%94%A8"><span class="nav-number"></span> <span class="nav-text">4. 测试使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E4%B8%80-chatgpt"><span class="nav-number">1.</span> <span class="nav-text">测试用例一: &#x2F;chatgpt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E4%BA%8C-transcribe"><span class="nav-number">2.</span> <span class="nav-text">测试用例二: &#x2F;transcribe</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%94%A8%E4%BE%8B%E4%B8%89-transcribe"><span class="nav-number">3.</span> <span class="nav-text">测试用例三: &#x2F;transcribe</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="潘秉宏"
+      src="/images/avatar.gif">
+  <!--
+  <p class="site-author-name" itemprop="name">潘秉宏</p>
+  -->
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/panpan02222" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;panpan02222" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://19909442097@163.com/" title="E-Mail → https:&#x2F;&#x2F;19909442097@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="潘秉宏">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="潘秉宏的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="基于 Openai API 进行接口移植 | 潘秉宏的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          基于 Openai API 进行接口移植
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-07-25 14:27:33" itemprop="dateCreated datePublished" datetime="2024-07-25T14:27:33+08:00">2024-07-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-08-29 17:10:16" itemprop="dateModified" datetime="2024-08-29T17:10:16+08:00">2024-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>1.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>4 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>记录一下 基于 Openai API 进行接口移植的过程，从引用 api 到测试到最后转接口使用</p>
+<span id="more"></span>
+
+
+
+<blockquote>
+<h3 id="注册Openai-API账号"><a href="#注册Openai-API账号" class="headerlink" title="注册Openai API账号"></a>注册 Openai API 账号</h3><ul>
+<li>老生常谈的问题 ，首先我们需要注册一个 Openai API 账号，并申请一个 API key，或者购买一个 API_KEY。</li>
+<li><strong>申请点击此链接:<a target="_blank" rel="noopener" href="https://platform.openai.com/login?launch">openai API 官网链接</a></strong></li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1-调用openai的GPT-4o模型接口"><a href="#1-调用openai的GPT-4o模型接口" class="headerlink" title="1.调用openai的GPT-4o模型接口"></a>1. 调用 openai 的 GPT-4o 模型接口</h3><ul>
+<li><p>OK 还是最常见的 chat_generate，这里直接放代码了</p>
+ <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">client = OpenAI(</span><br><span class="line">    api_key=<span class="comment">#这里就放入刚刚购买到的key就可以啦</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> opneai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gpt_generate_text</span>(<span class="params">prompt, messages_list</span>):</span><br><span class="line">    messages = <span class="string">''</span></span><br><span class="line">    <span class="keyword">if</span> messages_list:</span><br><span class="line">        messages = <span class="string">'以下是你和用户的当前会话消息：\n\n'</span> + <span class="string">'\n'</span>.join(messages_list)</span><br><span class="line">    stream = client.chat.completions.create(</span><br><span class="line">        <span class="comment"># model="gpt-4-turbo-preview",</span></span><br><span class="line">        model=<span class="string">"gpt-4o"</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: messages},</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: prompt},</span><br><span class="line">        ],</span><br><span class="line">        stream=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line">    text = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> stream:</span><br><span class="line">        <span class="keyword">if</span> chunk.choices[<span class="number">0</span>].delta.content <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(chunk.choices[<span class="number">0</span>].delta.content, end=<span class="string">""</span>)</span><br><span class="line">            text += chunk.choices[<span class="number">0</span>].delta.content</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>这里是<strong>路由函数</strong>的撰写</p>
+<ul>
+<li><p>可以看到这里可以通过 GET 和 POST （GET 不可以用哦）, 这里调用我们的 gpt_generate_text 函数，传入 prompt 和 messages_list，然后返回生成的文本。</p>
+  <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/chatgpt"</span>, methods=[<span class="string">'GET'</span>, <span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">chat_with_gpt</span>():</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'chatgpt GET 请求'</span></span><br><span class="line">    <span class="keyword">elif</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        data = request.json</span><br><span class="line">        prompt = data[<span class="string">'prompt'</span>]</span><br><span class="line">        messages_list = data.get(<span class="string">'messages'</span>, [])</span><br><span class="line">        text = gpt_generate_text(prompt, messages_list)</span><br><span class="line"></span><br><span class="line">        timestamp = <span class="built_in">str</span>(time.time()).split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> text:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成成功'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: text}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">2</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成失败'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: <span class="literal">None</span>}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">return</span> jsonify(response_data)</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="2-调用Openai的whisper-1模型接口"><a href="#2-调用Openai的whisper-1模型接口" class="headerlink" title="2.调用Openai的whisper-1模型接口"></a>2. 调用 Openai 的 whisper-1 模型接口</h2><ul>
+<li>2.1 同理这里是调用的 openai 的 <strong>whisper-1</strong> 模型进行音频转文本的函数撰写 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_audio</span>(<span class="params">audio_file</span>):</span><br><span class="line">    audio=<span class="built_in">open</span>(audio_file, <span class="string">"rb"</span>)</span><br><span class="line">    transcription = client.audio.transcriptions.create(model=<span class="string">"whisper-1"</span>,file=audio)</span><br><span class="line">    text = transcription.text</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
+<li>2.2 这里是最后<strong>路由函数</strong>的撰写 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/transcribe"</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'file'</span> <span class="keyword">not</span> <span class="keyword">in</span> request.files:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No file part"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    audio_file = request.files[<span class="string">'file'</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file.filename == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No selected file"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file:</span><br><span class="line">        <span class="comment"># 保存文件到临时位置</span></span><br><span class="line">        temp_file_path = os.path.join(<span class="string">"temp"</span>, audio_file.filename)</span><br><span class="line">        audio_file.save(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 调用转录函数</span></span><br><span class="line">        transcription_text = transcribe_audio(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除临时文件</span></span><br><span class="line">        os.remove(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"text"</span>: transcription_text})</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<blockquote>
+<ul>
+<li>首先我们要确定返回的请求中是否包含文件和文件名，如果没有，则返回错误信息和 400，</li>
+<li>其次，我们需要保存文件到临时位置，然后调用我们写好的转录函数进行转录，最后删除临时文件。</li>
+<li>最后返回转录后的文本给客户端 供使用。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="3-调用Openai的TTS-1模型接口"><a href="#3-调用Openai的TTS-1模型接口" class="headerlink" title="3.调用Openai的TTS-1模型接口"></a>3. 调用 Openai 的 TTS-1 模型接口</h2><ul>
+<li>3.1 调用 openai 的 API，将文本转换为语音 <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">def text_to_speech(text, vocie, model, path):</span><br><span class="line">    </span><br><span class="line">    response = client.audio.speech.create(</span><br><span class="line">        model=model,</span><br><span class="line">        voice=vocie,</span><br><span class="line">        input=text</span><br><span class="line">    )</span><br><span class="line">    speech_file_path = Path(path)</span><br><span class="line">    with open(speech_file_path, 'wb') as file:</span><br><span class="line">        file.write(response.content)</span><br><span class="line"></span><br><span class="line">    print(f'文件已保存到: {speech_file_path}')</span><br><span class="line">    return speech_file_path</span><br></pre></td></tr></tbody></table></figure></li>
+<li>3.2 文本转语音 text-to-speech 路由撰写 <figure class="highlight python"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line">server_ip = <span class="string">""</span>  <span class="comment"># 替换为你的服务器IP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">'/text-to-speech'</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_to_speech_endpoint</span>():</span><br><span class="line">    data = request.json</span><br><span class="line">    text = data.get(<span class="string">'text'</span>)</span><br><span class="line">    voice = data.get(<span class="string">'voice'</span>)</span><br><span class="line">    model = data.get(<span class="string">'model'</span>)</span><br><span class="line">    output_path = <span class="string">'./output.mp3'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text <span class="keyword">or</span> <span class="keyword">not</span> voice <span class="keyword">or</span> <span class="keyword">not</span> model:</span><br><span class="line">        <span class="keyword">return</span> {<span class="string">'error'</span>: <span class="string">'Missing required parameters'</span>}, <span class="number">400</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Define the directory where you want to save the files</span></span><br><span class="line">        output_dir = Path(<span class="string">'./audio_files'</span>)</span><br><span class="line">        output_dir.mkdir(exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate a unique filename using UUID</span></span><br><span class="line">        unique_filename = <span class="string">f"<span class="subst">{uuid.uuid4()}</span>.mp3"</span></span><br><span class="line">        output_path = output_dir / unique_filename</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate the speech and save the file</span></span><br><span class="line">        speech_file_path = text_to_speech(text, voice, model, output_path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Create the file URL</span></span><br><span class="line">        file_url = <span class="string">f"http://<span class="subst">{server_ip}</span>/root/xxx/<span class="subst">{speech_file_path}</span>"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Return the file URL as a response</span></span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'file_url'</span>: file_url}), <span class="number">200</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'error'</span>: <span class="built_in">str</span>(e)}), <span class="number">500</span></span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<ul>
+<li>首先我们要在后端代码中写入 我们的服务器 ip 地址</li>
+<li>我们要确保我们的 json 数据存在 四个键 text ， voice ， model ， output_path ，</li>
+<li>其次我们调用 text_to_speech 函数，传入 text，voice，model，output_path，</li>
+<li>然后我们生成一个唯一的 filename，保存到 output_dir 目录下</li>
+<li>最后我们生成一个 file_url，然后返回给客户端。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h2 id="4-测试使用"><a href="#4-测试使用" class="headerlink" title="4.测试使用"></a>4. 测试使用</h2><ul>
+<li>4.1 我们可以使用以下方式，这种方式在我们的 py 脚本下直接测试，传参切记</li>
+</ul>
+<p>​	 <code>if __name__ == "__main__":</code><br>​	    	<code>main()</code></p>
+<ul>
+<li><p>4.2 使用 命令行在我们的服务器上测试 GET <a target="_blank" rel="noopener" href="http://xxxx/">http://xxxx</a> {“xx”:”xx”}</p>
+</li>
+<li><p>4.3 使用 postman 、apifox 等等工具测试</p>
+</li>
+</ul>
+<p>​	本人这里使用的是第三种方法 apifox 这个工具，本人良心推荐大家使用，附<a target="_blank" rel="noopener" href="https://apifox.com/help/">官方文档链接</a></p>
+<ul>
+<li><p> 4.4 测试截图及测试数据</p>
+<h3 id="测试用例一-chatgpt"><a href="#测试用例一-chatgpt" class="headerlink" title="测试用例一: /chatgpt"></a>测试用例一: /chatgpt</h3><ul>
+<li>测试数据 </li>
+</ul>
+  <figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"code"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"data"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span> <span class="string">"你好！我是一个由人工智能驱动的助手，设计用于帮助回答问题、提供信息以及协助完成各种任务。有什么我可以帮你的吗？"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"message"</span><span class="punctuation">:</span> <span class="string">"内容生成成功"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"time"</span><span class="punctuation">:</span> <span class="string">"1721808765"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>响应截图</li>
+</ul>
+<p>  <img src="/../../img/api-1.jpg" alt="gpt4o"></p>
+<hr>
+<h3 id="测试用例二-transcribe"><a href="#测试用例二-transcribe" class="headerlink" title="测试用例二: /transcribe"></a>测试用例二: /transcribe</h3><ul>
+<li>测试数据</li>
+</ul>
+<p>  <img src="/../../img/api-2-1.jpg" alt="音频文件截图"></p>
+<ul>
+<li>响应截图</li>
+</ul>
+<p>  <img src="/../../img/api-2.jpg" alt="gpt4o"></p>
+<hr>
+<h3 id="测试用例三-transcribe"><a href="#测试用例三-transcribe" class="headerlink" title="测试用例三: /transcribe"></a>测试用例三: /transcribe</h3><ul>
+<li><p>测试数据</p>
+   <figure class="highlight json"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"model"</span><span class="punctuation">:</span><span class="string">"tts-1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"voice"</span><span class="punctuation">:</span><span class="string">"echo"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span><span class="string">"今天中午吃什么?"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>响应截图</p>
+<p><img src="/../../img/api-3.jpg" alt="gpt4o"></p>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>可怜可怜作者吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="潘秉宏 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="潘秉宏 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="followme">
+  <span>欢迎加我微信~</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/Weixin.jpg">
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/LLM/" rel="tag"># LLM</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/07/24/AI/20240724_%E8%87%AA%E7%A0%94%E8%AE%AD%E7%BB%83%E5%A4%A7%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B%E6%98%BE%E5%AD%98%E8%AE%A1%E7%AE%97%E5%99%A8/" rel="prev" title="自研训练大语言模型显存计算器">
+                  <i class="fa fa-angle-left"></i> 自研训练大语言模型显存计算器
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/07/26/Knowledge/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/" rel="next" title="什么是 RoCE/IB/RDMA">
+                  什么是 RoCE/IB/RDMA <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">潘秉宏</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">19k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:10</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script type="module">import * as THREE from "/lib/three.js"; window.THREE = THREE;</script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/panpan02222" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

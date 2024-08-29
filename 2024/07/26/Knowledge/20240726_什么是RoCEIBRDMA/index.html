@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ghost-32-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ghost-16-16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="在分布式存储网络中，我们使用的协议有RoCE、Infiniband（IB）和TCP&#x2F;IP。其中RoCE和IB属于RDMA(RemoteDirect Memory Access)技术，他和传统的TCP&#x2F;IP有什么区别呢，接下来我们将做详细对比。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="什么是 RoCE&#x2F;IB&#x2F;RDMA">
+<meta property="og:url" content="http://example.com/2024/07/26/Knowledge/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/index.html">
+<meta property="og:site_name" content="潘秉宏的博客">
+<meta property="og:description" content="在分布式存储网络中，我们使用的协议有RoCE、Infiniband（IB）和TCP&#x2F;IP。其中RoCE和IB属于RDMA(RemoteDirect Memory Access)技术，他和传统的TCP&#x2F;IP有什么区别呢，接下来我们将做详细对比。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/RDMA.png">
+<meta property="og:image" content="http://example.com/img/download.png">
+<meta property="og:image" content="http://example.com/img/36a8e300fd6759f17464122ef108e37b.png">
+<meta property="og:image" content="http://example.com/img/RDMA.png">
+<meta property="og:image" content="http://example.com/img/RoCE_Header_format.png">
+<meta property="article:published_time" content="2024-07-26T01:20:35.000Z">
+<meta property="article:modified_time" content="2024-08-29T09:10:16.895Z">
+<meta property="article:author" content="潘秉宏">
+<meta property="article:tag" content="Ops">
+<meta property="article:tag" content="work">
+<meta property="article:tag" content="网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/RDMA.png">
+
+
+<link rel="canonical" href="http://example.com/2024/07/26/Knowledge/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/07/26/Knowledge/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/","path":"2024/07/26/Knowledge/20240726_什么是RoCEIBRDMA/","title":"什么是 RoCE/IB/RDMA"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>什么是 RoCE/IB/RDMA | 潘秉宏的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">潘秉宏的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#RoCE%E5%92%8CIB%EF%BC%8CRDMA%E9%80%9A%E8%BF%B0"><span class="nav-number">1.</span> <span class="nav-text">RoCE 和 IB，RDMA 通述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFRoCE"><span class="nav-number">1.1.</span> <span class="nav-text">什么是 RoCE</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFIB"><span class="nav-number">1.2.</span> <span class="nav-text">什么是 IB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFRDMA"><span class="nav-number">1.3.</span> <span class="nav-text">什么是 RDMA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%93%E5%B1%95"><span class="nav-number">1.4.</span> <span class="nav-text">拓展</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RoCE%E4%BC%98%E7%BC%BA%E7%82%B9%E5%8F%8A%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF"><span class="nav-number">2.</span> <span class="nav-text">RoCE 优缺点及关键技术</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8RoCE%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="nav-number">2.1.</span> <span class="nav-text">使用 RoCE 的优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RoCE%E7%9A%84%E7%BC%BA%E7%82%B9"><span class="nav-number">2.2.</span> <span class="nav-text">RoCE 的缺点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RoCE%E5%AF%B9%E6%AF%94IB%E6%80%BB%E7%BB%93"><span class="nav-number">2.3.</span> <span class="nav-text">RoCE 对比 IB 总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RoCE%E7%9A%84%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF"><span class="nav-number">2.4.</span> <span class="nav-text">RoCE 的关键技术</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RoCE%E5%BA%94%E7%94%A8%E8%B6%8B%E5%8A%BF"><span class="nav-number">3.</span> <span class="nav-text">RoCE 应用趋势</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="潘秉宏"
+      src="/images/avatar.gif">
+  <!--
+  <p class="site-author-name" itemprop="name">潘秉宏</p>
+  -->
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/panpan02222" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;panpan02222" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://19909442097@163.com/" title="E-Mail → https:&#x2F;&#x2F;19909442097@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/07/26/Knowledge/20240726_%E4%BB%80%E4%B9%88%E6%98%AFRoCEIBRDMA/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="潘秉宏">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="潘秉宏的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="什么是 RoCE/IB/RDMA | 潘秉宏的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          什么是 RoCE/IB/RDMA
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-07-26 09:20:35" itemprop="dateCreated datePublished" datetime="2024-07-26T09:20:35+08:00">2024-07-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-08-29 17:10:16" itemprop="dateModified" datetime="2024-08-29T17:10:16+08:00">2024-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Knowledge/" itemprop="url" rel="index"><span itemprop="name">Knowledge</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>2k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p> 在分布式存储网络中，我们使用的协议有 <strong>RoCE</strong>、<strong>Infiniband（IB）</strong>和 <strong>TCP/IP</strong>。其中 RoCE 和 IB 属于 <strong>RDMA (RemoteDirect Memory Access) 技术</strong>，他和传统的 TCP/IP 有什么区别呢，接下来我们将做详细对比。</p>
+<p><img src="/../../img/RDMA.png" alt="RDMA API"></p>
+<span id="more"></span>
+
+<h2 id="RoCE和IB，RDMA通述"><a href="#RoCE和IB，RDMA通述" class="headerlink" title="RoCE和IB，RDMA通述"></a>RoCE 和 IB，RDMA 通述</h2><h3 id="什么是RoCE"><a href="#什么是RoCE" class="headerlink" title="什么是RoCE"></a>什么是 RoCE</h3><ul>
+<li>RoCE (译为” 基于融合以太网的 RDMA”, 英文全称: RDMA over Converged Ethernet) 是一个网络协议，允许在一个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E4%BB%A5%E5%A4%AA%E7%BD%91">以太网</a>网络上使用<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%BF%9C%E7%A8%8B%E7%9B%B4%E6%8E%A5%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE">远程直接内存访问</a>（RDMA）。RoCE 有 RoCE v1 和 RoCE v2 两个版本。RoCE v1 是一个以太网<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E9%93%BE%E8%B7%AF%E5%B1%82">链路层</a>协议，因此允许同一个以太网<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E5%B9%BF%E6%92%AD%E5%9F%9F">广播域</a>中的任意两台主机间进行通信。RoCE v2 是一个<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E7%BD%91%E7%BB%9C%E5%B1%82">网络层</a>协议，因而 RoCE v2 数据包可以被路由。虽然 RoCE 协议受益于<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/w/index.php?title=Data_center_bridging&amp;action=edit&amp;redlink=1">融合以太网网络</a>的特征，但该协议也可用于传统或非融合的以太网网络。</li>
+</ul>
+<h3 id="什么是IB"><a href="#什么是IB" class="headerlink" title="什么是IB"></a>什么是 IB</h3><ul>
+<li>InfiniBand (直译为 “无限带宽” 技术，缩写为 IB) 是一个用于<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97/0?fromModule=lemma_inlink">高性能计算</a>的计算机网络通信标准，它具有极高的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%90%9E%E5%90%90%E9%87%8F/0?fromModule=lemma_inlink">吞吐量</a>和极低的<a target="_blank" rel="noopener" href="https://baike.baidu.com/item/%E5%BB%B6%E8%BF%9F/0?fromModule=lemma_inlink">延迟</a>，用于计算机与计算机之间的数据互连。InfiniBand 也用作服务器与存储系统之间的直接或交换互连，以及存储系统之间的互连。</li>
+</ul>
+<h3 id="什么是RDMA"><a href="#什么是RDMA" class="headerlink" title="什么是RDMA"></a>什么是 RDMA</h3><ul>
+<li>RDMA (译为” 远程直接内存访问”, 英文全称：remote direct memory access) 是一种绕过远程主机操作系统内核访问其内存中数据的技术。由于不经过操作系统，不仅节省了大量 CPU 资源，同样也提高了系统吞吐量、降低了系统的网络通信<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/Latency_(engineering)">延迟</a>，尤其适合在大规模并行<a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%AE%A1%E7%AE%97%E6%9C%BA%E9%9B%86%E7%BE%A4">计算机集群</a>中有广泛应用。</li>
+</ul>
+<p><img src="/../../img/download.png" alt="TCP/RDMA"></p>
+<blockquote>
+<h3 id="拓展"><a href="#拓展" class="headerlink" title="拓展"></a>拓展</h3><p>传统应用要发送数据，‍‍需要通过 OS 封装 TCP/IP，‍‍然后依次经过主缓存、网卡缓存，‍‍再发出去。‍‍这样会导致两个限制。</p>
+<p>限制一：TCP/IP 协议栈处理会带来数 10 微秒的时延。‍‍TCP 协议栈在接收发送报文时，‍‍内核需要做多次上下文的切换，‍‍每次切换需要耗费 5-10 微秒。‍另外还需要至少三次的数据拷贝‍‍和依赖 CPU 进行协议工作，‍‍这导致仅仅协议上处理就会带来数 10 微秒的‍‍固定时延，‍‍协议栈时延成为最明显的瓶颈。‍‍</p>
+<p>限制二：TCP 协议栈处理导致服务器 CPU 负载‍‍居高不下。‍‍除了固定时延较长的问题，TCP/IP 网络需要主机 CPU‍‍多次参与协议的内存拷贝，‍‍网络规模越大，‍‍网络带宽越高，‍‍CPU 在收发数据时的调度负担越大，‍‍导致 CPU 持续高负载。‍‍</p>
+<p>在数据中心内部，超大规模分布式计算存储资源之间，如果使用传统的 TCP/IP 进行网络互连，将占用系统大量的计算资源，造成 IO 瓶颈，无法满足更高吞吐，更低时延的网络需求。</p>
+</blockquote>
+<hr>
+<h2 id="RoCE优缺点及关键技术"><a href="#RoCE优缺点及关键技术" class="headerlink" title="RoCE优缺点及关键技术"></a>RoCE 优缺点及关键技术</h2><h3 id="使用RoCE的优势"><a href="#使用RoCE的优势" class="headerlink" title="使用RoCE的优势"></a>使用 RoCE 的优势</h3><ul>
+<li><p><strong>成本效益：</strong> </p>
+<p>利用现有以太网基础设施：RoCE 可以在现有的以太网基础设施上运行，降低了部署和维护成本。 通用设备：使用通用的以太网交换机和网卡，设备成本较低。</p>
+</li>
+<li><p>** 兼容性和灵活性： **</p>
+<p>广泛兼容：RoCE 基于以太网，兼容性和通用性好，可以与其他网络设备和协议无缝集成。 灵活部署：可以灵活地部署在不同的网络拓扑和环境中。 </p>
+</li>
+<li><p><strong>易于管理：</strong></p>
+<p>统一管理：由于 RoCE 基于以太网，可以使用现有的网络管理工具和协议进行管理，简化了管理流程。</p>
+</li>
+</ul>
+<h3 id="RoCE的缺点"><a href="#RoCE的缺点" class="headerlink" title="RoCE的缺点"></a>RoCE 的缺点</h3><ul>
+<li><p><strong>性能：</strong></p>
+<p>较高的延迟：尽管 RoCE 能够提供低延迟，但通常不如 IB 网络，在极端低延迟需求的应用中可能不如 IB 表现优秀。 网络拥塞：在共享以太网上运行时，可能受到其他网络流量的影响，导致性能下降。 </p>
+</li>
+<li><p><strong>可靠性：</strong></p>
+<p>依赖于以太网质量：RoCE 的性能和可靠性依赖于以太网的质量，如果以太网网络质量不佳，可能会影响 RoCE 的表现。</p>
+</li>
+</ul>
+<h3 id="RoCE对比IB总结"><a href="#RoCE对比IB总结" class="headerlink" title="RoCE对比IB总结"></a>RoCE 对比 IB 总结</h3><ul>
+<li>IB 和 RoCE 的区别为链路层一个为 IB 协议，一个为 Ethernet 协议，其中 Ethernet 协议更具有普适性，且大部分场景 RoCE 时延更低、带宽更高。</li>
+</ul>
+<h3 id="RoCE的关键技术"><a href="#RoCE的关键技术" class="headerlink" title="RoCE的关键技术"></a>RoCE 的关键技术</h3><ul>
+<li><p>由于 RDMA 要求承载网络无丢包，否则效率就会急剧下降，所以 RoCE 技术如果选用以太网进行承载，就需要通过 PFC，ECN 以及 DCQCN 等技术对传统以太网络改造，打造无损以太网络，以确保零丢包。</p>
+<p><img src="/../../img/36a8e300fd6759f17464122ef108e37b.png" alt="PEC&amp;ECN"></p>
+</li>
+<li><p><strong>PFC:</strong></p>
+<p>基于优先级的流量控制。PFC 为多种类型的流量提供基于每跳优先级的流量控制。设备在转发报文时，通过在优先级映射表中查找报文的优先级，将报文分配到队列中进行调度和转发。当 802.1p 优先级报文的发送速率超过接收速率且接收端的数据缓存空间不足时，接收端向发送端发送 PFC 暂停帧。当发送端收到 PFC 暂停帧时，发送端停止发送具有指定 802.1p 优先级的报文，直到发送端收到 PFC XON 帧或老化定时器超时。配置 PFC 时，特定类型报文的拥塞不影响其他类型报文的正常转发。</p>
+</li>
+<li><p><strong>ECN：</strong></p>
+<p>显式拥塞通知。ECN 定义了基于 IP 层和传输层的流量控制和端到端拥塞通知机制。当设备拥塞时，ECN 会在数据包的 IP 头中标记 ECN 字段。接收端发送拥塞通知包（CNP）通知发送端放慢发送速度。ECN 实现端到端的拥塞管理，减少拥塞的扩散和加剧。</p>
+</li>
+</ul>
+<hr>
+<h2 id="RoCE应用趋势"><a href="#RoCE应用趋势" class="headerlink" title="RoCE应用趋势"></a>RoCE 应用趋势</h2><ul>
+<li><p>当比较 RoCE 与其他类似的策略时，例如 iWARP（Internet Wide Area RDMA Protocol）和传统的 InfiniBand 网络，我们可以看到一些显著的区别。</p>
+<p><img src="/../../img/RDMA.png" alt="RDMA"></p>
+</li>
+<li><p>iWARP 是一种通过 TCP/IP 协议栈实现 RDMA 的技术。虽然它可以在标准的三层网络中运行，但它的实现通常比 RoCE 复杂，并且可能需要更多的 CPU 资源来处理额外的软件堆栈。此外，iWARP 在网络性能方面可能不如 RoCE，尤其是在低延迟和高带宽的应用场景中。</p>
+</li>
+<li><p>InfiniBand 是一种专为高性能计算设计的网络技术，它提供了极低的延迟和非常高的带宽。尽管 InfiniBand 在性能上优于 RoCE，但它通常也更昂贵，并且需要专用的硬件。相比之下，RoCE 可以在现有的以太网基础设施上运行，降低了部署成本。</p>
+<p><img src="/../../img/RoCE_Header_format.png"></p>
+</li>
+<li><p>随着 RoCEv2 的成熟和普及，它已成为数据中心网络中的一个主要趋势。越来越多的企业开始采用 RoCEv2 来支持高性能计算、机器学习和大规模存储集群等应用。RoCEv2 的优势在于它能够在标准以太网上实现低延迟和高带宽的 RDMA 通信，同时保持较低的成本。</p>
+</li>
+<li><p>未来，随着对数据密集型应用需求的增长，RoCEv2 将继续在其核心市场中发挥重要作用。随着技术的进步和新的应用场景的出现，RoCEv2 可能会进一步优化以支持更广泛的用例，包括边缘计算和物联网（IoT）领域中的实时数据处理。</p>
+</li>
+<li><p>RoCEv2 凭借其在性能和成本之间的平衡，正在成为数据中心网络架构中的关键技术之一，而 RoCEv1 则由于其局限性而在实际应用中逐渐被淘汰。随着网络技术和市场需求的不断发展，RoCEv2 有望在未来的数据中心和高性能计算环境中扮演更加重要的角色。</p>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>可怜可怜作者吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="潘秉宏 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="潘秉宏 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="followme">
+  <span>欢迎加我微信~</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/Weixin.jpg">
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Ops/" rel="tag"># Ops</a>
+              <a href="/tags/work/" rel="tag"># work</a>
+              <a href="/tags/%E7%BD%91%E7%BB%9C/" rel="tag"># 网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/" rel="prev" title="基于 Openai API 进行接口移植">
+                  <i class="fa fa-angle-left"></i> 基于 Openai API 进行接口移植
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/07/29/In%20Linux/20240729_Ubuntu%E5%AE%89%E8%A3%85%E7%9B%91%E6%8E%A7%E7%B3%BB%E7%BB%9F%E5%8F%AF%E8%A7%86%E5%8C%96%E6%A8%A1%E5%9D%97/" rel="next" title="Ubuntu 安装监控系统可视化模块">
+                  Ubuntu 安装监控系统可视化模块 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">潘秉宏</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">19k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:10</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script type="module">import * as THREE from "/lib/three.js"; window.THREE = THREE;</script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/panpan02222" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

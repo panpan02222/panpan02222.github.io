@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/ghost-32-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/ghost-16-16.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha256-XOqroi11tY4EFQMR9ZYwZWKj5ZXiftSx36RRuC3anlA=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/themes/blue/pace-theme-minimal.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js" integrity="sha256-gqd7YTjg/BtfqWSwsJOvndl0Bxc8gFImLEkXQT8+qj0=" crossorigin="anonymous"></script>
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.20.0","exturl":false,"sidebar":{"position":"right","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="记录离线安装Nvidia-Docker流程手册, 2024年8月5日20:48:35.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="离线安装 docker&amp;nvidia-docker">
+<meta property="og:url" content="http://example.com/2024/08/05/In%20Linux/20240815_docker&nvidia-docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/index.html">
+<meta property="og:site_name" content="潘秉宏的博客">
+<meta property="og:description" content="记录离线安装Nvidia-Docker流程手册, 2024年8月5日20:48:35.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="http://example.com/img/docker-5.jpg">
+<meta property="og:image" content="http://example.com/img/docker-1.png">
+<meta property="og:image" content="http://example.com/img/docker-3.png">
+<meta property="og:image" content="http://example.com/img/docker-2.png">
+<meta property="og:image" content="http://example.com/img/docker-4.png">
+<meta property="article:published_time" content="2024-08-05T11:44:41.000Z">
+<meta property="article:modified_time" content="2024-08-29T09:10:16.891Z">
+<meta property="article:author" content="潘秉宏">
+<meta property="article:tag" content="Ops">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/img/docker-5.jpg">
+
+
+<link rel="canonical" href="http://example.com/2024/08/05/In%20Linux/20240815_docker&nvidia-docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://example.com/2024/08/05/In%20Linux/20240815_docker&nvidia-docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/","path":"2024/08/05/In Linux/20240815_docker&nvidia-docker离线安装/","title":"离线安装 docker&nvidia-docker"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>离线安装 docker&nvidia-docker | 潘秉宏的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">潘秉宏的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Docker-Nvidia-docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">Docker&amp;Nvidia-docker 离线安装安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#docker%E5%AE%89%E8%A3%85"><span class="nav-number">1.0.1.</span> <span class="nav-text">docker 安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nvidia-docker-%E5%AE%89%E8%A3%85"><span class="nav-number">1.0.2.</span> <span class="nav-text">nvidia-docker 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E4%B8%8B%E8%BD%BDdocker%E6%89%A7%E8%A1%8C%E6%96%87%E4%BB%B6"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">1. 下载 docker 执行文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E4%B8%8B%E8%BD%BD%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">2.  下载离线安装脚本</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E8%BF%90%E8%A1%8Cdocker"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">3.  运行 docker</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E5%BC%80%E6%9C%BA%E8%87%AA%E5%90%AF%E5%8A%A8docker%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.0.2.4.</span> <span class="nav-text">4. 开机自启动 docker 服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%82%E8%80%83%E9%93%BE%E6%8E%A5"><span class="nav-number">1.0.2.5.</span> <span class="nav-text">参考链接</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="潘秉宏"
+      src="/images/avatar.gif">
+  <!--
+  <p class="site-author-name" itemprop="name">潘秉宏</p>
+  -->
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">38</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">24</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/panpan02222" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;panpan02222" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://19909442097@163.com/" title="E-Mail → https:&#x2F;&#x2F;19909442097@163.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+        <div class="back-to-top animated" role="button" aria-label="返回顶部">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2024/08/05/In%20Linux/20240815_docker&nvidia-docker%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="潘秉宏">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="潘秉宏的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="离线安装 docker&nvidia-docker | 潘秉宏的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          离线安装 docker&nvidia-docker
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-08-05 19:44:41" itemprop="dateCreated datePublished" datetime="2024-08-05T19:44:41+08:00">2024-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-08-29 17:10:16" itemprop="dateModified" datetime="2024-08-29T17:10:16+08:00">2024-08-29</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/In-Linux/" itemprop="url" rel="index"><span itemprop="name">In Linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>434</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>2 分钟</span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><img src="/../../img/docker-5.jpg"></p>
+<p>记录离线安装 Nvidia-Docker 流程手册，2024 年 8 月 5 日 20:48:35.</p>
+<span id="more"></span>
+
+<h1 id="Docker-Nvidia-docker离线安装安装"><a href="#Docker-Nvidia-docker离线安装安装" class="headerlink" title="Docker&amp;Nvidia-docker离线安装安装"></a>Docker&amp;Nvidia-docker 离线安装安装</h1><h3 id="docker安装"><a href="#docker安装" class="headerlink" title="docker安装"></a>docker 安装</h3><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/chexlong/article/details/127932711">离线安装 docker</a></p>
+<hr>
+<h3 id="nvidia-docker-安装"><a href="#nvidia-docker-安装" class="headerlink" title="nvidia-docker 安装"></a>nvidia-docker 安装</h3><h4 id="1-下载docker执行文件"><a href="#1-下载docker执行文件" class="headerlink" title="1. 下载docker执行文件"></a>1. 下载 docker 执行文件</h4><ul>
+<li>点击以下的<code>下载链接</code>进行下载</li>
+</ul>
+<p>​	<a target="_blank" rel="noopener" href="https://download.docker.com/linux/static/stable/">下载链接</a></p>
+<ul>
+<li> x86_64 目录中的 Docker 可执行文件，适用于大多数使用 GPU 的服务器<br><em>第一步</em><br><img src="/../../img/docker-1.png" alt="step1"><br><em>第二步</em><br><img src="/../../img/docker-3.png" alt="step2"></li>
+</ul>
+<h4 id="2-下载离线安装脚本"><a href="#2-下载离线安装脚本" class="headerlink" title="2.  下载离线安装脚本"></a>2.  下载离线安装脚本</h4><ul>
+<li>点击以下的<code>下载链接</code>进行下载<br><a target="_blank" rel="noopener" href="https://github.com/Jrohy/docker-install/">下载链接</a></li>
+</ul>
+<p><img src="/../../img/docker-2.png"></p>
+<ul>
+<li><p>执行命令</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./install.sh -f /root/docker-18.09.6.tgz</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p><strong>把后面的 tgz 包换成自己的刚才下载 docker 离线版本</strong></p>
+</blockquote>
+</li>
+<li><p>下载<strong>对应当前系统</strong>的依赖包，<strong>共需下载 6 个文件</strong></p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查看当前系统版本, 如果是ubuntu系统则下载deb文件,如果是centos7则下载rpm文件</span></span><br><span class="line"><span class="built_in">cat</span> /etc/os-release</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<p>​	<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/libnvidia-container/tree/gh-pages/stable/rpm">rpm 下载链接</a></p>
+<p>​	<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/libnvidia-container/tree/gh-pages/stable/deb">deb 下载链接</a></p>
+<pre><code># 第1个文件
+https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/libnvidia-container-dev_1.16.1-1_amd64.deb
+
+# 第2个文件
+https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/libnvidia-container-tools_1.16.1-1_amd64.deb
+
+# 第3个文件
+https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/libnvidia-container1-dbg_1.16.1-1_amd64.deb
+
+# 第4个文件
+https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/libnvidia-container1_1.16.1-1_amd64.deb
+
+# 第5个文件
+https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvidia-container-toolkit_1.16.1-1_amd64.deb
+
+# 第6个文件
+https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvidia-container-runtime_3.14.0-1_all.deb
+</code></pre>
+<p><img src="/../../img/docker-4.png"></p>
+<ul>
+<li><p>将下载的文件放在一个文件夹下，运行命令</p>
+<figure class="highlight sh"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果是rpm包执行rpm安装</span></span><br><span class="line"><span class="built_in">sudo</span> rpm -Uvh *.rpm --nodeps --force</span><br><span class="line"><span class="comment"># 如果是deb包执行dpkg安装</span></span><br><span class="line"><span class="built_in">sudo</span> dpkg -i *.deb</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<h4 id="3-运行docker"><a href="#3-运行docker" class="headerlink" title="3.  运行docker"></a>3.  运行 docker</h4> <figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl start docker</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="4-开机自启动docker服务"><a href="#4-开机自启动docker服务" class="headerlink" title="4. 开机自启动docker服务"></a>4. 开机自启动 docker 服务</h4><figure class="highlight plaintext"><table><tbody><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo systemctl enable docker</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<blockquote>
+<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Anbi97/article/details/127428249">离线安装 nvidia-docker-1</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/397638816">离线安装 nvidia-docker-2</a></p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="reward-container">
+  <div>可怜可怜作者吧！</div>
+  <button>
+    赞赏
+  </button>
+  <div class="post-reward">
+      <div>
+        <img src="/images/wechatpay.png" alt="潘秉宏 微信">
+        <span>微信</span>
+      </div>
+      <div>
+        <img src="/images/alipay.png" alt="潘秉宏 支付宝">
+        <span>支付宝</span>
+      </div>
+
+  </div>
+</div>
+
+          <div class="followme">
+  <span>欢迎加我微信~</span>
+
+  <div class="social-list">
+
+      <div class="social-item">
+          <span class="social-link">
+            <span class="icon">
+              <i class="fab fa-weixin"></i>
+            </span>
+
+            <span class="label">WeChat</span>
+          </span>
+
+          <img class="social-item-img" src="/images/Weixin.jpg">
+      </div>
+  </div>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Ops/" rel="tag"># Ops</a>
+              <a href="/tags/docker/" rel="tag"># docker</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2024/08/01/AI/20240801_Llamaindex%E6%8E%A5%E5%85%A5%E5%8D%83%E5%B8%86RAG/" rel="prev" title="Llamaindex_构建 RAG Agent">
+                  <i class="fa fa-angle-left"></i> Llamaindex_构建 RAG Agent
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2024/08/06/In%20Linux/20240806_docker&nvidia-docker%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85/" rel="next" title="在线安装 docker&nvidia-docker">
+                  在线安装 docker&nvidia-docker <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2021 – 
+    <span itemprop="copyrightYear">2024</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">潘秉宏</span>
+  </div>
+<div class="wordcount">
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-chart-line"></i>
+    </span>
+    <span title="站点总字数">19k</span>
+  </span>
+  <span class="post-meta-item">
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    <span title="站点阅读时长">1:10</span>
+  </span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script type="module">import * as THREE from "/lib/three.js"; window.THREE = THREE;</script><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1/dist/canvas-nest.js"></script>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="reading-progress-bar"></div>
+
+  <a href="https://github.com/panpan02222" class="github-corner" title="在 GitHub 上关注我" aria-label="在 GitHub 上关注我" rel="noopener" target="_blank"><svg width="80" height="80" viewBox="0 0 250 250" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/next-theme-pjax/0.6.0/pjax.min.js" integrity="sha256-vxLn1tSKWD4dqbMRyv940UYw4sXgMtYcK6reefzZrao=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script><script src="/js/pjax.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  <script src="/js/third-party/pace.js"></script>
+
+
+  
+  <script data-pjax async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
