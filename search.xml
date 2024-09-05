@@ -19,6 +19,60 @@
 ]]></content>
   </entry>
   <entry>
+    <title>利用 NPU 运行 ChatGLM3 全流程</title>
+    <url>/2024/04/26/AI/20240426_%E5%88%A9%E7%94%A8NPU%E8%BF%90%E8%A1%8CChatGLM3%E5%85%A8%E6%B5%81%E7%A8%8B/</url>
+    <content><![CDATA[<p>利用 NPU 运行 ChatGLM3 全流程</p>
+<span id="more"></span>
+
+
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><ol>
+<li><p>新建 Conda 虚拟环境  <code>conda create -n env_name python==3.10</code></p>
+</li>
+<li><p>下载 ChatGLM3 源代码 <code>git clone https://github.com/THUDM/ChatGLM3.git</code></p>
+</li>
+<li><p>下载模型权重 </p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">git lfs install</span><br><span class="line">git clone https://www.modelscope.cn/ZhipuAI/chatglm3-6b.git</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装基础环境，进入源码仓库 <code>cd ChatGLM3</code> , pip 安装 <code>pip install -r requirements.txt</code><br><strong>特别说明 : torch 版本可在 requirements.txt 中手动修改</strong></p>
+</li>
+<li><p>安装 npu 基础环境，下载对应 torch 的 <strong>torch-npu</strong> 依赖包，本地安装 <code>pip install xxx.whl</code><br><a href="https://gitee.com/ascend/pytorch/releases">torch-npu 官方下载地址</a></p>
+</li>
+<li><p>运行以下代码，验证环境是否安装成功</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu</span><br><span class="line"></span><br><span class="line">x = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">y = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">z = x.mm(y)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(z)</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<hr>
+<h4 id="推理"><a href="#推理" class="headerlink" title="推理"></a>推理</h4><ol>
+<li>修改代码 <code>ChatGLM3-main/basic_demo/cli_demo.py</code><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu <span class="comment"># 新增一行</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># transoformer架构需要加 `.to('npu') `</span></span><br><span class="line">model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=<span class="literal">True</span>).to(<span class="string">'npu'</span>).<span class="built_in">eval</span>()</span><br><span class="line"><span class="comment"># model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行代码 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">python basic_demo/cli_demo.py</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><hr>
+<h5 id="安装依赖deepspeed"><a href="#安装依赖deepspeed" class="headerlink" title="安装依赖deepspeed"></a>安装依赖 <strong>deepspeed</strong></h5><ol>
+<li><code>pip install deepspeed==0.9.2</code></li>
+<li>下载 DeepSpeed,  执行本地安装 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd DeepSpeed-v0.9.2</span><br><span class="line">pip3 install -e ./</span><br></pre></td></tr></tbody></table></figure>
+ <a href="https://gitee.com/ascend/DeepSpeed/">DeepSpeed 官方仓库</a></li>
+</ol>
+<hr>
+<ol start="0">
+<li>注释微调依赖文件 <code>vim requirements.txt</code>  ,  安装微调相关依赖 <code>pip install -r requirements.txt</code><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">jieba&gt;=0.42.1</span><br><span class="line">ruamel_yaml&gt;=0.18.6</span><br><span class="line">rouge_chinese&gt;=1.0.3</span><br><span class="line">jupyter&gt;=1.0.0</span><br><span class="line">datasets&gt;=2.18.0</span><br><span class="line">peft&gt;=0.10.0</span><br><span class="line"># deepspeed==0.13.1 #注释</span><br><span class="line"># mpi4py&gt;=3.1.5 #注释</span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行微调脚本，按需修改路径 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> finetune_demo</span><br><span class="line"></span><br><span class="line">OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_hf.py  /home/jovyan/chatglm3/AdvertiseGen_fix  THUDM/chatglm3-6b  configs/sft.yaml configs/ds_zero_3.json</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<blockquote>
+<p>参考链接<br><a href="https://zhipu-ai.feishu.cn/wiki/HIj5wVxGqiUg3rkbQ1OcVEe5n9g">chatglm3 官方说明</a><br><a href="https://gitee.com/ascend/ModelZoo-PyTorch/tree/master/PyTorch/built-in/foundation/ChatGLM-6B">ascend 运行 chatglm1 官方教程</a><br><a href="https://www.hiascend.com/software/modelzoo/models/detail/5dfa1b69e0db4b8f889c5ee20aa23dcb">ascend 运行 chatglm2 官方教程</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>nccl</tag>
+        <tag>npu</tag>
+        <tag>chatglm3</tag>
+        <tag>deepspeed</tag>
+        <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>llama2-13B 联通云 AI 算力平台训练任务测试</title>
     <url>/2024/04/25/AI/20240425_Llama2-13B%20%E8%81%94%E9%80%9A%E4%BA%91AI%E7%AE%97%E5%8A%9B%E5%B9%B3%E5%8F%B0%E8%AE%AD%E7%BB%83%E4%BB%BB%E5%8A%A1%E6%B5%8B%E8%AF%95/</url>
     <content><![CDATA[<p>基于联通云 AI 算力平台训练 llama2-13B 任务测试</p>
@@ -120,60 +174,6 @@
       </categories>
       <tags>
         <tag>LLM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>利用 NPU 运行 ChatGLM3 全流程</title>
-    <url>/2024/04/26/AI/20240426_%E5%88%A9%E7%94%A8NPU%E8%BF%90%E8%A1%8CChatGLM3%E5%85%A8%E6%B5%81%E7%A8%8B/</url>
-    <content><![CDATA[<p>利用 NPU 运行 ChatGLM3 全流程</p>
-<span id="more"></span>
-
-
-<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><ol>
-<li><p>新建 Conda 虚拟环境  <code>conda create -n env_name python==3.10</code></p>
-</li>
-<li><p>下载 ChatGLM3 源代码 <code>git clone https://github.com/THUDM/ChatGLM3.git</code></p>
-</li>
-<li><p>下载模型权重 </p>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">git lfs install</span><br><span class="line">git clone https://www.modelscope.cn/ZhipuAI/chatglm3-6b.git</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>安装基础环境，进入源码仓库 <code>cd ChatGLM3</code> , pip 安装 <code>pip install -r requirements.txt</code><br><strong>特别说明 : torch 版本可在 requirements.txt 中手动修改</strong></p>
-</li>
-<li><p>安装 npu 基础环境，下载对应 torch 的 <strong>torch-npu</strong> 依赖包，本地安装 <code>pip install xxx.whl</code><br><a href="https://gitee.com/ascend/pytorch/releases">torch-npu 官方下载地址</a></p>
-</li>
-<li><p>运行以下代码，验证环境是否安装成功</p>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu</span><br><span class="line"></span><br><span class="line">x = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">y = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">z = x.mm(y)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(z)</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<hr>
-<h4 id="推理"><a href="#推理" class="headerlink" title="推理"></a>推理</h4><ol>
-<li>修改代码 <code>ChatGLM3-main/basic_demo/cli_demo.py</code><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu <span class="comment"># 新增一行</span></span><br></pre></td></tr></tbody></table></figure>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># transoformer架构需要加 `.to('npu') `</span></span><br><span class="line">model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=<span class="literal">True</span>).to(<span class="string">'npu'</span>).<span class="built_in">eval</span>()</span><br><span class="line"><span class="comment"># model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行代码 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">python basic_demo/cli_demo.py</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><hr>
-<h5 id="安装依赖deepspeed"><a href="#安装依赖deepspeed" class="headerlink" title="安装依赖deepspeed"></a>安装依赖 <strong>deepspeed</strong></h5><ol>
-<li><code>pip install deepspeed==0.9.2</code></li>
-<li>下载 DeepSpeed,  执行本地安装 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd DeepSpeed-v0.9.2</span><br><span class="line">pip3 install -e ./</span><br></pre></td></tr></tbody></table></figure>
- <a href="https://gitee.com/ascend/DeepSpeed/">DeepSpeed 官方仓库</a></li>
-</ol>
-<hr>
-<ol start="0">
-<li>注释微调依赖文件 <code>vim requirements.txt</code>  ,  安装微调相关依赖 <code>pip install -r requirements.txt</code><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">jieba&gt;=0.42.1</span><br><span class="line">ruamel_yaml&gt;=0.18.6</span><br><span class="line">rouge_chinese&gt;=1.0.3</span><br><span class="line">jupyter&gt;=1.0.0</span><br><span class="line">datasets&gt;=2.18.0</span><br><span class="line">peft&gt;=0.10.0</span><br><span class="line"># deepspeed==0.13.1 #注释</span><br><span class="line"># mpi4py&gt;=3.1.5 #注释</span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行微调脚本，按需修改路径 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> finetune_demo</span><br><span class="line"></span><br><span class="line">OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_hf.py  /home/jovyan/chatglm3/AdvertiseGen_fix  THUDM/chatglm3-6b  configs/sft.yaml configs/ds_zero_3.json</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<blockquote>
-<p>参考链接<br><a href="https://zhipu-ai.feishu.cn/wiki/HIj5wVxGqiUg3rkbQ1OcVEe5n9g">chatglm3 官方说明</a><br><a href="https://gitee.com/ascend/ModelZoo-PyTorch/tree/master/PyTorch/built-in/foundation/ChatGLM-6B">ascend 运行 chatglm1 官方教程</a><br><a href="https://www.hiascend.com/software/modelzoo/models/detail/5dfa1b69e0db4b8f889c5ee20aa23dcb">ascend 运行 chatglm2 官方教程</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>LLM</tag>
-        <tag>nccl</tag>
-        <tag>npu</tag>
-        <tag>chatglm3</tag>
-        <tag>deepspeed</tag>
       </tags>
   </entry>
   <entry>
@@ -279,6 +279,75 @@ python dbgpt/app/dbgpt_server.py
       </categories>
       <tags>
         <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Llamaindex_构建 RAG Agent</title>
+    <url>/2024/08/01/AI/20240801_Llamaindex%E6%8E%A5%E5%85%A5%E5%8D%83%E5%B8%86RAG/</url>
+    <content><![CDATA[<p>记录从使用 <strong>Llama-index</strong> 框架，基于在线文心千帆大模型 <strong>ERNIE-4.0</strong>, 构建实现本地知识检索.</p>
+<p><img src="/../../img/basic_rag.png"></p>
+<span id="more"></span>
+
+<h4 id="导入大模型"><a href="#导入大模型" class="headerlink" title="导入大模型"></a>导入大模型</h4><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.llms.qianfan <span class="keyword">import</span> Qianfan</span><br><span class="line"></span><br><span class="line">access_key = <span class="string">""</span></span><br><span class="line">secret_key = <span class="string">""</span></span><br><span class="line">model_name = <span class="string">"ERNIE-4.0-8K-Latest"</span></span><br><span class="line">url = <span class="string">"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro"</span></span><br><span class="line">llm = Qianfan(access_key, secret_key, model_name, url, context_window=<span class="number">8192</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p> <code>model_name</code> 可在千帆平台查看，如下图:</p>
+</blockquote>
+<p><img src="/../../img/llamaindex-02.jpg"></p>
+<hr>
+<h4 id="导入本地Embedding"><a href="#导入本地Embedding" class="headerlink" title="导入本地Embedding"></a>导入本地 Embedding</h4><ul>
+<li>下载 Embedding 模型 </li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> modelscope <span class="keyword">import</span> snapshot_download</span><br><span class="line"></span><br><span class="line">model_dir = snapshot_download(<span class="string">'Xorbits/bge-m3'</span>, cache_dir=<span class="string">'/data/LLMs'</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>加载本地 Embedding 模型 </li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.embeddings.huggingface <span class="keyword">import</span> HuggingFaceEmbedding</span><br><span class="line"></span><br><span class="line">cache_folder = <span class="string">r"embed_model/m3e-large"</span></span><br><span class="line">embed_model = HuggingFaceEmbedding(cache_folder=cache_folder)</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h4 id="构建本地知识库"><a href="#构建本地知识库" class="headerlink" title="构建本地知识库"></a>构建本地知识库</h4><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader, VectorStoreIndex</span><br><span class="line"></span><br><span class="line">directory = <span class="string">"/data/documents"</span> <span class="comment">#文档路径</span></span><br><span class="line">vector_index = VectorStoreIndex.from_documents(documents)</span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<h4 id="构建查询引擎"><a href="#构建查询引擎" class="headerlink" title="构建查询引擎"></a>构建查询引擎</h4><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">query_engine = vector_index.as_query_engine(similarity_top_k=<span class="number">3</span>, llm=llm)</span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p><code>similarity_top_k</code> 可根据经验自行调整，推荐设置 3, 5. </p>
+<p><strong>意为：问题与知识库匹配出最多 3 个相似的片段</strong></p>
+</blockquote>
+<hr>
+<h4 id="构建RAG-Agent"><a href="#构建RAG-Agent" class="headerlink" title="构建RAG Agent"></a>构建 RAG Agent</h4><ul>
+<li>构建工具 </li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_tool</span>(<span class="params">name, full_name, documents=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">f"./data/<span class="subst">{name}</span>"</span>):</span><br><span class="line">        <span class="comment"># build vector index</span></span><br><span class="line">        vector_index = VectorStoreIndex.from_documents(documents)</span><br><span class="line">        vector_index.storage_context.persist(persist_dir=<span class="string">f"./data/<span class="subst">{name}</span>"</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        vector_index = load_index_from_storage(</span><br><span class="line">            StorageContext.from_defaults(persist_dir=<span class="string">f"./data/<span class="subst">{name}</span>"</span>),</span><br><span class="line">        )</span><br><span class="line">    query_engine = vector_index.as_query_engine(similarity_top_k=<span class="number">3</span>, llm=llm)</span><br><span class="line">    query_engine_tool = QueryEngineTool(</span><br><span class="line">        query_engine=query_engine,</span><br><span class="line">        metadata=ToolMetadata(</span><br><span class="line">            name=name,</span><br><span class="line">            description=(</span><br><span class="line">                <span class="string">"Provides information about Uber quarterly financials ending"</span></span><br><span class="line">                <span class="string">f" <span class="subst">{full_name}</span>"</span></span><br><span class="line">            ),</span><br><span class="line">        ),</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> query_engine_tool</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>设置 Agent</li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.agent <span class="keyword">import</span> AgentRunner, ReActAgent</span><br><span class="line"></span><br><span class="line">agent = ReActAgent.from_tools(</span><br><span class="line">    query_engine_tools, llm=agent_llm, verbose=<span class="literal">True</span>, max_iterations=<span class="number">20</span></span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>运行 </li>
+</ul>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">response = agent.chat(<span class="string">"您的问题"</span>)</span><br></pre></td></tr></tbody></table></figure>
+
+<h4 id="整体代码"><a href="#整体代码" class="headerlink" title="整体代码"></a>整体代码</h4><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> Settings</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader, VectorStoreIndex</span><br><span class="line"><span class="keyword">from</span> llama_index.llms.qianfan <span class="keyword">import</span> Qianfan</span><br><span class="line"><span class="keyword">from</span> llama_index.core.tools <span class="keyword">import</span> QueryEngineTool, ToolMetadata</span><br><span class="line"><span class="keyword">from</span> llama_index.embeddings.huggingface <span class="keyword">import</span> HuggingFaceEmbedding</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化Qianfan模型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Rag</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.access_key = <span class="string">""</span></span><br><span class="line">        <span class="variable language_">self</span>.secret_key = <span class="string">""</span></span><br><span class="line">        <span class="variable language_">self</span>.model_name = <span class="string">"ERNIE-4.0-8K-Latest"</span></span><br><span class="line">        <span class="variable language_">self</span>.url = <span class="string">"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro"</span></span><br><span class="line">        <span class="variable language_">self</span>.llm = Qianfan(<span class="variable language_">self</span>.access_key, <span class="variable language_">self</span>.secret_key, <span class="variable language_">self</span>.model_name, <span class="variable language_">self</span>.url, context_window=<span class="number">8192</span>)</span><br><span class="line">        <span class="variable language_">self</span>.cache_folder = <span class="string">r"embed_model/m3e-large"</span></span><br><span class="line">        <span class="variable language_">self</span>.directory = <span class="string">r"/data/documents"</span>  <span class="comment"># 数据目录路径</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_tool</span>(<span class="params">self, name, full_name, documents=<span class="literal">None</span></span>):</span><br><span class="line">        embed_model = HuggingFaceEmbedding(cache_folder=<span class="variable language_">self</span>.cache_folder)</span><br><span class="line">        Settings.embed_model = embed_model</span><br><span class="line">        vector_index = VectorStoreIndex.from_documents(documents)</span><br><span class="line">        persist_path = <span class="string">f"<span class="subst">{self.directory}</span>/<span class="subst">{name}</span>"</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(persist_path):</span><br><span class="line">            vector_index.storage_context.persist(persist_dir=persist_path)</span><br><span class="line">        query_engine = vector_index.as_query_engine(similarity_top_k=<span class="number">3</span>, llm=<span class="variable language_">self</span>.llm)</span><br><span class="line">        query_engine_tool = QueryEngineTool(query_engine=query_engine, metadata=ToolMetadata(name=name, description=<span class="string">f"Provides information from document <span class="subst">{full_name}</span>"</span>))</span><br><span class="line">        <span class="keyword">return</span> query_engine_tool</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">parse_args</span>(<span class="params">self</span>):</span><br><span class="line">        query_engine_tools = []</span><br><span class="line">        <span class="keyword">for</span> filename <span class="keyword">in</span> os.listdir(<span class="variable language_">self</span>.directory):</span><br><span class="line">            <span class="keyword">if</span> filename.endswith(<span class="string">".txt"</span>):</span><br><span class="line">                filepath = os.path.join(<span class="variable language_">self</span>.directory, filename)</span><br><span class="line">                documents = SimpleDirectoryReader(input_files=[filepath]).load_data()</span><br><span class="line">                tool_name = filename[:-<span class="number">4</span>]  <span class="comment"># 去除'.txt'得到工具名称</span></span><br><span class="line">                tool = <span class="variable language_">self</span>.get_tool(tool_name, tool_name, documents=documents)</span><br><span class="line">                query_engine_tools.append(tool)</span><br><span class="line">        <span class="keyword">return</span> query_engine_tools</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">query_engine</span>(<span class="params">self, query</span>):</span><br><span class="line">        <span class="keyword">from</span> llama_index.core.agent <span class="keyword">import</span> ReActAgent</span><br><span class="line">        tools = <span class="variable language_">self</span>.parse_args()</span><br><span class="line">        agent = ReActAgent.from_tools(tools, llm=<span class="variable language_">self</span>.llm, verbose=<span class="literal">True</span>, max_iterations=<span class="number">20</span>)</span><br><span class="line">        response = agent.chat(query)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 Rag 实例并执行查询</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    rag = Rag()</span><br><span class="line">    <span class="built_in">print</span>(rag.query_engine(query=<span class="string">"问题"</span>))</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+
+
+<blockquote>
+<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p><a href="https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner_rag_controllable/">https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner_rag_controllable/</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>LLM</tag>
+        <tag>llamaindex</tag>
+        <tag>RAG</tag>
       </tags>
   </entry>
   <entry>
@@ -474,75 +543,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>Llamaindex_构建 RAG Agent</title>
-    <url>/2024/08/01/AI/20240801_Llamaindex%E6%8E%A5%E5%85%A5%E5%8D%83%E5%B8%86RAG/</url>
-    <content><![CDATA[<p>记录从使用 <strong>Llama-index</strong> 框架，基于在线文心千帆大模型 <strong>ERNIE-4.0</strong>, 构建实现本地知识检索.</p>
-<p><img src="/../../img/basic_rag.png"></p>
-<span id="more"></span>
-
-<h4 id="导入大模型"><a href="#导入大模型" class="headerlink" title="导入大模型"></a>导入大模型</h4><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.llms.qianfan <span class="keyword">import</span> Qianfan</span><br><span class="line"></span><br><span class="line">access_key = <span class="string">""</span></span><br><span class="line">secret_key = <span class="string">""</span></span><br><span class="line">model_name = <span class="string">"ERNIE-4.0-8K-Latest"</span></span><br><span class="line">url = <span class="string">"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro"</span></span><br><span class="line">llm = Qianfan(access_key, secret_key, model_name, url, context_window=<span class="number">8192</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p> <code>model_name</code> 可在千帆平台查看，如下图:</p>
-</blockquote>
-<p><img src="/../../img/llamaindex-02.jpg"></p>
-<hr>
-<h4 id="导入本地Embedding"><a href="#导入本地Embedding" class="headerlink" title="导入本地Embedding"></a>导入本地 Embedding</h4><ul>
-<li>下载 Embedding 模型 </li>
-</ul>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> modelscope <span class="keyword">import</span> snapshot_download</span><br><span class="line"></span><br><span class="line">model_dir = snapshot_download(<span class="string">'Xorbits/bge-m3'</span>, cache_dir=<span class="string">'/data/LLMs'</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>加载本地 Embedding 模型 </li>
-</ul>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.embeddings.huggingface <span class="keyword">import</span> HuggingFaceEmbedding</span><br><span class="line"></span><br><span class="line">cache_folder = <span class="string">r"embed_model/m3e-large"</span></span><br><span class="line">embed_model = HuggingFaceEmbedding(cache_folder=cache_folder)</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<h4 id="构建本地知识库"><a href="#构建本地知识库" class="headerlink" title="构建本地知识库"></a>构建本地知识库</h4><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader, VectorStoreIndex</span><br><span class="line"></span><br><span class="line">directory = <span class="string">"/data/documents"</span> <span class="comment">#文档路径</span></span><br><span class="line">vector_index = VectorStoreIndex.from_documents(documents)</span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<h4 id="构建查询引擎"><a href="#构建查询引擎" class="headerlink" title="构建查询引擎"></a>构建查询引擎</h4><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">query_engine = vector_index.as_query_engine(similarity_top_k=<span class="number">3</span>, llm=llm)</span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p><code>similarity_top_k</code> 可根据经验自行调整，推荐设置 3, 5. </p>
-<p><strong>意为：问题与知识库匹配出最多 3 个相似的片段</strong></p>
-</blockquote>
-<hr>
-<h4 id="构建RAG-Agent"><a href="#构建RAG-Agent" class="headerlink" title="构建RAG Agent"></a>构建 RAG Agent</h4><ul>
-<li>构建工具 </li>
-</ul>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_tool</span>(<span class="params">name, full_name, documents=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(<span class="string">f"./data/<span class="subst">{name}</span>"</span>):</span><br><span class="line">        <span class="comment"># build vector index</span></span><br><span class="line">        vector_index = VectorStoreIndex.from_documents(documents)</span><br><span class="line">        vector_index.storage_context.persist(persist_dir=<span class="string">f"./data/<span class="subst">{name}</span>"</span>)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        vector_index = load_index_from_storage(</span><br><span class="line">            StorageContext.from_defaults(persist_dir=<span class="string">f"./data/<span class="subst">{name}</span>"</span>),</span><br><span class="line">        )</span><br><span class="line">    query_engine = vector_index.as_query_engine(similarity_top_k=<span class="number">3</span>, llm=llm)</span><br><span class="line">    query_engine_tool = QueryEngineTool(</span><br><span class="line">        query_engine=query_engine,</span><br><span class="line">        metadata=ToolMetadata(</span><br><span class="line">            name=name,</span><br><span class="line">            description=(</span><br><span class="line">                <span class="string">"Provides information about Uber quarterly financials ending"</span></span><br><span class="line">                <span class="string">f" <span class="subst">{full_name}</span>"</span></span><br><span class="line">            ),</span><br><span class="line">        ),</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> query_engine_tool</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>设置 Agent</li>
-</ul>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core.agent <span class="keyword">import</span> AgentRunner, ReActAgent</span><br><span class="line"></span><br><span class="line">agent = ReActAgent.from_tools(</span><br><span class="line">    query_engine_tools, llm=agent_llm, verbose=<span class="literal">True</span>, max_iterations=<span class="number">20</span></span><br><span class="line">)</span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>运行 </li>
-</ul>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">response = agent.chat(<span class="string">"您的问题"</span>)</span><br></pre></td></tr></tbody></table></figure>
-
-<h4 id="整体代码"><a href="#整体代码" class="headerlink" title="整体代码"></a>整体代码</h4><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> Settings</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> llama_index.core <span class="keyword">import</span> SimpleDirectoryReader, VectorStoreIndex</span><br><span class="line"><span class="keyword">from</span> llama_index.llms.qianfan <span class="keyword">import</span> Qianfan</span><br><span class="line"><span class="keyword">from</span> llama_index.core.tools <span class="keyword">import</span> QueryEngineTool, ToolMetadata</span><br><span class="line"><span class="keyword">from</span> llama_index.embeddings.huggingface <span class="keyword">import</span> HuggingFaceEmbedding</span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化Qianfan模型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Rag</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="variable language_">self</span>.access_key = <span class="string">""</span></span><br><span class="line">        <span class="variable language_">self</span>.secret_key = <span class="string">""</span></span><br><span class="line">        <span class="variable language_">self</span>.model_name = <span class="string">"ERNIE-4.0-8K-Latest"</span></span><br><span class="line">        <span class="variable language_">self</span>.url = <span class="string">"https://aip.baidubce.com/rpc/2.0/ai_custom/v1/wenxinworkshop/chat/completions_pro"</span></span><br><span class="line">        <span class="variable language_">self</span>.llm = Qianfan(<span class="variable language_">self</span>.access_key, <span class="variable language_">self</span>.secret_key, <span class="variable language_">self</span>.model_name, <span class="variable language_">self</span>.url, context_window=<span class="number">8192</span>)</span><br><span class="line">        <span class="variable language_">self</span>.cache_folder = <span class="string">r"embed_model/m3e-large"</span></span><br><span class="line">        <span class="variable language_">self</span>.directory = <span class="string">r"/data/documents"</span>  <span class="comment"># 数据目录路径</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_tool</span>(<span class="params">self, name, full_name, documents=<span class="literal">None</span></span>):</span><br><span class="line">        embed_model = HuggingFaceEmbedding(cache_folder=<span class="variable language_">self</span>.cache_folder)</span><br><span class="line">        Settings.embed_model = embed_model</span><br><span class="line">        vector_index = VectorStoreIndex.from_documents(documents)</span><br><span class="line">        persist_path = <span class="string">f"<span class="subst">{self.directory}</span>/<span class="subst">{name}</span>"</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(persist_path):</span><br><span class="line">            vector_index.storage_context.persist(persist_dir=persist_path)</span><br><span class="line">        query_engine = vector_index.as_query_engine(similarity_top_k=<span class="number">3</span>, llm=<span class="variable language_">self</span>.llm)</span><br><span class="line">        query_engine_tool = QueryEngineTool(query_engine=query_engine, metadata=ToolMetadata(name=name, description=<span class="string">f"Provides information from document <span class="subst">{full_name}</span>"</span>))</span><br><span class="line">        <span class="keyword">return</span> query_engine_tool</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">parse_args</span>(<span class="params">self</span>):</span><br><span class="line">        query_engine_tools = []</span><br><span class="line">        <span class="keyword">for</span> filename <span class="keyword">in</span> os.listdir(<span class="variable language_">self</span>.directory):</span><br><span class="line">            <span class="keyword">if</span> filename.endswith(<span class="string">".txt"</span>):</span><br><span class="line">                filepath = os.path.join(<span class="variable language_">self</span>.directory, filename)</span><br><span class="line">                documents = SimpleDirectoryReader(input_files=[filepath]).load_data()</span><br><span class="line">                tool_name = filename[:-<span class="number">4</span>]  <span class="comment"># 去除'.txt'得到工具名称</span></span><br><span class="line">                tool = <span class="variable language_">self</span>.get_tool(tool_name, tool_name, documents=documents)</span><br><span class="line">                query_engine_tools.append(tool)</span><br><span class="line">        <span class="keyword">return</span> query_engine_tools</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">query_engine</span>(<span class="params">self, query</span>):</span><br><span class="line">        <span class="keyword">from</span> llama_index.core.agent <span class="keyword">import</span> ReActAgent</span><br><span class="line">        tools = <span class="variable language_">self</span>.parse_args()</span><br><span class="line">        agent = ReActAgent.from_tools(tools, llm=<span class="variable language_">self</span>.llm, verbose=<span class="literal">True</span>, max_iterations=<span class="number">20</span>)</span><br><span class="line">        response = agent.chat(query)</span><br><span class="line">        <span class="keyword">return</span> response</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 Rag 实例并执行查询</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    rag = Rag()</span><br><span class="line">    <span class="built_in">print</span>(rag.query_engine(query=<span class="string">"问题"</span>))</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-
-
-<blockquote>
-<h4 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h4><p><a href="https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner_rag_controllable/">https://docs.llamaindex.ai/en/stable/examples/agent/agent_runner/agent_runner_rag_controllable/</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>LLM</tag>
-        <tag>llamaindex</tag>
-        <tag>RAG</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Wps 离线插件使用方法</title>
     <url>/2024/08/06/AI/20240806_Wps%E7%A6%BB%E7%BA%BF%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p>本人自研的基于 WPS 加载项开发的智能助手.</p>
@@ -621,21 +621,6 @@ python dbgpt/app/dbgpt_server.py
       <tags>
         <tag>LLM</tag>
         <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>局域网远程桌面</title>
-    <url>/2021/01/14/Config/20210114_%E5%B1%80%E5%9F%9F%E7%BD%91%E9%93%BE%E6%8E%A5/</url>
-    <content><![CDATA[<p>内网远程桌面连接方法</p>
-<span id="more"></span>
-
-
-<h4 id="依次执行以下命令："><a href="#依次执行以下命令：" class="headerlink" title="依次执行以下命令："></a>依次执行以下命令：</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">win+r</span><br><span class="line"></span><br><span class="line">mstsc</span><br><span class="line"></span><br><span class="line"><span class="comment">#输入需要链接的主机ip</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查询win+r--&gt;"cmd"--&gt;"ipconfig"</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>work</tag>
       </tags>
   </entry>
   <entry>
@@ -792,383 +777,6 @@ python dbgpt/app/dbgpt_server.py
       <tags>
         <tag>python</tag>
         <tag>MLLM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>修改远程桌面端口步骤</title>
-    <url>/2021/01/11/Config/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4%20/</url>
-    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
-<span id="more"></span>
-
-
-<ol>
-<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
-</li>
-<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
-</li>
-<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
-</li>
-<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
-</li>
-<li><p>重启电脑</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>work</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Proxychains install</title>
-    <url>/2022/07/17/Config/20220707_Proxychains%E5%AE%89%E8%A3%85/</url>
-    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
-<span id="more"></span>
-
-
-<ul>
-<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
-</li>
-<li><p>进入解压后的目录，执行 <code>./configure</code></p>
-</li>
-<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
-</li>
-<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
-</li>
-</ul>
-<blockquote>
-<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>配置 Anaconda3 的 conda 源</title>
-    <url>/2024/04/25/Config/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
-    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
-
-<h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="修改hosts文件-etc-hosts"><a href="#修改hosts文件-etc-hosts" class="headerlink" title="修改hosts文件 /etc/hosts"></a>修改 hosts 文件 /etc/hosts</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<h4 id="修改为"><a href="#修改为" class="headerlink" title="修改为:"></a>修改为:</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line">101.6.15.130  mirrors.tuna.tsinghua.edu.cn</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="配置conda源为清华源"><a href="#配置conda源为清华源" class="headerlink" title="配置conda源为清华源"></a>配置 conda 源为清华源</h3><ol>
-<li>查看 conda 配置文件的位置：<code>whereis conda</code></li>
-<li>编辑配置文件：<code>vim /root/.condarc</code></li>
-<li>将配置文件中的内容替换为：<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/</span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行 <code>conda clean -i </code>清除索引缓存</li>
-<li>创建新环境 <code>conda create -n myenv python==3.10</code> 验证 conda 源是否配置成功</li>
-</ol>
-</b>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>anaconda</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>配置 VNC 教程</title>
-    <url>/2024/07/17/Config/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
-    <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
-<p>VNC（Virtual Network Computing），为一种使用 RFB 协议的屏幕画面分享及远程操作软件。此软件借由网络，可发送键盘与鼠标的动作及即时的屏幕画面。</p>
-<p>VNC 与操作系统无关，因此可跨平台使用，例如可用 Windows 连线到某 Linux 的电脑，反之亦同。甚至在没有安装客户端程序的电脑中，只要有支持 JAVA 的浏览器，也可使用。</p>
-<span id="more"></span>
-
-<ol>
-<li><h2 id="两台-windows电脑内下载并安装"><a href="#两台-windows电脑内下载并安装" class="headerlink" title="两台 windows电脑内下载并安装"></a><strong>两台</strong> windows 电脑内下载并安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">TightVNC官网地址</span><br><span class="line">https://www.tightvnc.com/download.php</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-26-43-1718673923532.jpg" alt="" width="563" data-align="center">
-
-<hr>
-<ol start="2">
-<li><h2 id="TightVNC-服务端-被连接端-配置"><a href="#TightVNC-服务端-被连接端-配置" class="headerlink" title="TightVNC 服务端(被连接端) 配置"></a>TightVNC <strong>服务端</strong> (被连接端) 配置</h2><ul>
-<li><p>默认端口号 5900</p>
-</li>
-<li><p>注意自己设置连接密码</p>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-36-02-image.png" alt="" width="337" data-align="left">
-
-<p><strong>如果找不到配置界面，在任务栏右下角图标内右键 或点击 ‘开始菜单’-‘所有应用’-‘TightVNC’-‘Run TightVNC Service’</strong></p>
-<hr>
-</li>
-</ul>
-</li>
-<li><h2 id="TightVNC-客户端-连接端-配置"><a href="#TightVNC-客户端-连接端-配置" class="headerlink" title="TightVNC 客户端(连接端) 配置"></a>TightVNC <strong>客户端</strong> (连接端) 配置</h2><ul>
-<li>进入方式：开始菜单 - 所有应用 - TightVNC-TightVNC Viewer</li>
-</ul>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-48-42-image.png" alt="" width="341" data-align="left">
-
-<ul>
-<li><p> 输入服务器的 <strong>ip 地址</strong>和<strong>端口</strong> , 并连接</p>
-<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-57-49-image.png" alt="" width="412"></li>
-</ul>
-</li>
-</ol>
-<blockquote>
-<p> <a href="https://cloud.baidu.com/article/3002603">参考博客 - 1</a></p>
-</blockquote>
-<blockquote>
-<p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服务器免密配置教程 - 1</title>
-    <url>/2024/07/15/Config/20240701_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
-    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
-<p><img src="/../../img/image-20240710103927738.png" alt="show ip"></p>
-<span id="more"></span>
-
-<blockquote>
-<p>[!NOTE]</p>
-<p>该手册一共 2 个版本，此文档为第一版。</p>
-</blockquote>
-<h2 id="1-获取密钥"><a href="#1-获取密钥" class="headerlink" title="1. 获取密钥"></a>1. 获取密钥</h2>   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -f /root/.ssh/rsa</span><br></pre></td></tr></tbody></table></figure>
-
-<h2 id="2-验证"><a href="#2-验证" class="headerlink" title="2. 验证"></a>2. 验证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> id_rsa.pub authorized_keys</span><br><span class="line"><span class="comment"># authorized_keys是用于 SSH 服务器验证远程用户身份</span></span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="3-配置StrictHostKeyChecking"><a href="#3-配置StrictHostKeyChecking" class="headerlink" title="3. 配置StrictHostKeyChecking"></a>3. 配置 <code>StrictHostKeyChecking</code></h2><ul>
-<li>创建 config 文件 <code>vim config</code></li>
-</ul>
-<figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">StrictHostKeyChecking no</span><br><span class="line"><span class="params">#</span> 设置 StrictHostKeyChecking no 意味着SSH客户端在连接到远程主机时不会检查该主机的公钥，也不会将新的主机密钥添加到已知主机列表中。这意味着所有远程主机的密钥将被自动接受，而不会进行任何验证。</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<h2 id="4-准备ip文件"><a href="#4-准备ip文件" class="headerlink" title="4. 准备ip文件"></a>4. 准备 ip 文件</h2><ul>
-<li><p>创建 ip.txt <code>vim ip.txt</code></p>
-</li>
-<li><p>将需要免密的机器 <code>ip</code> 写入</p>
-<p><img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738"></p>
-</li>
-</ul>
-<h2 id="5-创建脚本"><a href="#5-创建脚本" class="headerlink" title="5. 创建脚本"></a>5. 创建脚本</h2><ul>
-<li>需要手动写登录密码 <code>password</code></li>
-<li>前提安装 <code>expect</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 IP 地址列表</span></span><br><span class="line">servers=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    servers+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地 .ssh 目录路径</span></span><br><span class="line">ssh_dir=<span class="string">"<span class="variable">$HOME</span>/.ssh"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 expect 进行 scp 并自动输入密码</span></span><br><span class="line"><span class="keyword">for</span> server <span class="keyword">in</span> <span class="string">"<span class="variable">${servers[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Copying SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    expect &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">spawn scp -r $ssh_dir root@$server:/root/</span></span><br><span class="line"><span class="string">expect {</span></span><br><span class="line"><span class="string">    "password:" {</span></span><br><span class="line"><span class="string">        send "your password\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    "yes/no" {</span></span><br><span class="line"><span class="string">        send "yes\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    eof {</span></span><br><span class="line"><span class="string">        exit</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">}</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">    <span class="keyword">if</span> [ $? -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Successfully copied SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Failed to copy SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"All servers have been updated with SSH keys."</span></span><br></pre></td></tr></tbody></table></figure>
-
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<p>补充安装 expect 包教程</p>
-<h3 id="在Ubuntu上安装Expect"><a href="#在Ubuntu上安装Expect" class="headerlink" title="在Ubuntu上安装Expect"></a>在 Ubuntu 上安装 Expect</h3><ol>
-<li><p><strong>更新包列表</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>安装 Expect</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install expect</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证安装</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这将显示已安装的 <code>expect</code> 版本。</p>
-</li>
-</ol>
-<h3 id="在CentOS上安装Expect"><a href="#在CentOS上安装Expect" class="headerlink" title="在CentOS上安装Expect"></a>在 CentOS 上安装 Expect</h3><ol>
-<li><p><strong>更新包列表</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>安装 Expect</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install expect</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证安装</strong>：</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
-
-<p>这将显示已安装的 <code>expect</code> 版本。</p>
-<hr>
-<p>完成这些步骤后，你的系统上就会安装 Expect 工具。Expect 是一种用于自动化交互任务的工具，常用于自动化 SSH 登录、FTP 等需要用户交互的任务。</p>
-</li>
-</ol>
-</blockquote>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服务器配置永久修改 DNS</title>
-    <url>/2024/07/15/Config/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
-    <content><![CDATA[<p>服务器内配置 DNS</p>
-<span id="more"></span>
-
-<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>2.<br>    </p><figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">DNS=114.114.114.114 8.8.8.8 8.8.4.4</span><br><span class="line">FallbackDNs=8.8.8.8</span><br><span class="line">Domains=domain.com</span><br></pre></td></tr></tbody></table></figure><p></p>
-<ol start="3">
-<li><pre><code class="bash">sudo systemctl restart systemd-resolved
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
-</code></pre>
-</li>
-<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
-</code></pre>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>服务器免密配置教程 - 2</title>
-    <url>/2024/07/15/Config/20240709_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
-    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
-<span id="more"></span>
-
-
-<blockquote>
-<p>[!NOTE]</p>
-<p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
-</blockquote>
-<h2 id="1-准备ip文件"><a href="#1-准备ip文件" class="headerlink" title="1. 准备ip文件"></a>1. 准备 ip 文件</h2><ul>
-<li><p>创建 ip.txt <code>vim ip.txt</code></p>
-</li>
-<li><p>将需要免密的机器 <code>ip</code> 写入</p>
-</li>
-</ul>
-<h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
-<li><code>vim set_key.sh</code></li>
-</ul>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否已经生成了SSH密钥对</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f ~/.ssh/id_rsa.pub ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Generating SSH key pair..."</span></span><br><span class="line">  ssh-keygen -t rsa -N <span class="string">""</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公钥复制到每台目标机器</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> -r ip; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Configuring SSH key authentication for <span class="variable">$ip</span>..."</span></span><br><span class="line">  ssh-copy-id root@<span class="variable">$ip</span></span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"><span class="built_in">echo</span> </span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li><p><code>chmod +x set_key.sh</code></p>
-</li>
-<li><p><code>./set_key.sh</code></p>
-</li>
-</ul>
-<hr>
-<blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
-</blockquote>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建基于 Hexo 架构的个人博客</title>
-    <url>/2024/07/18/Config/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
-<p><img src="/../../img/hexo-1.jpg" alt="hexo 首页"></p>
-<span id="more"></span>
-
-
-<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
-<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
-<ul>
-<li>升级 npm：<code>npm install -g npm</code></li>
-</ul>
-<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
-<ul>
-<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
-</ul>
-<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
-<li><p>检查 node.js 版本：</p>
-<p>  <code>node -v</code></p>
-</li>
-<li><p>检查 npm 版本：</p>
-<p>  <code>npm -v</code></p>
-</li>
-<li><p>检查 cnpm 版本：</p>
-<p>  <code>cnpm -v</code></p>
-</li>
-</ul>
-<div class="note warning"><p>这里是警告。</p></div>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows 之 CMD 常用命令</title>
-    <url>/2024/08/19/Config/20240819_Windows%E4%B9%8Bcmd%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>在 windows 操作系统内，使用终端进行的常用操作命令.</p>
-<span id="more"></span>
-
-<ul>
-<li><p>查看 <code>IP</code></p>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">ipconfig</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>关闭防火墙</p>
-  <figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">netsh advfirewall <span class="built_in">set</span> allprofiles state off</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1424,33 +1032,32 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>服务器批量安装 Nvidia-Docker</title>
-    <url>/2024/07/15/In%20Linux/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/</url>
-    <content><![CDATA[<p>多台服务器同时安装 Nvidia-docker</p>
+    <title>批量加载 docker 镜像 &amp; 镜像重命名</title>
+    <url>/2024/07/15/In%20Linux/20240711_%E6%89%B9%E9%87%8F%E5%8A%A0%E8%BD%BDdocker%E9%95%9C%E5%83%8F&amp;%E9%95%9C%E5%83%8F%E9%87%8D%E5%91%BD%E5%90%8D/</url>
+    <content><![CDATA[<p>多台服务器同时批量加载 docker 镜像 + 重命名，并创建容器。</p>
 <span id="more"></span>
-<h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
 
-<ul>
-<li>将以上保存到一个文件中，命名 <code>installNGC</code></li>
-</ul>
-<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
 
-<ul>
-<li><p>这条命令是在 Linux 系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
-<ul>
-<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号 (SIGHUP)，这意味着即使用户退出当前终端会话，由 <code>nohup</code> 启动的进程仍然会继续运行。</p>
+<h2 id="1-加载镜像"><a href="#1-加载镜像" class="headerlink" title="1. 加载镜像"></a>1. 加载镜像</h2><ul>
+<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
 </li>
-<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code> 脚本或程序将会被运行，它位于 <code>/mnt/hcufs/tools</code> 目录下。</p>
+<li><p>单机执行命令：<code>docker load -i /mnt/hcufs/pytorch.tar</code></p>
 </li>
-<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到 <code>/dev/null</code> 设备文件。<code>/dev/null</code> 是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让 <code>installNGC</code> 程序的输出显示在终端上。</p>
+<li><p>多机命令: </p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"nohup docker load -i /mnt/hcufs/pytorch.tar &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
 </li>
-<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果 <code>installNGC</code> 程序产生任何错误输出，也将被重定向到 <code>/dev/null</code>，同样不会在终端上显示。</p>
-</li>
-<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的 shell 提示符，而不需要等待 <code>installNGC</code> 完成执行。</p>
-</li>
+<li><p><strong>验证是否加载镜像</strong></p>
+<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">for i in $(cat serivce.txt); do ssh $i "docker images"</span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
-<p>综上所述，这条命令的意思是：在后台运行 <code>/mnt/hcufs/tools/installNGC</code> 程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
+<h2 id="2-重命名镜像"><a href="#2-重命名镜像" class="headerlink" title="2. 重命名镜像"></a>2. 重命名镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 此处的3f0为镜像的ID</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker tags 3f0 pytorch:1.0"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-创建容器"><a href="#3-创建容器" class="headerlink" title="3. 创建容器"></a>3. 创建容器</h2><ul>
+<li><p>单机命令 <code>docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash</code></p>
 </li>
+<li><p>多机创建:</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash &amp;&amp; exit"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
 </ul>
 <hr>
 <blockquote>
@@ -1485,32 +1092,33 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>批量加载 docker 镜像 &amp; 镜像重命名</title>
-    <url>/2024/07/15/In%20Linux/20240711_%E6%89%B9%E9%87%8F%E5%8A%A0%E8%BD%BDdocker%E9%95%9C%E5%83%8F&amp;%E9%95%9C%E5%83%8F%E9%87%8D%E5%91%BD%E5%90%8D/</url>
-    <content><![CDATA[<p>多台服务器同时批量加载 docker 镜像 + 重命名，并创建容器。</p>
+    <title>服务器批量安装 Nvidia-Docker</title>
+    <url>/2024/07/15/In%20Linux/20240630_%E6%89%B9%E9%87%8F%E5%AE%89%E8%A3%85Nvidia-Docker/</url>
+    <content><![CDATA[<p>多台服务器同时安装 Nvidia-docker</p>
 <span id="more"></span>
+<h2 id="1-单机安装命令"><a href="#1-单机安装命令" class="headerlink" title="1. 单机安装命令"></a>1. 单机安装命令</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">distribution=$(. /etc/os-release;echo $ID$VERSION_ID) \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add - \</span><br><span class="line">&amp;&amp; curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list</span><br><span class="line"></span><br><span class="line">apt-get update</span><br><span class="line"></span><br><span class="line">apt-get install -y nvidia-docker2</span><br><span class="line"></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></tbody></table></figure>
 
-
-<h2 id="1-加载镜像"><a href="#1-加载镜像" class="headerlink" title="1. 加载镜像"></a>1. 加载镜像</h2><ul>
-<li><p>该脚本需把机器编号改为 <code>h800-01</code> ，<code>h800-10</code> 这种格式</p>
-</li>
-<li><p>单机执行命令：<code>docker load -i /mnt/hcufs/pytorch.tar</code></p>
-</li>
-<li><p>多机命令: </p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 63`;<span class="keyword">do</span> </span><br><span class="line">	ssh h800-<span class="variable">$i</span> <span class="string">"nohup docker load -i /mnt/hcufs/pytorch.tar &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p><strong>验证是否加载镜像</strong></p>
-<figure class="highlight shell"><table><tbody><tr><td class="code"><pre><span class="line">for i in $(cat serivce.txt); do ssh $i "docker images"</span><br></pre></td></tr></tbody></table></figure></li>
+<ul>
+<li>将以上保存到一个文件中，命名 <code>installNGC</code></li>
 </ul>
-<h2 id="2-重命名镜像"><a href="#2-重命名镜像" class="headerlink" title="2. 重命名镜像"></a>2. 重命名镜像</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 此处的3f0为镜像的ID</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 60 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker tags 3f0 pytorch:1.0"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<h2 id="2-批量安装脚本"><a href="#2-批量安装脚本" class="headerlink" title="2. 批量安装脚本"></a>2. 批量安装脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 01 63`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"nohup /mnt/hcufs/tools/installNGC &gt; /dev/null 2&gt;&amp;1 &amp;"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
 
-
-
-<h2 id="3-创建容器"><a href="#3-创建容器" class="headerlink" title="3. 创建容器"></a>3. 创建容器</h2><ul>
-<li><p>单机命令 <code>docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash</code></p>
+<ul>
+<li><p>这条命令是在 Linux 系统中用来在后台运行一个程序，并且防止终端会话结束时程序随之终止的常用方法。让我们逐部分解析这个命令：</p>
+<ul>
+<li><p><code>nohup</code>: 这是一个命令前缀，意为”no hang up”，它的作用是使进程忽略挂断信号 (SIGHUP)，这意味着即使用户退出当前终端会话，由 <code>nohup</code> 启动的进程仍然会继续运行。</p>
 </li>
-<li><p>多机创建:</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `<span class="built_in">seq</span> -w 1 62`;<span class="keyword">do</span> ssh h800-<span class="variable">$i</span> <span class="string">"docker run --gpus all -it -m 500g --cap-add=SYS_PTRACE --cap-add=IPC_LOCK --shm-size 20g --network=host --name nvcr pytorch:1.0 bash &amp;&amp; exit"</span>;<span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li><p><code>/mnt/hcufs/tools/installNGC</code>: 这是你要执行的程序路径。<code>installNGC</code> 脚本或程序将会被运行，它位于 <code>/mnt/hcufs/tools</code> 目录下。</p>
+</li>
+<li><p><code>&gt; /dev/null</code>: 这是一个重定向操作，将标准输出（stdout）重定向到 <code>/dev/null</code> 设备文件。<code>/dev/null</code> 是一个特殊文件，任何写入其中的内容都会被丢弃，不会留下任何痕迹。这样做的目的是不让 <code>installNGC</code> 程序的输出显示在终端上。</p>
+</li>
+<li><p><code>2&gt;&amp;1</code>: 这是另一个重定向操作，将标准错误（stderr）重定向到与标准输出相同的地方。这里的意思是，如果 <code>installNGC</code> 程序产生任何错误输出，也将被重定向到 <code>/dev/null</code>，同样不会在终端上显示。</p>
+</li>
+<li><p><code>&amp;</code>: 这个符号放在命令末尾，表示该命令应该在后台运行。这意味着你可以立即返回到你的 shell 提示符，而不需要等待 <code>installNGC</code> 完成执行。</p>
+</li>
+</ul>
+<p>综上所述，这条命令的意思是：在后台运行 <code>/mnt/hcufs/tools/installNGC</code> 程序，即使你关闭了终端会话，程序也会继续运行，并且所有标准输出和标准错误输出都将被丢弃，不会显示在屏幕上。这在长时间运行任务时非常有用，因为你可以安全地关闭终端窗口而不影响任务的执行。</p>
+</li>
 </ul>
 <hr>
 <blockquote>
@@ -1747,47 +1355,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>VMware 内配置共享文件夹</title>
-    <url>/2024/07/29/In%20Linux/20240729_VMware%E5%86%85%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
-    <content><![CDATA[<p><img src="/../../img/VMware-1.png" alt="image-20240729144342715"></p>
-<p>VMware 设置共享文件夹，改过一次然后文件夹消失了。很奇怪.</p>
-<span id="more"></span>
-
-<h4 id="安装VMware-Tools"><a href="#安装VMware-Tools" class="headerlink" title="安装VMware Tools"></a>安装 VMware Tools</h4><ul>
-<li>找到<strong>虚拟机</strong> - <strong>重新安装 VMware Tools</strong> | <em>如果是灰色就执行下一步</em></li>
-<li>重启虚拟机</li>
-<li>重启的过程中，不停的查看<strong>重新安装 VMware Tools</strong></li>
-<li> 当能点击时，点击安装即可</li>
-</ul>
-<h4 id="配置共享文件夹"><a href="#配置共享文件夹" class="headerlink" title="配置共享文件夹"></a>配置共享文件夹</h4><ul>
-<li><p>点击<strong>虚拟机设置</strong></p>
-</li>
-<li><p>找到<strong>选项</strong></p>
-<p><img src="/../../img/vmware-2.jpg"></p>
-</li>
-<li><p>选<strong>共享文件夹</strong> , 按图内进行配置</p>
-</li>
-</ul>
-<h4 id="查看共享文件夹"><a href="#查看共享文件夹" class="headerlink" title="查看共享文件夹"></a>查看共享文件夹</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd /mnt/hgfs</span><br><span class="line">ls</span><br></pre></td></tr></tbody></table></figure>
-
-
-
-<blockquote>
-<p>[!CAUTION]</p>
-<p>当执行完后，如果没有看见自己的共享文件夹，执行以下命令</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">如果输出文件夹的名称, 快执行下一步, 如果这个啥都没输出, 我没治了.</span><br><span class="line">vmhgfs-fuse /mnt/hgfs</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">sudo mount -t fuse.vmhgfs-fuse .host:/ /mnt/hgfs -o allow_other</span><br></pre></td></tr></tbody></table></figure>
-</blockquote>
-]]></content>
-      <categories>
-        <category>In Linux</category>
-      </categories>
-      <tags>
-        <tag>-Linux</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>在线安装 docker&amp;nvidia-docker</title>
     <url>/2024/08/06/In%20Linux/20240806_docker&amp;nvidia-docker%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85/</url>
     <content><![CDATA[<p>记录单机在线安装 docker 及英伟达 docker 的操作，只保留操作命令。选择自适应的操作系统，逐行执行即可.</p>
@@ -1869,6 +1436,47 @@ python dbgpt/app/dbgpt_server.py
       <tags>
         <tag>Ops</tag>
         <tag>docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>VMware 内配置共享文件夹</title>
+    <url>/2024/07/29/In%20Linux/20240729_VMware%E5%86%85%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E6%96%87%E4%BB%B6%E5%A4%B9/</url>
+    <content><![CDATA[<p><img src="/../../img/VMware-1.png" alt="image-20240729144342715"></p>
+<p>VMware 设置共享文件夹，改过一次然后文件夹消失了。很奇怪.</p>
+<span id="more"></span>
+
+<h4 id="安装VMware-Tools"><a href="#安装VMware-Tools" class="headerlink" title="安装VMware Tools"></a>安装 VMware Tools</h4><ul>
+<li>找到<strong>虚拟机</strong> - <strong>重新安装 VMware Tools</strong> | <em>如果是灰色就执行下一步</em></li>
+<li>重启虚拟机</li>
+<li>重启的过程中，不停的查看<strong>重新安装 VMware Tools</strong></li>
+<li> 当能点击时，点击安装即可</li>
+</ul>
+<h4 id="配置共享文件夹"><a href="#配置共享文件夹" class="headerlink" title="配置共享文件夹"></a>配置共享文件夹</h4><ul>
+<li><p>点击<strong>虚拟机设置</strong></p>
+</li>
+<li><p>找到<strong>选项</strong></p>
+<p><img src="/../../img/vmware-2.jpg"></p>
+</li>
+<li><p>选<strong>共享文件夹</strong> , 按图内进行配置</p>
+</li>
+</ul>
+<h4 id="查看共享文件夹"><a href="#查看共享文件夹" class="headerlink" title="查看共享文件夹"></a>查看共享文件夹</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd /mnt/hgfs</span><br><span class="line">ls</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<blockquote>
+<p>[!CAUTION]</p>
+<p>当执行完后，如果没有看见自己的共享文件夹，执行以下命令</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">如果输出文件夹的名称, 快执行下一步, 如果这个啥都没输出, 我没治了.</span><br><span class="line">vmhgfs-fuse /mnt/hgfs</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">sudo mount -t fuse.vmhgfs-fuse .host:/ /mnt/hgfs -o allow_other</span><br></pre></td></tr></tbody></table></figure>
+</blockquote>
+]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
+      <tags>
+        <tag>-Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -2039,6 +1647,21 @@ https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvi
       </tags>
   </entry>
   <entry>
+    <title>局域网远程桌面</title>
+    <url>/2021/01/14/Config/20210114_%E5%B1%80%E5%9F%9F%E7%BD%91%E9%93%BE%E6%8E%A5/</url>
+    <content><![CDATA[<p>内网远程桌面连接方法</p>
+<span id="more"></span>
+
+
+<h4 id="依次执行以下命令："><a href="#依次执行以下命令：" class="headerlink" title="依次执行以下命令："></a>依次执行以下命令：</h4><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">win+r</span><br><span class="line"></span><br><span class="line">mstsc</span><br><span class="line"></span><br><span class="line"><span class="comment">#输入需要链接的主机ip</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#查询win+r--&gt;"cmd"--&gt;"ipconfig"</span></span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>work</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux 快捷指令</title>
     <url>/2024/07/17/In%20Linux/Linux%E5%BF%AB%E6%8D%B7%E6%8C%87%E4%BB%A4/</url>
     <content><![CDATA[<p>本人工作时常用到的一些 linux 快捷指令，希望对大家有所帮助。</p>
@@ -2130,6 +1753,383 @@ https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvi
 ]]></content>
       <categories>
         <category>In Linux</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>修改远程桌面端口步骤</title>
+    <url>/2021/01/11/Config/20220122_%E4%BF%AE%E6%94%B9%E8%BF%9C%E7%A8%8B%E6%A1%8C%E9%9D%A2%E7%AB%AF%E5%8F%A3%E6%AD%A5%E9%AA%A4/</url>
+    <content><![CDATA[<p>为 mstsc.exe 的端口修改</p>
+<span id="more"></span>
+
+
+<ol>
+<li><p>注册表  修改 HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp    PortNumber 为 xxxx</p>
+</li>
+<li><p>windows 防火墙 - 高级设置 - 入站规 加上 xxxx 端口</p>
+</li>
+<li><p>我的电脑 - 管理 - 服务和应用程序 - 服务  启动 Remote Desktop 开头的 3 或 4 个服务</p>
+</li>
+<li><p>我的电脑 - 属性 - 高级系统设置 - 远程  勾选’允许运行任意版本…’</p>
+</li>
+<li><p>重启电脑</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>work</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置 Anaconda3 的 conda 源</title>
+    <url>/2024/04/25/Config/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
+    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
+
+<h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="修改hosts文件-etc-hosts"><a href="#修改hosts文件-etc-hosts" class="headerlink" title="修改hosts文件 /etc/hosts"></a>修改 hosts 文件 /etc/hosts</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为"><a href="#修改为" class="headerlink" title="修改为:"></a>修改为:</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line">101.6.15.130  mirrors.tuna.tsinghua.edu.cn</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="配置conda源为清华源"><a href="#配置conda源为清华源" class="headerlink" title="配置conda源为清华源"></a>配置 conda 源为清华源</h3><ol>
+<li>查看 conda 配置文件的位置：<code>whereis conda</code></li>
+<li>编辑配置文件：<code>vim /root/.condarc</code></li>
+<li>将配置文件中的内容替换为：<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/</span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行 <code>conda clean -i </code>清除索引缓存</li>
+<li>创建新环境 <code>conda create -n myenv python==3.10</code> 验证 conda 源是否配置成功</li>
+</ol>
+</b>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>anaconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Proxychains install</title>
+    <url>/2022/07/17/Config/20220707_Proxychains%E5%AE%89%E8%A3%85/</url>
+    <content><![CDATA[<p>Proxychains 是一款基于 Linux 系统的网络代理工具，在服务器内安装 proxychains，并配置 socks5 代理。</p>
+<span id="more"></span>
+
+
+<ul>
+<li><p>解压源码 <code>tar zxvf proxychains-ng-x.xx.tar.gz</code></p>
+</li>
+<li><p>进入解压后的目录，执行 <code>./configure</code></p>
+</li>
+<li><p>安装软件执行 <code>make</code>,<code>make intsall </code></p>
+</li>
+<li><p>修改代理服务器 (xxx 为你的代理服务器地址)</p>
+</li>
+</ul>
+<blockquote>
+<p> cd /usr/local/etc/proxychains.conf<br> 打开配置文件，添加以下内容：<br> 最后一行处修改 <b> socks5 xxxxxx </b></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置 VNC 教程</title>
+    <url>/2024/07/17/Config/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
+    <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
+<p>VNC（Virtual Network Computing），为一种使用 RFB 协议的屏幕画面分享及远程操作软件。此软件借由网络，可发送键盘与鼠标的动作及即时的屏幕画面。</p>
+<p>VNC 与操作系统无关，因此可跨平台使用，例如可用 Windows 连线到某 Linux 的电脑，反之亦同。甚至在没有安装客户端程序的电脑中，只要有支持 JAVA 的浏览器，也可使用。</p>
+<span id="more"></span>
+
+<ol>
+<li><h2 id="两台-windows电脑内下载并安装"><a href="#两台-windows电脑内下载并安装" class="headerlink" title="两台 windows电脑内下载并安装"></a><strong>两台</strong> windows 电脑内下载并安装</h2><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">TightVNC官网地址</span><br><span class="line">https://www.tightvnc.com/download.php</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-26-43-1718673923532.jpg" alt="" width="563" data-align="center">
+
+<hr>
+<ol start="2">
+<li><h2 id="TightVNC-服务端-被连接端-配置"><a href="#TightVNC-服务端-被连接端-配置" class="headerlink" title="TightVNC 服务端(被连接端) 配置"></a>TightVNC <strong>服务端</strong> (被连接端) 配置</h2><ul>
+<li><p>默认端口号 5900</p>
+</li>
+<li><p>注意自己设置连接密码</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-36-02-image.png" alt="" width="337" data-align="left">
+
+<p><strong>如果找不到配置界面，在任务栏右下角图标内右键 或点击 ‘开始菜单’-‘所有应用’-‘TightVNC’-‘Run TightVNC Service’</strong></p>
+<hr>
+</li>
+</ul>
+</li>
+<li><h2 id="TightVNC-客户端-连接端-配置"><a href="#TightVNC-客户端-连接端-配置" class="headerlink" title="TightVNC 客户端(连接端) 配置"></a>TightVNC <strong>客户端</strong> (连接端) 配置</h2><ul>
+<li>进入方式：开始菜单 - 所有应用 - TightVNC-TightVNC Viewer</li>
+</ul>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-48-42-image.png" alt="" width="341" data-align="left">
+
+<ul>
+<li><p> 输入服务器的 <strong>ip 地址</strong>和<strong>端口</strong> , 并连接</p>
+<img title="" src="file:///C:/Users/24529/AppData/Roaming/marktext/images/2024-06-18-09-57-49-image.png" alt="" width="412"></li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p> <a href="https://cloud.baidu.com/article/3002603">参考博客 - 1</a></p>
+</blockquote>
+<blockquote>
+<p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器免密配置教程 - 1</title>
+    <url>/2024/07/15/Config/20240701_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-1/</url>
+    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
+<p><img src="/../../img/image-20240710103927738.png" alt="show ip"></p>
+<span id="more"></span>
+
+<blockquote>
+<p>[!NOTE]</p>
+<p>该手册一共 2 个版本，此文档为第一版。</p>
+</blockquote>
+<h2 id="1-获取密钥"><a href="#1-获取密钥" class="headerlink" title="1. 获取密钥"></a>1. 获取密钥</h2>   <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">ssh-keygen -t rsa -f /root/.ssh/rsa</span><br></pre></td></tr></tbody></table></figure>
+
+<h2 id="2-验证"><a href="#2-验证" class="headerlink" title="2. 验证"></a>2. 验证</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cp</span> id_rsa.pub authorized_keys</span><br><span class="line"><span class="comment"># authorized_keys是用于 SSH 服务器验证远程用户身份</span></span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="3-配置StrictHostKeyChecking"><a href="#3-配置StrictHostKeyChecking" class="headerlink" title="3. 配置StrictHostKeyChecking"></a>3. 配置 <code>StrictHostKeyChecking</code></h2><ul>
+<li>创建 config 文件 <code>vim config</code></li>
+</ul>
+<figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">StrictHostKeyChecking no</span><br><span class="line"><span class="params">#</span> 设置 StrictHostKeyChecking no 意味着SSH客户端在连接到远程主机时不会检查该主机的公钥，也不会将新的主机密钥添加到已知主机列表中。这意味着所有远程主机的密钥将被自动接受，而不会进行任何验证。</span><br></pre></td></tr></tbody></table></figure>
+
+
+
+<h2 id="4-准备ip文件"><a href="#4-准备ip文件" class="headerlink" title="4. 准备ip文件"></a>4. 准备 ip 文件</h2><ul>
+<li><p>创建 ip.txt <code>vim ip.txt</code></p>
+</li>
+<li><p>将需要免密的机器 <code>ip</code> 写入</p>
+<p><img src="C:\Users\24529\AppData\Roaming\Typora\typora-user-images\image-20240710103927738.png" alt="image-20240710103927738"></p>
+</li>
+</ul>
+<h2 id="5-创建脚本"><a href="#5-创建脚本" class="headerlink" title="5. 创建脚本"></a>5. 创建脚本</h2><ul>
+<li>需要手动写登录密码 <code>password</code></li>
+<li>前提安装 <code>expect</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 IP 地址列表</span></span><br><span class="line">servers=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    servers+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 本地 .ssh 目录路径</span></span><br><span class="line">ssh_dir=<span class="string">"<span class="variable">$HOME</span>/.ssh"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 expect 进行 scp 并自动输入密码</span></span><br><span class="line"><span class="keyword">for</span> server <span class="keyword">in</span> <span class="string">"<span class="variable">${servers[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Copying SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    expect &lt;&lt; <span class="string">EOF</span></span><br><span class="line"><span class="string">spawn scp -r $ssh_dir root@$server:/root/</span></span><br><span class="line"><span class="string">expect {</span></span><br><span class="line"><span class="string">    "password:" {</span></span><br><span class="line"><span class="string">        send "your password\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    "yes/no" {</span></span><br><span class="line"><span class="string">        send "yes\r"</span></span><br><span class="line"><span class="string">        exp_continue</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">    eof {</span></span><br><span class="line"><span class="string">        exit</span></span><br><span class="line"><span class="string">    }</span></span><br><span class="line"><span class="string">}</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line">    <span class="keyword">if</span> [ $? -eq 0 ]; <span class="keyword">then</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Successfully copied SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="built_in">echo</span> <span class="string">"Failed to copy SSH keys to <span class="variable">$server</span>"</span></span><br><span class="line">    <span class="keyword">fi</span></span><br><span class="line"><span class="keyword">done</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"All servers have been updated with SSH keys."</span></span><br></pre></td></tr></tbody></table></figure>
+
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<p>补充安装 expect 包教程</p>
+<h3 id="在Ubuntu上安装Expect"><a href="#在Ubuntu上安装Expect" class="headerlink" title="在Ubuntu上安装Expect"></a>在 Ubuntu 上安装 Expect</h3><ol>
+<li><p><strong>更新包列表</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get update</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>安装 Expect</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> apt-get install expect</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>验证安装</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这将显示已安装的 <code>expect</code> 版本。</p>
+</li>
+</ol>
+<h3 id="在CentOS上安装Expect"><a href="#在CentOS上安装Expect" class="headerlink" title="在CentOS上安装Expect"></a>在 CentOS 上安装 Expect</h3><ol>
+<li><p><strong>更新包列表</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum update</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>安装 Expect</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">sudo</span> yum install expect</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p><strong>验证安装</strong>：</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">expect -v</span><br></pre></td></tr></tbody></table></figure>
+
+<p>这将显示已安装的 <code>expect</code> 版本。</p>
+<hr>
+<p>完成这些步骤后，你的系统上就会安装 Expect 工具。Expect 是一种用于自动化交互任务的工具，常用于自动化 SSH 登录、FTP 等需要用户交互的任务。</p>
+</li>
+</ol>
+</blockquote>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器配置永久修改 DNS</title>
+    <url>/2024/07/15/Config/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
+    <content><![CDATA[<p>服务器内配置 DNS</p>
+<span id="more"></span>
+
+<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>2.<br>    </p><figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">DNS=114.114.114.114 8.8.8.8 8.8.4.4</span><br><span class="line">FallbackDNs=8.8.8.8</span><br><span class="line">Domains=domain.com</span><br></pre></td></tr></tbody></table></figure><p></p>
+<ol start="3">
+<li><pre><code class="bash">sudo systemctl restart systemd-resolved
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
+</code></pre>
+</li>
+<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
+</code></pre>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>搭建基于 Hexo 架构的个人博客</title>
+    <url>/2024/07/18/Config/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
+<p><img src="/../../img/hexo-1.jpg" alt="hexo 首页"></p>
+<span id="more"></span>
+
+
+<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
+<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
+<ul>
+<li>升级 npm：<code>npm install -g npm</code></li>
+</ul>
+<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
+<ul>
+<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
+</ul>
+<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
+<li><p>检查 node.js 版本：</p>
+<p>  <code>node -v</code></p>
+</li>
+<li><p>检查 npm 版本：</p>
+<p>  <code>npm -v</code></p>
+</li>
+<li><p>检查 cnpm 版本：</p>
+<p>  <code>cnpm -v</code></p>
+</li>
+</ul>
+<div class="note warning"><p>这里是警告。</p></div>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>blog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows 之 CMD 常用命令</title>
+    <url>/2024/08/19/Config/20240819_Windows%E4%B9%8Bcmd%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>在 windows 操作系统内，使用终端进行的常用操作命令.</p>
+<span id="more"></span>
+
+<ul>
+<li><p>查看 <code>IP</code></p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">ipconfig</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>关闭防火墙</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">netsh advfirewall <span class="built_in">set</span> allprofiles state off</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+        <tag>Windows</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器免密配置教程 - 2</title>
+    <url>/2024/07/15/Config/20240709_%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%85%8D%E5%AF%86%E9%85%8D%E7%BD%AE%E6%95%99%E7%A8%8B-2/</url>
+    <content><![CDATA[<p>工作时解决服务器免密登录问题，记录一下解决过程。</p>
+<span id="more"></span>
+
+
+<blockquote>
+<p>[!NOTE]</p>
+<p>该手册一共 2 个版本，此文档为第<b>二</b>版。</p>
+</blockquote>
+<h2 id="1-准备ip文件"><a href="#1-准备ip文件" class="headerlink" title="1. 准备ip文件"></a>1. 准备 ip 文件</h2><ul>
+<li><p>创建 ip.txt <code>vim ip.txt</code></p>
+</li>
+<li><p>将需要免密的机器 <code>ip</code> 写入</p>
+</li>
+</ul>
+<h2 id="2-创建脚本-运行脚本"><a href="#2-创建脚本-运行脚本" class="headerlink" title="2. 创建脚本+运行脚本"></a>2. 创建脚本 + 运行脚本</h2><ul>
+<li><code>vim set_key.sh</code></li>
+</ul>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查是否已经生成了SSH密钥对</span></span><br><span class="line"><span class="keyword">if</span> [ ! -f ~/.ssh/id_rsa.pub ]; <span class="keyword">then</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Generating SSH key pair..."</span></span><br><span class="line">  ssh-keygen -t rsa -N <span class="string">""</span> -f ~/.ssh/id_rsa</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公钥复制到每台目标机器</span></span><br><span class="line"><span class="keyword">while</span> <span class="built_in">read</span> -r ip; <span class="keyword">do</span></span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"Configuring SSH key authentication for <span class="variable">$ip</span>..."</span></span><br><span class="line">  ssh-copy-id root@<span class="variable">$ip</span></span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"><span class="built_in">echo</span> </span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li><p><code>chmod +x set_key.sh</code></p>
+</li>
+<li><p><code>./set_key.sh</code></p>
+</li>
+</ul>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>Config</category>
       </categories>
       <tags>
         <tag>Ops</tag>
@@ -2516,46 +2516,6 @@ https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvi
       </tags>
   </entry>
   <entry>
-    <title>自研工具 - 基于 Nvidia 驱动日志 (Events.log) 统计网络震荡次数</title>
-    <url>/2024/05/24/Python/20240524_%E5%BC%80%E5%8F%91%E5%88%86%E6%9E%90Nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<p>统计 Link Down 的次数，并显示服务名称和计算机名称</p>
-<p><img src="/../../img/linkdown-1.png"></p>
-<span id="more"></span>
-
-<ul>
-<li><p>代码部分</p>
-  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">@File    :   count_dict-v3.py</span></span><br><span class="line"><span class="string">@Time    :   2024/05/13 09:19:02</span></span><br><span class="line"><span class="string">@Author  :   pan binghong </span></span><br><span class="line"><span class="string">@Email   :   19909442097@163.com</span></span><br><span class="line"><span class="string">@description   :   统计Link Down的次数，并显示服务名称和计算机名称</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> filedialog</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_csv_and_process</span>():</span><br><span class="line">    file_path = filedialog.askopenfilename(filetypes=[(<span class="string">'CSV文件'</span>, <span class="string">'*.csv'</span>)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> file_path:</span><br><span class="line">        df = pd.read_csv(file_path)</span><br><span class="line">        df_warning = df[(df[<span class="string">'Severity'</span>] == <span class="string">'Warning'</span>) &amp; (df[<span class="string">'Event Name'</span>] == <span class="string">'Link is Down'</span>)]</span><br><span class="line">        pattern1 = re.<span class="built_in">compile</span>(<span class="string">r'Source\s+([a-fA-F0-9]+)'</span>)</span><br><span class="line">        mac_list = []</span><br><span class="line">        <span class="keyword">for</span> source <span class="keyword">in</span> df_warning[<span class="string">'Source'</span>]:</span><br><span class="line">            match1 = pattern1.search(source)</span><br><span class="line">            <span class="keyword">if</span> match1:</span><br><span class="line">                mac_list.append(match1.group(<span class="number">1</span>))</span><br><span class="line">        time0 = df_warning[<span class="string">'Date/Time'</span>].iloc[-<span class="number">1</span>]</span><br><span class="line">        time1 = df_warning[<span class="string">'Date/Time'</span>].iloc[<span class="number">0</span>]</span><br><span class="line">        df_result = find_service_names_and_counts(mac_list, mac_dict, time_list=[time0, time1])</span><br><span class="line">        df_result_computer = find_computer_names_and_counts(df_warning[<span class="string">'Description'</span>], time_list=[time0, time1])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 清除之前的表格内容（如果有的话）</span></span><br><span class="line">        <span class="keyword">for</span> widget <span class="keyword">in</span> frame.winfo_children():</span><br><span class="line">            widget.destroy()</span><br><span class="line"></span><br><span class="line">        notebook = ttk.Notebook(frame)</span><br><span class="line">        notebook.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第一页：服务名称统计</span></span><br><span class="line">        service_frame = ttk.Frame(notebook)</span><br><span class="line">        notebook.add(service_frame, text=<span class="string">'Service Name'</span>)</span><br><span class="line">        show_dataframe_in_gui(df_result, service_frame)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第二页：计算机名称统计</span></span><br><span class="line">        computer_frame = ttk.Frame(notebook)</span><br><span class="line">        notebook.add(computer_frame, text=<span class="string">'Computer Name'</span>)</span><br><span class="line">        show_dataframe_in_gui(df_result_computer, computer_frame)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_computer_names_and_counts</span>(<span class="params">descriptions, time_list</span>):  </span><br><span class="line">    start_time, end_time = time_list  </span><br><span class="line">    <span class="comment"># 创建一个字典来记录每个计算机名称的linkdown次数  </span></span><br><span class="line">    computer_counts = {}  </span><br><span class="line">    sum_counts = <span class="number">0</span>  </span><br><span class="line">    pattern2 = re.<span class="built_in">compile</span>(<span class="string">r'\(Computer:([^)]+)\)'</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> desc <span class="keyword">in</span> descriptions:  </span><br><span class="line">        match2 = pattern2.search(desc)  </span><br><span class="line">        <span class="keyword">if</span> match2:  </span><br><span class="line">            computer_name = match2.group(<span class="number">1</span>)  </span><br><span class="line">            computer_counts[computer_name] = computer_counts.get(computer_name, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">            sum_counts += <span class="number">1</span>  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建不包含时间信息的DataFrame  </span></span><br><span class="line">    df_result_computer = pd.DataFrame.from_dict(computer_counts, orient=<span class="string">'index'</span>, columns=[<span class="string">'Count of Link is Down'</span>]).reset_index()  </span><br><span class="line">    df_result_computer.columns = [<span class="string">'Computer Name'</span>, <span class="string">'Count of Link is Down'</span>]  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个新行来保存时间信息  </span></span><br><span class="line">    time_info_row = pd.Series([<span class="string">'Start Time: '</span> + start_time, <span class="string">'End Time: '</span> + end_time], index=[<span class="string">'Computer Name'</span>, <span class="string">'Count of Link is Down'</span>])  </span><br><span class="line">    time_info_df = pd.DataFrame([time_info_row])  <span class="comment"># 将Series转换为DataFrame  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将时间信息DataFrame放在原始DataFrame的开始位置  </span></span><br><span class="line">    df_result_computer = pd.concat([time_info_df, df_result_computer]).reset_index(drop=<span class="literal">True</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在DataFrame的末尾添加一行总次数  </span></span><br><span class="line">    total_row = pd.DataFrame({<span class="string">'Computer Name'</span>: [<span class="string">'Total'</span>], <span class="string">'Count of Link is Down'</span>: [sum_counts]}, index=[<span class="built_in">len</span>(df_result_computer)])  </span><br><span class="line">    df_result_computer = pd.concat([df_result_computer.iloc[:-<span class="number">1</span>], total_row]).reset_index(drop=<span class="literal">True</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> df_result_computer </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_service_names_and_counts</span>(<span class="params">mac_list, mac_dict, time_list</span>):  </span><br><span class="line">    <span class="comment"># 假设time_list有两个元素: [开始时间, 结束时间]  </span></span><br><span class="line">    start_time, end_time = time_list  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个字典来记录每个服务名称的linkdown次数  </span></span><br><span class="line">    service_counts = {}  </span><br><span class="line">    sum_counts = <span class="number">0</span>  </span><br><span class="line">    <span class="comment"># 遍历mac_list中的每个MAC地址  </span></span><br><span class="line">    <span class="keyword">for</span> mac <span class="keyword">in</span> mac_list:  </span><br><span class="line">        <span class="comment"># 查找MAC地址在哪个服务名称的列表中  </span></span><br><span class="line">        <span class="keyword">for</span> service_name, macs <span class="keyword">in</span> mac_dict.items():  </span><br><span class="line">            <span class="keyword">if</span> mac <span class="keyword">in</span> macs:  </span><br><span class="line">                <span class="comment"># 如果找到，增加该服务名称的计数  </span></span><br><span class="line">                service_counts[service_name] = service_counts.get(service_name, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">                sum_counts += <span class="number">1</span>  </span><br><span class="line">                <span class="keyword">break</span>  <span class="comment"># 跳出内部循环，因为每个MAC地址只应对应一个服务名称  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建DataFrame  </span></span><br><span class="line">    df_result = pd.DataFrame.from_dict(service_counts, orient=<span class="string">'index'</span>, columns=[<span class="string">'Count of Link is Down'</span>]).reset_index()  </span><br><span class="line">    df_result.columns = [<span class="string">'Service Name'</span>, <span class="string">'Count of Link is Down'</span>]  </span><br><span class="line"></span><br><span class="line">    time_info_row = pd.Series([<span class="string">'Start Time: '</span> + start_time, <span class="string">'End Time: '</span> + end_time], index=[<span class="string">'Service Name'</span>, <span class="string">'Count of Link is Down'</span>])  </span><br><span class="line">    time_info_df = pd.DataFrame([time_info_row])  <span class="comment"># 将Series转换为DataFrame  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将时间信息DataFrame放在原始DataFrame的开始位置  </span></span><br><span class="line">    df_result = pd.concat([time_info_df, df_result]).reset_index(drop=<span class="literal">True</span>) </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在DataFrame的末尾添加一行总次数  </span></span><br><span class="line">    total_row = pd.DataFrame({<span class="string">'Service Name'</span>: [<span class="string">'Total'</span>], <span class="string">'Count of Link is Down'</span>: [sum_counts]}, index=[<span class="built_in">len</span>(df_result)-<span class="number">1</span>])  </span><br><span class="line">    df_result = pd.concat([df_result.iloc[:-<span class="number">1</span>], total_row]).reset_index(drop=<span class="literal">True</span>)  <span class="comment"># 重置索引，不包括最后一行（因为我们将在其后添加总次数）  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> df_result   </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_dataframe_in_gui</span>(<span class="params">df, frame_widget</span>):  </span><br><span class="line">    <span class="comment"># 清除之前的表格内容（如果有的话）  </span></span><br><span class="line">    <span class="keyword">for</span> widget <span class="keyword">in</span> frame_widget.winfo_children():  </span><br><span class="line">        widget.destroy()  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 注意这里：将df.columns转换为列表  </span></span><br><span class="line">    column_names = <span class="built_in">list</span>(df.columns)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个Treeview组件来显示数据  </span></span><br><span class="line">    tree = ttk.Treeview(frame_widget, columns=column_names, show=<span class="string">'headings'</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置列标题  </span></span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> column_names:  </span><br><span class="line">        tree.heading(col, text=col)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 插入数据到Treeview  </span></span><br><span class="line">    <span class="keyword">for</span> index, row <span class="keyword">in</span> df.iterrows():  </span><br><span class="line">        tree.insert(<span class="string">''</span>, <span class="string">'end'</span>, values=row.tolist())  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将Treeview添加到frame中（如果它之前没有被添加到frame中，这一步是必要的）  </span></span><br><span class="line">    tree.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    root = tk.Tk()</span><br><span class="line">    root.geometry(<span class="string">'400x500'</span>)</span><br><span class="line">    root.title(<span class="string">'Link Down Count'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个Frame来放置Treeview  </span></span><br><span class="line">    <span class="keyword">global</span> frame</span><br><span class="line">    frame = tk.Frame(root)  </span><br><span class="line">    frame.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>) </span><br><span class="line"></span><br><span class="line">    load_button = tk.Button(root, text=<span class="string">'选择CSV文件'</span>, command=load_csv_and_process)</span><br><span class="line">    load_button.pack()</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">'mac_dict.json'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">global</span> mac_dict</span><br><span class="line">            mac_dict = json.load(f)</span><br><span class="line"></span><br><span class="line">        root.mainloop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>导出为.exe 可执行文件命令</p>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">pyinstaller --onefile --icon=./icon/dog.ico --noconsole cld.py</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>提前准备 json 文件，格式为:</p>
- <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"H800-1"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"H800-2"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>键为<code>机器的名称</code></p>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看机器名称</span></span><br><span class="line"><span class="built_in">uname</span> -n</span><br></pre></td></tr></tbody></table></figure>
-
-<p>值为 <code>MAC地址</code></p>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看特定接口的MAC地址：</span></span><br><span class="line">ip <span class="built_in">link</span> show eth0</span><br></pre></td></tr></tbody></table></figure>
-
-<p>其中 <code>eth0</code> 可以替换为你要查询的网络接口名称。</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="小工具下载地址"><a href="#小工具下载地址" class="headerlink" title="小工具下载地址"></a>小工具下载地址</h4><p><a href="https://sharrr.com/s#f5524aae-7492-47cc-be11-5d98b85afbfb/3bMQOBu6ZgwilavK69J%2FmA%3D%3D/5tLg2uk_z1omqApsxrV9BCcPd9XEUGs0mRf3jQk4xtQ">统计 Link Down 小工具</a></p>
-<p>过期联系我哦～</p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-        <tag>python</tag>
-        <tag>NVIDIA</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>基于 Openai API 进行接口移植</title>
     <url>/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/</url>
     <content><![CDATA[<p>记录一下 基于 Openai API 进行接口移植的过程，从引用 api 到测试到最后转接口使用</p>
@@ -2656,6 +2616,46 @@ https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvi
       </categories>
       <tags>
         <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>自研工具 - 基于 Nvidia 驱动日志 (Events.log) 统计网络震荡次数</title>
+    <url>/2024/05/24/Python/20240524_%E5%BC%80%E5%8F%91%E5%88%86%E6%9E%90Nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<p>统计 Link Down 的次数，并显示服务名称和计算机名称</p>
+<p><img src="/../../img/linkdown-1.png"></p>
+<span id="more"></span>
+
+<ul>
+<li><p>代码部分</p>
+  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">@File    :   count_dict-v3.py</span></span><br><span class="line"><span class="string">@Time    :   2024/05/13 09:19:02</span></span><br><span class="line"><span class="string">@Author  :   pan binghong </span></span><br><span class="line"><span class="string">@Email   :   19909442097@163.com</span></span><br><span class="line"><span class="string">@description   :   统计Link Down的次数，并显示服务名称和计算机名称</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> filedialog</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_csv_and_process</span>():</span><br><span class="line">    file_path = filedialog.askopenfilename(filetypes=[(<span class="string">'CSV文件'</span>, <span class="string">'*.csv'</span>)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> file_path:</span><br><span class="line">        df = pd.read_csv(file_path)</span><br><span class="line">        df_warning = df[(df[<span class="string">'Severity'</span>] == <span class="string">'Warning'</span>) &amp; (df[<span class="string">'Event Name'</span>] == <span class="string">'Link is Down'</span>)]</span><br><span class="line">        pattern1 = re.<span class="built_in">compile</span>(<span class="string">r'Source\s+([a-fA-F0-9]+)'</span>)</span><br><span class="line">        mac_list = []</span><br><span class="line">        <span class="keyword">for</span> source <span class="keyword">in</span> df_warning[<span class="string">'Source'</span>]:</span><br><span class="line">            match1 = pattern1.search(source)</span><br><span class="line">            <span class="keyword">if</span> match1:</span><br><span class="line">                mac_list.append(match1.group(<span class="number">1</span>))</span><br><span class="line">        time0 = df_warning[<span class="string">'Date/Time'</span>].iloc[-<span class="number">1</span>]</span><br><span class="line">        time1 = df_warning[<span class="string">'Date/Time'</span>].iloc[<span class="number">0</span>]</span><br><span class="line">        df_result = find_service_names_and_counts(mac_list, mac_dict, time_list=[time0, time1])</span><br><span class="line">        df_result_computer = find_computer_names_and_counts(df_warning[<span class="string">'Description'</span>], time_list=[time0, time1])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 清除之前的表格内容（如果有的话）</span></span><br><span class="line">        <span class="keyword">for</span> widget <span class="keyword">in</span> frame.winfo_children():</span><br><span class="line">            widget.destroy()</span><br><span class="line"></span><br><span class="line">        notebook = ttk.Notebook(frame)</span><br><span class="line">        notebook.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第一页：服务名称统计</span></span><br><span class="line">        service_frame = ttk.Frame(notebook)</span><br><span class="line">        notebook.add(service_frame, text=<span class="string">'Service Name'</span>)</span><br><span class="line">        show_dataframe_in_gui(df_result, service_frame)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第二页：计算机名称统计</span></span><br><span class="line">        computer_frame = ttk.Frame(notebook)</span><br><span class="line">        notebook.add(computer_frame, text=<span class="string">'Computer Name'</span>)</span><br><span class="line">        show_dataframe_in_gui(df_result_computer, computer_frame)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_computer_names_and_counts</span>(<span class="params">descriptions, time_list</span>):  </span><br><span class="line">    start_time, end_time = time_list  </span><br><span class="line">    <span class="comment"># 创建一个字典来记录每个计算机名称的linkdown次数  </span></span><br><span class="line">    computer_counts = {}  </span><br><span class="line">    sum_counts = <span class="number">0</span>  </span><br><span class="line">    pattern2 = re.<span class="built_in">compile</span>(<span class="string">r'\(Computer:([^)]+)\)'</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> desc <span class="keyword">in</span> descriptions:  </span><br><span class="line">        match2 = pattern2.search(desc)  </span><br><span class="line">        <span class="keyword">if</span> match2:  </span><br><span class="line">            computer_name = match2.group(<span class="number">1</span>)  </span><br><span class="line">            computer_counts[computer_name] = computer_counts.get(computer_name, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">            sum_counts += <span class="number">1</span>  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建不包含时间信息的DataFrame  </span></span><br><span class="line">    df_result_computer = pd.DataFrame.from_dict(computer_counts, orient=<span class="string">'index'</span>, columns=[<span class="string">'Count of Link is Down'</span>]).reset_index()  </span><br><span class="line">    df_result_computer.columns = [<span class="string">'Computer Name'</span>, <span class="string">'Count of Link is Down'</span>]  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个新行来保存时间信息  </span></span><br><span class="line">    time_info_row = pd.Series([<span class="string">'Start Time: '</span> + start_time, <span class="string">'End Time: '</span> + end_time], index=[<span class="string">'Computer Name'</span>, <span class="string">'Count of Link is Down'</span>])  </span><br><span class="line">    time_info_df = pd.DataFrame([time_info_row])  <span class="comment"># 将Series转换为DataFrame  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将时间信息DataFrame放在原始DataFrame的开始位置  </span></span><br><span class="line">    df_result_computer = pd.concat([time_info_df, df_result_computer]).reset_index(drop=<span class="literal">True</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在DataFrame的末尾添加一行总次数  </span></span><br><span class="line">    total_row = pd.DataFrame({<span class="string">'Computer Name'</span>: [<span class="string">'Total'</span>], <span class="string">'Count of Link is Down'</span>: [sum_counts]}, index=[<span class="built_in">len</span>(df_result_computer)])  </span><br><span class="line">    df_result_computer = pd.concat([df_result_computer.iloc[:-<span class="number">1</span>], total_row]).reset_index(drop=<span class="literal">True</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> df_result_computer </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_service_names_and_counts</span>(<span class="params">mac_list, mac_dict, time_list</span>):  </span><br><span class="line">    <span class="comment"># 假设time_list有两个元素: [开始时间, 结束时间]  </span></span><br><span class="line">    start_time, end_time = time_list  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个字典来记录每个服务名称的linkdown次数  </span></span><br><span class="line">    service_counts = {}  </span><br><span class="line">    sum_counts = <span class="number">0</span>  </span><br><span class="line">    <span class="comment"># 遍历mac_list中的每个MAC地址  </span></span><br><span class="line">    <span class="keyword">for</span> mac <span class="keyword">in</span> mac_list:  </span><br><span class="line">        <span class="comment"># 查找MAC地址在哪个服务名称的列表中  </span></span><br><span class="line">        <span class="keyword">for</span> service_name, macs <span class="keyword">in</span> mac_dict.items():  </span><br><span class="line">            <span class="keyword">if</span> mac <span class="keyword">in</span> macs:  </span><br><span class="line">                <span class="comment"># 如果找到，增加该服务名称的计数  </span></span><br><span class="line">                service_counts[service_name] = service_counts.get(service_name, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">                sum_counts += <span class="number">1</span>  </span><br><span class="line">                <span class="keyword">break</span>  <span class="comment"># 跳出内部循环，因为每个MAC地址只应对应一个服务名称  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建DataFrame  </span></span><br><span class="line">    df_result = pd.DataFrame.from_dict(service_counts, orient=<span class="string">'index'</span>, columns=[<span class="string">'Count of Link is Down'</span>]).reset_index()  </span><br><span class="line">    df_result.columns = [<span class="string">'Service Name'</span>, <span class="string">'Count of Link is Down'</span>]  </span><br><span class="line"></span><br><span class="line">    time_info_row = pd.Series([<span class="string">'Start Time: '</span> + start_time, <span class="string">'End Time: '</span> + end_time], index=[<span class="string">'Service Name'</span>, <span class="string">'Count of Link is Down'</span>])  </span><br><span class="line">    time_info_df = pd.DataFrame([time_info_row])  <span class="comment"># 将Series转换为DataFrame  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将时间信息DataFrame放在原始DataFrame的开始位置  </span></span><br><span class="line">    df_result = pd.concat([time_info_df, df_result]).reset_index(drop=<span class="literal">True</span>) </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在DataFrame的末尾添加一行总次数  </span></span><br><span class="line">    total_row = pd.DataFrame({<span class="string">'Service Name'</span>: [<span class="string">'Total'</span>], <span class="string">'Count of Link is Down'</span>: [sum_counts]}, index=[<span class="built_in">len</span>(df_result)-<span class="number">1</span>])  </span><br><span class="line">    df_result = pd.concat([df_result.iloc[:-<span class="number">1</span>], total_row]).reset_index(drop=<span class="literal">True</span>)  <span class="comment"># 重置索引，不包括最后一行（因为我们将在其后添加总次数）  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> df_result   </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_dataframe_in_gui</span>(<span class="params">df, frame_widget</span>):  </span><br><span class="line">    <span class="comment"># 清除之前的表格内容（如果有的话）  </span></span><br><span class="line">    <span class="keyword">for</span> widget <span class="keyword">in</span> frame_widget.winfo_children():  </span><br><span class="line">        widget.destroy()  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 注意这里：将df.columns转换为列表  </span></span><br><span class="line">    column_names = <span class="built_in">list</span>(df.columns)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个Treeview组件来显示数据  </span></span><br><span class="line">    tree = ttk.Treeview(frame_widget, columns=column_names, show=<span class="string">'headings'</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置列标题  </span></span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> column_names:  </span><br><span class="line">        tree.heading(col, text=col)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 插入数据到Treeview  </span></span><br><span class="line">    <span class="keyword">for</span> index, row <span class="keyword">in</span> df.iterrows():  </span><br><span class="line">        tree.insert(<span class="string">''</span>, <span class="string">'end'</span>, values=row.tolist())  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将Treeview添加到frame中（如果它之前没有被添加到frame中，这一步是必要的）  </span></span><br><span class="line">    tree.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    root = tk.Tk()</span><br><span class="line">    root.geometry(<span class="string">'400x500'</span>)</span><br><span class="line">    root.title(<span class="string">'Link Down Count'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个Frame来放置Treeview  </span></span><br><span class="line">    <span class="keyword">global</span> frame</span><br><span class="line">    frame = tk.Frame(root)  </span><br><span class="line">    frame.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>) </span><br><span class="line"></span><br><span class="line">    load_button = tk.Button(root, text=<span class="string">'选择CSV文件'</span>, command=load_csv_and_process)</span><br><span class="line">    load_button.pack()</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">'mac_dict.json'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">global</span> mac_dict</span><br><span class="line">            mac_dict = json.load(f)</span><br><span class="line"></span><br><span class="line">        root.mainloop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>导出为.exe 可执行文件命令</p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">pyinstaller --onefile --icon=./icon/dog.ico --noconsole cld.py</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>提前准备 json 文件，格式为:</p>
+ <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"H800-1"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"H800-2"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>键为<code>机器的名称</code></p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看机器名称</span></span><br><span class="line"><span class="built_in">uname</span> -n</span><br></pre></td></tr></tbody></table></figure>
+
+<p>值为 <code>MAC地址</code></p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看特定接口的MAC地址：</span></span><br><span class="line">ip <span class="built_in">link</span> show eth0</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中 <code>eth0</code> 可以替换为你要查询的网络接口名称。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="小工具下载地址"><a href="#小工具下载地址" class="headerlink" title="小工具下载地址"></a>小工具下载地址</h4><p><a href="https://sharrr.com/s#f5524aae-7492-47cc-be11-5d98b85afbfb/3bMQOBu6ZgwilavK69J%2FmA%3D%3D/5tLg2uk_z1omqApsxrV9BCcPd9XEUGs0mRf3jQk4xtQ">统计 Link Down 小工具</a></p>
+<p>过期联系我哦～</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+        <tag>python</tag>
+        <tag>NVIDIA</tag>
       </tags>
   </entry>
   <entry>
