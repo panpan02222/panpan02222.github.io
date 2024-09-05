@@ -653,6 +653,8 @@
 <h4 id="5-3-Freeze微调"><a href="#5-3-Freeze微调" class="headerlink" title="5.3 Freeze微调"></a>5.3 Freeze 微调</h4><p>Freeze 方法，即参数冻结，对原始模型部分参数进行冻结操作，仅训练部分参数，以达到在单卡或不进行 TP 或 PP 操作，就可以对大模型进行训练。在语言模型模型微调中，Freeze 微调方法仅微调 Transformer 后几层的全连接层参数，而冻结其它所有参数。</p>
 <h4 id="5-4-GaLore微调"><a href="#5-4-GaLore微调" class="headerlink" title="5.4 GaLore微调"></a>5.4 GaLore 微调</h4><p>GaLore 是一种允许全参数学习的训练策略，但比常见的低秩自适应方法（例如 LoRA）更节省内存。GaLore 关键思想是利用权重矩阵 W 的梯度缓慢变化的低秩结构，而不是试图将权重矩阵直接近似为低秩形式。使得在消费级 GPU 上训练大型语言模型成为可能。这一策略为未来的大模型训练提供了重要的技术支持，具有广泛的应用前景。</p>
 <p><img src="/../img/LLM-tuning-18.png" alt="198"></p>
+<h3 id="6-代理-Agent"><a href="#6-代理-Agent" class="headerlink" title="6. 代理(Agent)"></a>6. 代理 (Agent)</h3><p>增加辅助代理是指在主要模型之外引入其他小模型或组件，这些辅助代理可以帮助主模型更好地完成任务。辅助代理可能负责不同的子任务，如噪声过滤、特征增强、错误检测等，它们的工作成果可以作为额外的信息提供给主模型，从而帮助主模型做出更准确的决策。这种方法可以提高系统的鲁棒性和灵活性，使其在复杂环境中表现出色。</p>
+<p><img src="/../img/LLM-tuning-26.png" alt="image-20240905142400736"></p>
 <hr>
 <h2 id="模型结构"><a href="#模型结构" class="headerlink" title="模型结构"></a>模型结构</h2><h3 id="1-模型深度与宽度的平衡"><a href="#1-模型深度与宽度的平衡" class="headerlink" title="1. 模型深度与宽度的平衡"></a>1. 模型深度与宽度的平衡</h3><p>在语言模型中，增加模型的深度可以使其捕获更复杂的语言结构，而增加宽度则可以提供更多的表达能力。然而，深度和宽度的增加都会带来更高的计算成本和潜在的过拟合风险。可以通过实验来确定最优的层数和每层的隐藏单元数，找到一个既能提高模型性能又不会过度增加训练时间的平衡点。<img src="/../img/LLM-tuning-19.png" alt="image-20240905134548220"></p>
 <h3 id="2-残差连接"><a href="#2-残差连接" class="headerlink" title="2. 残差连接"></a>2. 残差连接</h3><p>在语言模型中引入残差连接可以帮助模型更好地学习长期依赖关系，并减轻梯度消失的问题。通过让信息流绕过一层或多层，模型可以更容易地学习到输入与输出之间的映射关系。</p>
@@ -671,6 +673,9 @@
 <p><img src="/LLM-tuning-23.png" alt="image-20240905135601961"></p>
 <hr>
 ]]></content>
+      <categories>
+        <category>Knowledge</category>
+      </categories>
       <tags>
         <tag>llm</tag>
         <tag>train</tag>
