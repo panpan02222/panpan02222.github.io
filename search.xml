@@ -123,60 +123,6 @@
       </tags>
   </entry>
   <entry>
-    <title>利用 NPU 运行 ChatGLM3 全流程</title>
-    <url>/2024/04/26/AI/20240426_%E5%88%A9%E7%94%A8NPU%E8%BF%90%E8%A1%8CChatGLM3%E5%85%A8%E6%B5%81%E7%A8%8B/</url>
-    <content><![CDATA[<p>利用 NPU 运行 ChatGLM3 全流程</p>
-<span id="more"></span>
-
-
-<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><ol>
-<li><p>新建 Conda 虚拟环境  <code>conda create -n env_name python==3.10</code></p>
-</li>
-<li><p>下载 ChatGLM3 源代码 <code>git clone https://github.com/THUDM/ChatGLM3.git</code></p>
-</li>
-<li><p>下载模型权重 </p>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">git lfs install</span><br><span class="line">git clone https://www.modelscope.cn/ZhipuAI/chatglm3-6b.git</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>安装基础环境，进入源码仓库 <code>cd ChatGLM3</code> , pip 安装 <code>pip install -r requirements.txt</code><br><strong>特别说明 : torch 版本可在 requirements.txt 中手动修改</strong></p>
-</li>
-<li><p>安装 npu 基础环境，下载对应 torch 的 <strong>torch-npu</strong> 依赖包，本地安装 <code>pip install xxx.whl</code><br><a href="https://gitee.com/ascend/pytorch/releases">torch-npu 官方下载地址</a></p>
-</li>
-<li><p>运行以下代码，验证环境是否安装成功</p>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu</span><br><span class="line"></span><br><span class="line">x = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">y = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">z = x.mm(y)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(z)</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<hr>
-<h4 id="推理"><a href="#推理" class="headerlink" title="推理"></a>推理</h4><ol>
-<li>修改代码 <code>ChatGLM3-main/basic_demo/cli_demo.py</code><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu <span class="comment"># 新增一行</span></span><br></pre></td></tr></tbody></table></figure>
-<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># transoformer架构需要加 `.to('npu') `</span></span><br><span class="line">model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=<span class="literal">True</span>).to(<span class="string">'npu'</span>).<span class="built_in">eval</span>()</span><br><span class="line"><span class="comment"># model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()</span></span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行代码 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">python basic_demo/cli_demo.py</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><hr>
-<h5 id="安装依赖deepspeed"><a href="#安装依赖deepspeed" class="headerlink" title="安装依赖deepspeed"></a>安装依赖 <strong>deepspeed</strong></h5><ol>
-<li><code>pip install deepspeed==0.9.2</code></li>
-<li>下载 DeepSpeed,  执行本地安装 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd DeepSpeed-v0.9.2</span><br><span class="line">pip3 install -e ./</span><br></pre></td></tr></tbody></table></figure>
- <a href="https://gitee.com/ascend/DeepSpeed/">DeepSpeed 官方仓库</a></li>
-</ol>
-<hr>
-<ol start="0">
-<li>注释微调依赖文件 <code>vim requirements.txt</code>  ,  安装微调相关依赖 <code>pip install -r requirements.txt</code><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">jieba&gt;=0.42.1</span><br><span class="line">ruamel_yaml&gt;=0.18.6</span><br><span class="line">rouge_chinese&gt;=1.0.3</span><br><span class="line">jupyter&gt;=1.0.0</span><br><span class="line">datasets&gt;=2.18.0</span><br><span class="line">peft&gt;=0.10.0</span><br><span class="line"># deepspeed==0.13.1 #注释</span><br><span class="line"># mpi4py&gt;=3.1.5 #注释</span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行微调脚本，按需修改路径 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> finetune_demo</span><br><span class="line"></span><br><span class="line">OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_hf.py  /home/jovyan/chatglm3/AdvertiseGen_fix  THUDM/chatglm3-6b  configs/sft.yaml configs/ds_zero_3.json</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<blockquote>
-<p>参考链接<br><a href="https://zhipu-ai.feishu.cn/wiki/HIj5wVxGqiUg3rkbQ1OcVEe5n9g">chatglm3 官方说明</a><br><a href="https://gitee.com/ascend/ModelZoo-PyTorch/tree/master/PyTorch/built-in/foundation/ChatGLM-6B">ascend 运行 chatglm1 官方教程</a><br><a href="https://www.hiascend.com/software/modelzoo/models/detail/5dfa1b69e0db4b8f889c5ee20aa23dcb">ascend 运行 chatglm2 官方教程</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>LLM</tag>
-        <tag>nccl</tag>
-        <tag>npu</tag>
-        <tag>chatglm3</tag>
-        <tag>deepspeed</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>DB-GPT 源代码部署</title>
     <url>/2024/07/23/AI/20240724_DB-GPT%E6%BA%90%E4%BB%A3%E7%A0%81%E9%83%A8%E7%BD%B2/</url>
     <content><![CDATA[<p>源代码部署 DB-GPT 操作流程，含测试，部署，注意事项等。</p>
@@ -279,6 +225,60 @@ python dbgpt/app/dbgpt_server.py
       </categories>
       <tags>
         <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>利用 NPU 运行 ChatGLM3 全流程</title>
+    <url>/2024/04/26/AI/20240426_%E5%88%A9%E7%94%A8NPU%E8%BF%90%E8%A1%8CChatGLM3%E5%85%A8%E6%B5%81%E7%A8%8B/</url>
+    <content><![CDATA[<p>利用 NPU 运行 ChatGLM3 全流程</p>
+<span id="more"></span>
+
+
+<h4 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h4><ol>
+<li><p>新建 Conda 虚拟环境  <code>conda create -n env_name python==3.10</code></p>
+</li>
+<li><p>下载 ChatGLM3 源代码 <code>git clone https://github.com/THUDM/ChatGLM3.git</code></p>
+</li>
+<li><p>下载模型权重 </p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">git lfs install</span><br><span class="line">git clone https://www.modelscope.cn/ZhipuAI/chatglm3-6b.git</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装基础环境，进入源码仓库 <code>cd ChatGLM3</code> , pip 安装 <code>pip install -r requirements.txt</code><br><strong>特别说明 : torch 版本可在 requirements.txt 中手动修改</strong></p>
+</li>
+<li><p>安装 npu 基础环境，下载对应 torch 的 <strong>torch-npu</strong> 依赖包，本地安装 <code>pip install xxx.whl</code><br><a href="https://gitee.com/ascend/pytorch/releases">torch-npu 官方下载地址</a></p>
+</li>
+<li><p>运行以下代码，验证环境是否安装成功</p>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu</span><br><span class="line"></span><br><span class="line">x = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">y = torch.randn(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">z = x.mm(y)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(z)</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<hr>
+<h4 id="推理"><a href="#推理" class="headerlink" title="推理"></a>推理</h4><ol>
+<li>修改代码 <code>ChatGLM3-main/basic_demo/cli_demo.py</code><figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch_npu <span class="comment"># 新增一行</span></span><br></pre></td></tr></tbody></table></figure>
+<figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># transoformer架构需要加 `.to('npu') `</span></span><br><span class="line">model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=<span class="literal">True</span>).to(<span class="string">'npu'</span>).<span class="built_in">eval</span>()</span><br><span class="line"><span class="comment"># model = AutoModel.from_pretrained(MODEL_PATH, trust_remote_code=True, device_map="auto").eval()</span></span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行代码 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">python basic_demo/cli_demo.py</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h4 id="训练"><a href="#训练" class="headerlink" title="训练"></a>训练</h4><hr>
+<h5 id="安装依赖deepspeed"><a href="#安装依赖deepspeed" class="headerlink" title="安装依赖deepspeed"></a>安装依赖 <strong>deepspeed</strong></h5><ol>
+<li><code>pip install deepspeed==0.9.2</code></li>
+<li>下载 DeepSpeed,  执行本地安装 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cd DeepSpeed-v0.9.2</span><br><span class="line">pip3 install -e ./</span><br></pre></td></tr></tbody></table></figure>
+ <a href="https://gitee.com/ascend/DeepSpeed/">DeepSpeed 官方仓库</a></li>
+</ol>
+<hr>
+<ol start="0">
+<li>注释微调依赖文件 <code>vim requirements.txt</code>  ,  安装微调相关依赖 <code>pip install -r requirements.txt</code><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">jieba&gt;=0.42.1</span><br><span class="line">ruamel_yaml&gt;=0.18.6</span><br><span class="line">rouge_chinese&gt;=1.0.3</span><br><span class="line">jupyter&gt;=1.0.0</span><br><span class="line">datasets&gt;=2.18.0</span><br><span class="line">peft&gt;=0.10.0</span><br><span class="line"># deepspeed==0.13.1 #注释</span><br><span class="line"># mpi4py&gt;=3.1.5 #注释</span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行微调脚本，按需修改路径 <figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> finetune_demo</span><br><span class="line"></span><br><span class="line">OMP_NUM_THREADS=1 torchrun --standalone --nnodes=1 --nproc_per_node=8  finetune_hf.py  /home/jovyan/chatglm3/AdvertiseGen_fix  THUDM/chatglm3-6b  configs/sft.yaml configs/ds_zero_3.json</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<blockquote>
+<p>参考链接<br><a href="https://zhipu-ai.feishu.cn/wiki/HIj5wVxGqiUg3rkbQ1OcVEe5n9g">chatglm3 官方说明</a><br><a href="https://gitee.com/ascend/ModelZoo-PyTorch/tree/master/PyTorch/built-in/foundation/ChatGLM-6B">ascend 运行 chatglm1 官方教程</a><br><a href="https://www.hiascend.com/software/modelzoo/models/detail/5dfa1b69e0db4b8f889c5ee20aa23dcb">ascend 运行 chatglm2 官方教程</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>LLM</tag>
+        <tag>nccl</tag>
+        <tag>npu</tag>
+        <tag>chatglm3</tag>
+        <tag>deepspeed</tag>
       </tags>
   </entry>
   <entry>
@@ -599,6 +599,31 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
+    <title>Wps 离线插件使用方法</title>
+    <url>/2024/08/06/AI/20240806_Wps%E7%A6%BB%E7%BA%BF%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
+    <content><![CDATA[<p>本人自研的基于 WPS 加载项开发的智能助手.</p>
+<span id="more"></span>
+
+<ul>
+<li><p>双击打开 <code>publish.html</code> 文件</p>
+<p><img src="/../../img/wps.png"></p>
+</li>
+<li><p>双击运行 <code>set_wps.bat</code> 文件</p>
+<p><img src="/../../img/wps-2.png"></p>
+</li>
+<li><p>打开 WPS - 文字，查看</p>
+<p><img src="/../../img/wps-3.png"></p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>AI</category>
+      </categories>
+      <tags>
+        <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>基于 Swift 框架 Lora 微调多模态 MiniCPM-v2.6</title>
     <url>/2024/08/23/AI/20240823_%E5%9F%BA%E4%BA%8ESwift%E5%BE%AE%E8%B0%83MiniCPM-v2.6/</url>
     <content><![CDATA[<p>记录本人使用<strong>自定义数据</strong> , 从处理文本 / 图片，到构建 <strong>Train.jsonl</strong>, 最终使用 Swift<strong>Lora 微调</strong> MiniCPM-v-2.6 的全部过程.</p>
@@ -755,31 +780,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>Wps 离线插件使用方法</title>
-    <url>/2024/08/06/AI/20240806_Wps%E7%A6%BB%E7%BA%BF%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95/</url>
-    <content><![CDATA[<p>本人自研的基于 WPS 加载项开发的智能助手.</p>
-<span id="more"></span>
-
-<ul>
-<li><p>双击打开 <code>publish.html</code> 文件</p>
-<p><img src="/../../img/wps.png"></p>
-</li>
-<li><p>双击运行 <code>set_wps.bat</code> 文件</p>
-<p><img src="/../../img/wps-2.png"></p>
-</li>
-<li><p>打开 WPS - 文字，查看</p>
-<p><img src="/../../img/wps-3.png"></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>AI</category>
-      </categories>
-      <tags>
-        <tag>LLM</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>局域网远程桌面</title>
     <url>/2021/01/14/Config/20210114_%E5%B1%80%E5%9F%9F%E7%BD%91%E9%93%BE%E6%8E%A5/</url>
     <content><![CDATA[<p>内网远程桌面连接方法</p>
@@ -850,32 +850,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>配置 Anaconda3 的 conda 源</title>
-    <url>/2024/04/25/Config/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
-    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
-
-<h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
-<h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="修改hosts文件-etc-hosts"><a href="#修改hosts文件-etc-hosts" class="headerlink" title="修改hosts文件 /etc/hosts"></a>修改 hosts 文件 /etc/hosts</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-<h4 id="修改为"><a href="#修改为" class="headerlink" title="修改为:"></a>修改为:</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line">101.6.15.130  mirrors.tuna.tsinghua.edu.cn</span><br></pre></td></tr></tbody></table></figure>
-
-<h3 id="配置conda源为清华源"><a href="#配置conda源为清华源" class="headerlink" title="配置conda源为清华源"></a>配置 conda 源为清华源</h3><ol>
-<li>查看 conda 配置文件的位置：<code>whereis conda</code></li>
-<li>编辑配置文件：<code>vim /root/.condarc</code></li>
-<li>将配置文件中的内容替换为：<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/</span><br></pre></td></tr></tbody></table></figure></li>
-<li>运行 <code>conda clean -i </code>清除索引缓存</li>
-<li>创建新环境 <code>conda create -n myenv python==3.10</code> 验证 conda 源是否配置成功</li>
-</ol>
-</b>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>anaconda</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>配置 VNC 教程</title>
     <url>/2024/07/17/Config/20240618_%E9%85%8D%E7%BD%AEVNC%E6%95%99%E7%A8%8B/</url>
     <content><![CDATA[<p>使用两台 windows 电脑进行远程控制，配置 VNC 的详细教程.</p>
@@ -918,6 +892,57 @@ python dbgpt/app/dbgpt_server.py
 <blockquote>
 <p><a href="https://www.xuejiu123.com/253.html">参考博客 - 2</a></p>
 </blockquote>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>配置 Anaconda3 的 conda 源</title>
+    <url>/2024/04/25/Config/20240425_%E9%85%8D%E7%BD%AEAnaconda3%E7%9A%84conda%E6%BA%90/</url>
+    <content><![CDATA[<h3 id="配置Anaconda3"><a href="#配置Anaconda3" class="headerlink" title="配置Anaconda3"></a><b>配置 Anaconda3<br></b></h3><span id="more"></span><b>
+
+<h3 id="修改DNS配置文件-etc-resolv-conf"><a href="#修改DNS配置文件-etc-resolv-conf" class="headerlink" title="修改DNS配置文件 /etc/resolv.conf"></a>修改 DNS 配置文件 /etc/resolv.conf</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/resolv.conf </span><br><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line">nameserver 100.123.37.248</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为："><a href="#修改为：" class="headerlink" title="修改为："></a>修改为：</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">search 608192-8443020096138588160.svc.cluster.local svc.cluster.local cluster.local</span><br><span class="line"># nameserver 100.123.37.248 # 注释掉原有内容</span><br><span class="line">nameserver 114.114.114.114</span><br><span class="line">options ndots:5</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="修改hosts文件-etc-hosts"><a href="#修改hosts文件-etc-hosts" class="headerlink" title="修改hosts文件 /etc/hosts"></a>修改 hosts 文件 /etc/hosts</h3><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+<h4 id="修改为"><a href="#修改为" class="headerlink" title="修改为:"></a>修改为:</h4><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">cat /etc/hosts</span><br><span class="line"># Kubernetes-managed hosts file.</span><br><span class="line">127.0.0.1       localhost</span><br><span class="line">::1     localhost ip6-localhost ip6-loopback</span><br><span class="line">fe00::0 ip6-localnet</span><br><span class="line">fe00::0 ip6-mcastprefix</span><br><span class="line">fe00::1 ip6-allnodes</span><br><span class="line">fe00::2 ip6-allrouters</span><br><span class="line">100.124.49.167  nb-510725983817446230-0</span><br><span class="line"></span><br><span class="line"># Entries added by HostAliases.</span><br><span class="line">100.123.232.241 kubernetes      kubernetes.default      kubernetes.default.svc</span><br><span class="line">101.6.15.130  mirrors.tuna.tsinghua.edu.cn</span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="配置conda源为清华源"><a href="#配置conda源为清华源" class="headerlink" title="配置conda源为清华源"></a>配置 conda 源为清华源</h3><ol>
+<li>查看 conda 配置文件的位置：<code>whereis conda</code></li>
+<li>编辑配置文件：<code>vim /root/.condarc</code></li>
+<li>将配置文件中的内容替换为：<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">channels:</span><br><span class="line">  - defaults</span><br><span class="line">show_channel_urls: true</span><br><span class="line">default_channels:</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r</span><br><span class="line">  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/msys2</span><br><span class="line">custom_channels:</span><br><span class="line">  conda-forge: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  msys2: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  bioconda: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  menpo: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  pytorch-lts: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  simpleitk: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud</span><br><span class="line">  deepmodeling: https://mirrors.tuna.tsinghua.edu.cn/anaconda/cloud/</span><br></pre></td></tr></tbody></table></figure></li>
+<li>运行 <code>conda clean -i </code>清除索引缓存</li>
+<li>创建新环境 <code>conda create -n myenv python==3.10</code> 验证 conda 源是否配置成功</li>
+</ol>
+</b>]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>anaconda</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>服务器配置永久修改 DNS</title>
+    <url>/2024/07/15/Config/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
+    <content><![CDATA[<p>服务器内配置 DNS</p>
+<span id="more"></span>
+
+<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
+<p>2.<br>    </p><figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">DNS=114.114.114.114 8.8.8.8 8.8.4.4</span><br><span class="line">FallbackDNs=8.8.8.8</span><br><span class="line">Domains=domain.com</span><br></pre></td></tr></tbody></table></figure><p></p>
+<ol start="3">
+<li><pre><code class="bash">sudo systemctl restart systemd-resolved
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
+</code></pre>
+</li>
+<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
+</code></pre>
+</li>
+</ol>
 ]]></content>
       <categories>
         <category>Config</category>
@@ -1029,28 +1054,39 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>服务器配置永久修改 DNS</title>
-    <url>/2024/07/15/Config/20240704_%E6%B0%B8%E4%B9%85%E4%BF%AE%E6%94%B9DNS/</url>
-    <content><![CDATA[<p>服务器内配置 DNS</p>
+    <title>搭建基于 Hexo 架构的个人博客</title>
+    <url>/2024/07/18/Config/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
+    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
+<p><img src="/../../img/hexo-1.jpg" alt="hexo 首页"></p>
 <span id="more"></span>
 
-<p>1.<br>    </p><figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">vi /etc/systemd/resolved.conf</span><br></pre></td></tr></tbody></table></figure><p></p>
-<p>2.<br>    </p><figure class="highlight tex"><table><tbody><tr><td class="code"><pre><span class="line">DNS=114.114.114.114 8.8.8.8 8.8.4.4</span><br><span class="line">FallbackDNs=8.8.8.8</span><br><span class="line">Domains=domain.com</span><br></pre></td></tr></tbody></table></figure><p></p>
-<ol start="3">
-<li><pre><code class="bash">sudo systemctl restart systemd-resolved
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line"></span><br><span class="line">4. ```bash</span><br><span class="line">   mv /etc/resolv.conf /etc/resolv.conf_bak</span><br></pre></td></tr></tbody></table></figure>
-</code></pre>
+
+<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
+<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
+<ul>
+<li>升级 npm：<code>npm install -g npm</code></li>
+</ul>
+<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
+<ul>
+<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
+</ul>
+<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
+<li><p>检查 node.js 版本：</p>
+<p>  <code>node -v</code></p>
 </li>
-<li><pre><code class="bash">ln -s /run/systemd/resolve/resolv.conf /etc/
-</code></pre>
+<li><p>检查 npm 版本：</p>
+<p>  <code>npm -v</code></p>
 </li>
-</ol>
-]]></content>
+<li><p>检查 cnpm 版本：</p>
+<p>  <code>cnpm -v</code></p>
+</li>
+</ul>
+<div class="note warning"><p>这里是警告。</p></div>]]></content>
       <categories>
         <category>Config</category>
       </categories>
       <tags>
-        <tag>Ops</tag>
+        <tag>blog</tag>
       </tags>
   </entry>
   <entry>
@@ -1111,64 +1147,6 @@ python dbgpt/app/dbgpt_server.py
       </categories>
       <tags>
         <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>搭建基于 Hexo 架构的个人博客</title>
-    <url>/2024/07/18/Config/20240718_%E6%90%AD%E5%BB%BA%E5%9F%BA%E4%BA%8Ehexo%E6%9E%B6%E6%9E%84%E7%9A%84%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/</url>
-    <content><![CDATA[<p>记录一下搭建基于 hexo 架构的个人博客的过程。从安装 node.js 开始，到安装 hexo，到配置主题，到写文章，到部署发布。</p>
-<p><img src="/../../img/hexo-1.jpg" alt="hexo 首页"></p>
-<span id="more"></span>
-
-
-<h2 id="1-安装node-js"><a href="#1-安装node-js" class="headerlink" title="1.安装node.js"></a>1. 安装 node.js</h2><p><a></a><a href="https://nodejs.org/zh-cn/download/package-manager/">https://nodejs.org/zh-cn/download/package-manager/</a></p>
-<h2 id="2-安装npm"><a href="#2-安装npm" class="headerlink" title="2.安装npm"></a>2. 安装 npm</h2><p>当你安装 node.js 时，npm 会自动安装。但是，npm 的更新比 Node.js 更频繁，因此请确保您拥有最新版本。</p>
-<ul>
-<li>升级 npm：<code>npm install -g npm</code></li>
-</ul>
-<h2 id="3-安装cnpm"><a href="#3-安装cnpm" class="headerlink" title="3.安装cnpm"></a>3. 安装 cnpm</h2><p>使用 npm 下载软件包时，有时会遇到网络问题，这时可以使用 cnpm 加速下载。cnpm 是淘宝提供的 npm 镜像，速度更快。</p>
-<ul>
-<li><code>npm install -g cnpm --registry=http://registry.npm.taobao.org</code></li>
-</ul>
-<h2 id="4-检查安装是否成功"><a href="#4-检查安装是否成功" class="headerlink" title="4.检查安装是否成功"></a>4. 检查安装是否成功</h2><ul>
-<li><p>检查 node.js 版本：</p>
-<p>  <code>node -v</code></p>
-</li>
-<li><p>检查 npm 版本：</p>
-<p>  <code>npm -v</code></p>
-</li>
-<li><p>检查 cnpm 版本：</p>
-<p>  <code>cnpm -v</code></p>
-</li>
-</ul>
-<div class="note warning"><p>这里是警告。</p></div>]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>blog</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Windows 之 CMD 常用命令</title>
-    <url>/2024/08/19/Config/20240819_Windows%E4%B9%8Bcmd%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
-    <content><![CDATA[<p>在 windows 操作系统内，使用终端进行的常用操作命令.</p>
-<span id="more"></span>
-
-<ul>
-<li><p>查看 <code>IP</code></p>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">ipconfig</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>关闭防火墙</p>
-  <figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">netsh advfirewall <span class="built_in">set</span> allprofiles state off</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-]]></content>
-      <categories>
-        <category>Config</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1269,121 +1247,6 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>基准测试全流程</title>
-    <url>/2024/04/18/In%20Linux/20240418_%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%85%A8%E6%B5%81%E7%A8%8B/</url>
-    <content><![CDATA[<p>nccl 测试，p2pBandwidthLatency 测试，all_reduce_perf 测试</p>
-<span id="more"></span>
-
-
-<h3 id="基准测试整体事项"><a href="#基准测试整体事项" class="headerlink" title="基准测试整体事项"></a>基准测试整体事项</h3><table>
-<thead>
-<tr>
-<th align="center">编号</th>
-<th align="left">测试事项</th>
-<th>是否已完成 (附带完成时间)</th>
-<th> 验证截图</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="center"> 1</td>
-<td align="left">cuda 安装</td>
-<td>已完成 2024 年 4 月 17 日 16:50:06</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">2</td>
-<td align="left">nccl 安装</td>
-<td>已完成 2024 年 4 月 17 日 15:25:25</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">3</td>
-<td align="left">cuda sample 拷贝</td>
-<td>已完成 2024 年 4 月 17 日 15:50:11</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">4</td>
-<td align="left">nccl-test 拷贝</td>
-<td>已完成 2024 年 4 月 17 日 15:15:31</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">5</td>
-<td align="left">p2pBandwidthLatency 测试</td>
-<td>已完成 2024 年 4 月 17 日 16:50:17</td>
-<td></td>
-</tr>
-<tr>
-<td align="center">6</td>
-<td align="left">all_reduce_perf 测试</td>
-<td>已完成 2024 年 4 月 17 日 16:50:19</td>
-<td></td>
-</tr>
-</tbody></table>
-<h3 id="文件保存路径"><a href="#文件保存路径" class="headerlink" title="文件保存路径"></a>文件保存路径</h3><p><code>/home/shanghai/</code></p>
-<hr>
-<h3 id="所需文件下载链接"><a href="#所需文件下载链接" class="headerlink" title="所需文件下载链接"></a>所需文件下载链接</h3><p><a href="https://developer.nvidia.com/cuda-12-2-0-download-archive?target_os=Linux&amp;target_arch=x86_64&amp;Distribution=CentOS&amp;target_version=7&amp;target_type=rpm_network">CUDA  12.2 下载地址</a><br><a href="https://developer.nvidia.com/nccl/nccl-download">nccl 2.21.5 下载地址</a><br><a href="https://github.com/NVIDIA/cuda-samples">cuda-sample 源码</a><br><a href="https://github.com/NVIDIA/nccl-tests">nccl-test 源码</a></p>
-<hr>
-<h3 id="CUDA安装"><a href="#CUDA安装" class="headerlink" title="CUDA安装:"></a>CUDA 安装:</h3><ol>
-<li><p>下载 cuda</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">wget https://developer.download.nvidia.com/compute/cuda/12.2.0/local_installers/cuda_12.2.0_535.54.03_linux.run</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>安装包升级权限</p>
-<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">chmod +x cuda_12.2.0_535.54.03_linux.run</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>执行安装</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./cuda_12.2.0_535.54.03_linux.run</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>配置环境变量</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>将 cuda 路径追写到 bashrc 后</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=/usr/local/cuda/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/usr/local/cuda/lib64:<span class="variable">$LD_LIBRARY_PATH</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>更新环境变量</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>验证安装是否正常</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">nvcc -V</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<h3 id="CUDA-sample-p2pBandwidthLatency测试"><a href="#CUDA-sample-p2pBandwidthLatency测试" class="headerlink" title="CUDA-sample-p2pBandwidthLatency测试"></a>CUDA-sample-p2pBandwidthLatency 测试</h3><ol>
-<li><p>进入 sample 文件夹</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> Samples\5_Domain_Specific\p2pBandwidthLatencyTest</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>编译</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">make</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>执行文件，同时将结果保存到 10.10.70.9log.txt 中</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./p2pBandwidthLatencyTest &gt;10.10.70.9log.txt</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<hr>
-<h3 id="nccl安装"><a href="#nccl安装" class="headerlink" title="nccl安装"></a>nccl 安装</h3><ol>
-<li><p>下载并安装 nccl 以及依赖</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-rhel7.repo</span><br></pre></td></tr></tbody></table></figure>
-
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install libnccl-2.21.5-1+cuda12.2 libnccl-devel-2.21.5-1+cuda12.2 libnccl-        static-2.21.5-1+cuda12.2    </span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<h3 id="nccl-test-all-reduce-perf测试"><a href="#nccl-test-all-reduce-perf测试" class="headerlink" title="nccl-test-all_reduce_perf测试"></a>nccl-test-all_reduce_perf 测试</h3><ol>
-<li><p>进入 nccl-test 文件夹 <code>cd nccl-tests/</code></p>
-</li>
-<li><p>执行编译测试，并将结果保存到 test.txt 中</p>
-<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./build/all_reduce_perf -b 8 -e 256M -f 2 -g 8 &gt;test.txt</span><br></pre></td></tr></tbody></table></figure></li>
-</ol>
-<hr>
-<blockquote>
-<p>参考链接<br><a href="https://market.cloud.baidu.com/doc/GPU/s/0kqm6s30y#gpu%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85">CUDA 安装以及 sample 测试</a><br><a href="https://cloud.tencent.com/developer/article/2361710">nccl 测试</a></p>
-</blockquote>
-]]></content>
-      <categories>
-        <category>In Linux</category>
-      </categories>
-      <tags>
-        <tag>nccl</tag>
-        <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>获取 NVIDIA 驱动问题的全流程</title>
     <url>/2024/05/23/In%20Linux/20240523_%E8%8E%B7%E5%8F%96nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97/</url>
     <content><![CDATA[<p>获取 NVIDIA 驱动问题的全流程</p>
@@ -1421,6 +1284,28 @@ python dbgpt/app/dbgpt_server.py
       <tags>
         <tag>Ops</tag>
         <tag>NVIDIA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Windows 之 CMD 常用命令</title>
+    <url>/2024/08/19/Config/20240819_Windows%E4%B9%8Bcmd%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4/</url>
+    <content><![CDATA[<p>在 windows 操作系统内，使用终端进行的常用操作命令.</p>
+<span id="more"></span>
+
+<ul>
+<li><p>查看 <code>IP</code></p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">ipconfig</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>关闭防火墙</p>
+  <figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">netsh advfirewall <span class="built_in">set</span> allprofiles state off</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+]]></content>
+      <categories>
+        <category>Config</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+        <tag>Windows</tag>
       </tags>
   </entry>
   <entry>
@@ -1601,44 +1486,117 @@ python dbgpt/app/dbgpt_server.py
       </tags>
   </entry>
   <entry>
-    <title>多机配置 hosts 及 hostname</title>
-    <url>/2024/07/15/In%20Linux/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
-    <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
+    <title>基准测试全流程</title>
+    <url>/2024/04/18/In%20Linux/20240418_%E5%9F%BA%E5%87%86%E6%B5%8B%E8%AF%95%E5%85%A8%E6%B5%81%E7%A8%8B/</url>
+    <content><![CDATA[<p>nccl 测试，p2pBandwidthLatency 测试，all_reduce_perf 测试</p>
 <span id="more"></span>
 
-<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
-<li>把 <code>ip</code> 复制到文本内</li>
-</ul>
-<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+
+<h3 id="基准测试整体事项"><a href="#基准测试整体事项" class="headerlink" title="基准测试整体事项"></a>基准测试整体事项</h3><table>
+<thead>
+<tr>
+<th align="center">编号</th>
+<th align="left">测试事项</th>
+<th>是否已完成 (附带完成时间)</th>
+<th> 验证截图</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center"> 1</td>
+<td align="left">cuda 安装</td>
+<td>已完成 2024 年 4 月 17 日 16:50:06</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">2</td>
+<td align="left">nccl 安装</td>
+<td>已完成 2024 年 4 月 17 日 15:25:25</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">3</td>
+<td align="left">cuda sample 拷贝</td>
+<td>已完成 2024 年 4 月 17 日 15:50:11</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">4</td>
+<td align="left">nccl-test 拷贝</td>
+<td>已完成 2024 年 4 月 17 日 15:15:31</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">5</td>
+<td align="left">p2pBandwidthLatency 测试</td>
+<td>已完成 2024 年 4 月 17 日 16:50:17</td>
+<td></td>
+</tr>
+<tr>
+<td align="center">6</td>
+<td align="left">all_reduce_perf 测试</td>
+<td>已完成 2024 年 4 月 17 日 16:50:19</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="文件保存路径"><a href="#文件保存路径" class="headerlink" title="文件保存路径"></a>文件保存路径</h3><p><code>/home/shanghai/</code></p>
+<hr>
+<h3 id="所需文件下载链接"><a href="#所需文件下载链接" class="headerlink" title="所需文件下载链接"></a>所需文件下载链接</h3><p><a href="https://developer.nvidia.com/cuda-12-2-0-download-archive?target_os=Linux&amp;target_arch=x86_64&amp;Distribution=CentOS&amp;target_version=7&amp;target_type=rpm_network">CUDA  12.2 下载地址</a><br><a href="https://developer.nvidia.com/nccl/nccl-download">nccl 2.21.5 下载地址</a><br><a href="https://github.com/NVIDIA/cuda-samples">cuda-sample 源码</a><br><a href="https://github.com/NVIDIA/nccl-tests">nccl-test 源码</a></p>
+<hr>
+<h3 id="CUDA安装"><a href="#CUDA安装" class="headerlink" title="CUDA安装:"></a>CUDA 安装:</h3><ol>
+<li><p>下载 cuda</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">wget https://developer.download.nvidia.com/compute/cuda/12.2.0/local_installers/cuda_12.2.0_535.54.03_linux.run</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>安装包升级权限</p>
+<figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">chmod +x cuda_12.2.0_535.54.03_linux.run</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>执行安装</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./cuda_12.2.0_535.54.03_linux.run</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>配置环境变量</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">vim ~/.bashrc</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>将 cuda 路径追写到 bashrc 后</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">export</span> PATH=/usr/local/cuda/bin:<span class="variable">$PATH</span></span><br><span class="line"><span class="built_in">export</span> LD_LIBRARY_PATH=/usr/local/cuda/lib64:<span class="variable">$LD_LIBRARY_PATH</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>更新环境变量</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>验证安装是否正常</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">nvcc -V</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h3 id="CUDA-sample-p2pBandwidthLatency测试"><a href="#CUDA-sample-p2pBandwidthLatency测试" class="headerlink" title="CUDA-sample-p2pBandwidthLatency测试"></a>CUDA-sample-p2pBandwidthLatency 测试</h3><ol>
+<li><p>进入 sample 文件夹</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> Samples\5_Domain_Specific\p2pBandwidthLatencyTest</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>编译</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">make</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>执行文件，同时将结果保存到 10.10.70.9log.txt 中</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./p2pBandwidthLatencyTest &gt;10.10.70.9log.txt</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<hr>
+<h3 id="nccl安装"><a href="#nccl安装" class="headerlink" title="nccl安装"></a>nccl 安装</h3><ol>
+<li><p>下载并安装 nccl 以及依赖</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum-config-manager --add-repo https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-rhel7.repo</span><br></pre></td></tr></tbody></table></figure>
+
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">yum install libnccl-2.21.5-1+cuda12.2 libnccl-devel-2.21.5-1+cuda12.2 libnccl-        static-2.21.5-1+cuda12.2    </span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
+<h3 id="nccl-test-all-reduce-perf测试"><a href="#nccl-test-all-reduce-perf测试" class="headerlink" title="nccl-test-all_reduce_perf测试"></a>nccl-test-all_reduce_perf 测试</h3><ol>
+<li><p>进入 nccl-test 文件夹 <code>cd nccl-tests/</code></p>
+</li>
+<li><p>执行编译测试，并将结果保存到 test.txt 中</p>
+<figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line">./build/all_reduce_perf -b 8 -e 256M -f 2 -g 8 &gt;test.txt</span><br></pre></td></tr></tbody></table></figure></li>
+</ol>
 <hr>
 <blockquote>
-<p>[!TIP]</p>
-<ul>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
-</li>
-<li><p><input checked="" disabled="" type="checkbox"> 
-<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
-</li>
-</ul>
+<p>参考链接<br><a href="https://market.cloud.baidu.com/doc/GPU/s/0kqm6s30y#gpu%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85">CUDA 安装以及 sample 测试</a><br><a href="https://cloud.tencent.com/developer/article/2361710">nccl 测试</a></p>
 </blockquote>
 ]]></content>
       <categories>
         <category>In Linux</category>
       </categories>
       <tags>
+        <tag>nccl</tag>
         <tag>Ops</tag>
       </tags>
   </entry>
@@ -1744,6 +1702,48 @@ python dbgpt/app/dbgpt_server.py
         <tag>Ops</tag>
         <tag>Linux</tag>
         <tag>Prometheus</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多机配置 hosts 及 hostname</title>
+    <url>/2024/07/15/In%20Linux/20240713_%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%AE%E6%94%B9host%E5%92%8Chostname/</url>
+    <content><![CDATA[<p>修改 hosts 及 hostname, 使用脚本，并同步到多台服务器内.</p>
+<span id="more"></span>
+
+<h2 id="1-准备IP-txt"><a href="#1-准备IP-txt" class="headerlink" title="1. 准备IP.txt"></a>1. 准备 <code>IP.txt</code></h2><ul>
+<li>把 <code>ip</code> 复制到文本内</li>
+</ul>
+<h2 id="2-脚本"><a href="#2-脚本" class="headerlink" title="2. 脚本"></a>2. 脚本</h2><figure class="highlight bash"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取ip.txt文件并将IP地址存入数组</span></span><br><span class="line">ips=()</span><br><span class="line"><span class="keyword">while</span> IFS= <span class="built_in">read</span> -r line; <span class="keyword">do</span></span><br><span class="line">    ips+=(<span class="string">"<span class="variable">$line</span>"</span>)</span><br><span class="line"><span class="keyword">done</span> &lt; ip.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 遍历数组并执行操作</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">"<span class="variable">${!ips[@]}</span>"</span>; <span class="keyword">do</span></span><br><span class="line">    ip=<span class="variable">${ips[$i]}</span></span><br><span class="line">    hostname=<span class="string">"h800-<span class="subst">$(printf <span class="string">"%02d"</span> $(($i+1)</span>))"</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">"Setting up <span class="variable">$hostname</span> with IP <span class="variable">$ip</span>"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 执行SSH命令</span></span><br><span class="line">    ssh user@<span class="variable">$ip</span> <span class="string">"sudo hostnamectl set-hostname <span class="variable">$hostname</span> &amp;&amp; echo -e \"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>\" | sudo tee -a /etc/hosts"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 更新本地hosts文件</span></span><br><span class="line">    <span class="built_in">echo</span> -e <span class="string">"<span class="variable">$ip</span>\t<span class="variable">$hostname</span>"</span> | <span class="built_in">sudo</span> <span class="built_in">tee</span> -a /etc/hosts</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></tbody></table></figure>
+<hr>
+<blockquote>
+<p>[!TIP]</p>
+<ul>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-1.html">1. 服务器免密配置教程 - 1</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/1-2.html">2. 服务器免密配置教程 - 2</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/3.html">3. 服务器修改 host 和 hostname</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<a href="https://a19909442097.rth5.com/markdown_text/4.html">4. 服务器挂载外部存储卷</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/5.html">5. 批量加载 docker 镜像 &amp; 镜像重命名</a></p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox"> 
+<pangu> </pangu><a href="https://a19909442097.rth5.com/markdown_text/6.html">6. 安装 Nvidia-docker</a></p>
+</li>
+</ul>
+</blockquote>
+]]></content>
+      <categories>
+        <category>In Linux</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
       </tags>
   </entry>
   <entry>
@@ -2133,149 +2133,6 @@ https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvi
       </categories>
       <tags>
         <tag>Ops</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>基于 Openai API 进行接口移植</title>
-    <url>/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/</url>
-    <content><![CDATA[<p>记录一下 基于 Openai API 进行接口移植的过程，从引用 api 到测试到最后转接口使用</p>
-<span id="more"></span>
-
-
-
-<blockquote>
-<h3 id="注册Openai-API账号"><a href="#注册Openai-API账号" class="headerlink" title="注册Openai API账号"></a>注册 Openai API 账号</h3><ul>
-<li>老生常谈的问题 ，首先我们需要注册一个 Openai API 账号，并申请一个 API key，或者购买一个 API_KEY。</li>
-<li><strong>申请点击此链接:<a href="https://platform.openai.com/login?launch">openai API 官网链接</a></strong></li>
-</ul>
-</blockquote>
-<hr>
-<h3 id="1-调用openai的GPT-4o模型接口"><a href="#1-调用openai的GPT-4o模型接口" class="headerlink" title="1.调用openai的GPT-4o模型接口"></a>1. 调用 openai 的 GPT-4o 模型接口</h3><ul>
-<li><p>OK 还是最常见的 chat_generate，这里直接放代码了</p>
- <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">client = OpenAI(</span><br><span class="line">    api_key=<span class="comment">#这里就放入刚刚购买到的key就可以啦</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> opneai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gpt_generate_text</span>(<span class="params">prompt, messages_list</span>):</span><br><span class="line">    messages = <span class="string">''</span></span><br><span class="line">    <span class="keyword">if</span> messages_list:</span><br><span class="line">        messages = <span class="string">'以下是你和用户的当前会话消息：\n\n'</span> + <span class="string">'\n'</span>.join(messages_list)</span><br><span class="line">    stream = client.chat.completions.create(</span><br><span class="line">        <span class="comment"># model="gpt-4-turbo-preview",</span></span><br><span class="line">        model=<span class="string">"gpt-4o"</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: messages},</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: prompt},</span><br><span class="line">        ],</span><br><span class="line">        stream=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line">    text = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> stream:</span><br><span class="line">        <span class="keyword">if</span> chunk.choices[<span class="number">0</span>].delta.content <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(chunk.choices[<span class="number">0</span>].delta.content, end=<span class="string">""</span>)</span><br><span class="line">            text += chunk.choices[<span class="number">0</span>].delta.content</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
-<li><p>这里是<strong>路由函数</strong>的撰写</p>
-<ul>
-<li><p>可以看到这里可以通过 GET 和 POST （GET 不可以用哦）, 这里调用我们的 gpt_generate_text 函数，传入 prompt 和 messages_list，然后返回生成的文本。</p>
-  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/chatgpt"</span>, methods=[<span class="string">'GET'</span>, <span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">chat_with_gpt</span>():</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'chatgpt GET 请求'</span></span><br><span class="line">    <span class="keyword">elif</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        data = request.json</span><br><span class="line">        prompt = data[<span class="string">'prompt'</span>]</span><br><span class="line">        messages_list = data.get(<span class="string">'messages'</span>, [])</span><br><span class="line">        text = gpt_generate_text(prompt, messages_list)</span><br><span class="line"></span><br><span class="line">        timestamp = <span class="built_in">str</span>(time.time()).split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> text:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成成功'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: text}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">2</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成失败'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: <span class="literal">None</span>}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">return</span> jsonify(response_data)</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="2-调用Openai的whisper-1模型接口"><a href="#2-调用Openai的whisper-1模型接口" class="headerlink" title="2.调用Openai的whisper-1模型接口"></a>2. 调用 Openai 的 whisper-1 模型接口</h2><ul>
-<li>2.1 同理这里是调用的 openai 的 <strong>whisper-1</strong> 模型进行音频转文本的函数撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_audio</span>(<span class="params">audio_file</span>):</span><br><span class="line">    audio=<span class="built_in">open</span>(audio_file, <span class="string">"rb"</span>)</span><br><span class="line">    transcription = client.audio.transcriptions.create(model=<span class="string">"whisper-1"</span>,file=audio)</span><br><span class="line">    text = transcription.text</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
-<li>2.2 这里是最后<strong>路由函数</strong>的撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/transcribe"</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'file'</span> <span class="keyword">not</span> <span class="keyword">in</span> request.files:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No file part"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    audio_file = request.files[<span class="string">'file'</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file.filename == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No selected file"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file:</span><br><span class="line">        <span class="comment"># 保存文件到临时位置</span></span><br><span class="line">        temp_file_path = os.path.join(<span class="string">"temp"</span>, audio_file.filename)</span><br><span class="line">        audio_file.save(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 调用转录函数</span></span><br><span class="line">        transcription_text = transcribe_audio(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除临时文件</span></span><br><span class="line">        os.remove(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"text"</span>: transcription_text})</span><br></pre></td></tr></tbody></table></figure></li>
-</ul>
-<blockquote>
-<ul>
-<li>首先我们要确定返回的请求中是否包含文件和文件名，如果没有，则返回错误信息和 400，</li>
-<li>其次，我们需要保存文件到临时位置，然后调用我们写好的转录函数进行转录，最后删除临时文件。</li>
-<li>最后返回转录后的文本给客户端 供使用。</li>
-</ul>
-</blockquote>
-<hr>
-<h2 id="3-调用Openai的TTS-1模型接口"><a href="#3-调用Openai的TTS-1模型接口" class="headerlink" title="3.调用Openai的TTS-1模型接口"></a>3. 调用 Openai 的 TTS-1 模型接口</h2><ul>
-<li>3.1 调用 openai 的 API，将文本转换为语音 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">def text_to_speech(text, vocie, model, path):</span><br><span class="line">    </span><br><span class="line">    response = client.audio.speech.create(</span><br><span class="line">        model=model,</span><br><span class="line">        voice=vocie,</span><br><span class="line">        input=text</span><br><span class="line">    )</span><br><span class="line">    speech_file_path = Path(path)</span><br><span class="line">    with open(speech_file_path, 'wb') as file:</span><br><span class="line">        file.write(response.content)</span><br><span class="line"></span><br><span class="line">    print(f'文件已保存到: {speech_file_path}')</span><br><span class="line">    return speech_file_path</span><br></pre></td></tr></tbody></table></figure></li>
-<li>3.2 文本转语音 text-to-speech 路由撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line">server_ip = <span class="string">""</span>  <span class="comment"># 替换为你的服务器IP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">'/text-to-speech'</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_to_speech_endpoint</span>():</span><br><span class="line">    data = request.json</span><br><span class="line">    text = data.get(<span class="string">'text'</span>)</span><br><span class="line">    voice = data.get(<span class="string">'voice'</span>)</span><br><span class="line">    model = data.get(<span class="string">'model'</span>)</span><br><span class="line">    output_path = <span class="string">'./output.mp3'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text <span class="keyword">or</span> <span class="keyword">not</span> voice <span class="keyword">or</span> <span class="keyword">not</span> model:</span><br><span class="line">        <span class="keyword">return</span> {<span class="string">'error'</span>: <span class="string">'Missing required parameters'</span>}, <span class="number">400</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Define the directory where you want to save the files</span></span><br><span class="line">        output_dir = Path(<span class="string">'./audio_files'</span>)</span><br><span class="line">        output_dir.mkdir(exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate a unique filename using UUID</span></span><br><span class="line">        unique_filename = <span class="string">f"<span class="subst">{uuid.uuid4()}</span>.mp3"</span></span><br><span class="line">        output_path = output_dir / unique_filename</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate the speech and save the file</span></span><br><span class="line">        speech_file_path = text_to_speech(text, voice, model, output_path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Create the file URL</span></span><br><span class="line">        file_url = <span class="string">f"http://<span class="subst">{server_ip}</span>/root/xxx/<span class="subst">{speech_file_path}</span>"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Return the file URL as a response</span></span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'file_url'</span>: file_url}), <span class="number">200</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'error'</span>: <span class="built_in">str</span>(e)}), <span class="number">500</span></span><br></pre></td></tr></tbody></table></figure>
-<blockquote>
-<ul>
-<li>首先我们要在后端代码中写入 我们的服务器 ip 地址</li>
-<li>我们要确保我们的 json 数据存在 四个键 text ， voice ， model ， output_path ，</li>
-<li>其次我们调用 text_to_speech 函数，传入 text，voice，model，output_path，</li>
-<li>然后我们生成一个唯一的 filename，保存到 output_dir 目录下</li>
-<li>最后我们生成一个 file_url，然后返回给客户端。</li>
-</ul>
-</blockquote>
-</li>
-</ul>
-<hr>
-<h2 id="4-测试使用"><a href="#4-测试使用" class="headerlink" title="4.测试使用"></a>4. 测试使用</h2><ul>
-<li>4.1 我们可以使用以下方式，这种方式在我们的 py 脚本下直接测试，传参切记</li>
-</ul>
-<p>​	 <code>if __name__ == "__main__":</code><br>​	    	<code>main()</code></p>
-<ul>
-<li><p>4.2 使用 命令行在我们的服务器上测试 GET <a href="http://xxxx/">http://xxxx</a> {“xx”:”xx”}</p>
-</li>
-<li><p>4.3 使用 postman 、apifox 等等工具测试</p>
-</li>
-</ul>
-<p>​	本人这里使用的是第三种方法 apifox 这个工具，本人良心推荐大家使用，附<a href="https://apifox.com/help/">官方文档链接</a></p>
-<ul>
-<li><p> 4.4 测试截图及测试数据</p>
-<h3 id="测试用例一-chatgpt"><a href="#测试用例一-chatgpt" class="headerlink" title="测试用例一: /chatgpt"></a>测试用例一: /chatgpt</h3><ul>
-<li>测试数据 </li>
-</ul>
-  <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"code"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"data"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span> <span class="string">"你好！我是一个由人工智能驱动的助手，设计用于帮助回答问题、提供信息以及协助完成各种任务。有什么我可以帮你的吗？"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"message"</span><span class="punctuation">:</span> <span class="string">"内容生成成功"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"time"</span><span class="punctuation">:</span> <span class="string">"1721808765"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<ul>
-<li>响应截图</li>
-</ul>
-<p>  <img src="/../../img/api-1.jpg" alt="gpt4o"></p>
-<hr>
-<h3 id="测试用例二-transcribe"><a href="#测试用例二-transcribe" class="headerlink" title="测试用例二: /transcribe"></a>测试用例二: /transcribe</h3><ul>
-<li>测试数据</li>
-</ul>
-<p>  <img src="/../../img/api-2-1.jpg" alt="音频文件截图"></p>
-<ul>
-<li>响应截图</li>
-</ul>
-<p>  <img src="/../../img/api-2.jpg" alt="gpt4o"></p>
-<hr>
-<h3 id="测试用例三-transcribe"><a href="#测试用例三-transcribe" class="headerlink" title="测试用例三: /transcribe"></a>测试用例三: /transcribe</h3><ul>
-<li><p>测试数据</p>
-   <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"model"</span><span class="punctuation">:</span><span class="string">"tts-1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"voice"</span><span class="punctuation">:</span><span class="string">"echo"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span><span class="string">"今天中午吃什么?"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>响应截图</p>
-<p><img src="/../../img/api-3.jpg" alt="gpt4o"></p>
-</li>
-</ul>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>LLM</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>自研工具 - 基于 Nvidia 驱动日志 (Events.log) 统计网络震荡次数</title>
-    <url>/2024/05/24/Python/20240524_%E5%BC%80%E5%8F%91%E5%88%86%E6%9E%90Nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7/</url>
-    <content><![CDATA[<p>统计 Link Down 的次数，并显示服务名称和计算机名称</p>
-<p><img src="/../../img/linkdown-1.png"></p>
-<span id="more"></span>
-
-<ul>
-<li><p>代码部分</p>
-  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">@File    :   count_dict-v3.py</span></span><br><span class="line"><span class="string">@Time    :   2024/05/13 09:19:02</span></span><br><span class="line"><span class="string">@Author  :   pan binghong </span></span><br><span class="line"><span class="string">@Email   :   19909442097@163.com</span></span><br><span class="line"><span class="string">@description   :   统计Link Down的次数，并显示服务名称和计算机名称</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> filedialog</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_csv_and_process</span>():</span><br><span class="line">    file_path = filedialog.askopenfilename(filetypes=[(<span class="string">'CSV文件'</span>, <span class="string">'*.csv'</span>)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> file_path:</span><br><span class="line">        df = pd.read_csv(file_path)</span><br><span class="line">        df_warning = df[(df[<span class="string">'Severity'</span>] == <span class="string">'Warning'</span>) &amp; (df[<span class="string">'Event Name'</span>] == <span class="string">'Link is Down'</span>)]</span><br><span class="line">        pattern1 = re.<span class="built_in">compile</span>(<span class="string">r'Source\s+([a-fA-F0-9]+)'</span>)</span><br><span class="line">        mac_list = []</span><br><span class="line">        <span class="keyword">for</span> source <span class="keyword">in</span> df_warning[<span class="string">'Source'</span>]:</span><br><span class="line">            match1 = pattern1.search(source)</span><br><span class="line">            <span class="keyword">if</span> match1:</span><br><span class="line">                mac_list.append(match1.group(<span class="number">1</span>))</span><br><span class="line">        time0 = df_warning[<span class="string">'Date/Time'</span>].iloc[-<span class="number">1</span>]</span><br><span class="line">        time1 = df_warning[<span class="string">'Date/Time'</span>].iloc[<span class="number">0</span>]</span><br><span class="line">        df_result = find_service_names_and_counts(mac_list, mac_dict, time_list=[time0, time1])</span><br><span class="line">        df_result_computer = find_computer_names_and_counts(df_warning[<span class="string">'Description'</span>], time_list=[time0, time1])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 清除之前的表格内容（如果有的话）</span></span><br><span class="line">        <span class="keyword">for</span> widget <span class="keyword">in</span> frame.winfo_children():</span><br><span class="line">            widget.destroy()</span><br><span class="line"></span><br><span class="line">        notebook = ttk.Notebook(frame)</span><br><span class="line">        notebook.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第一页：服务名称统计</span></span><br><span class="line">        service_frame = ttk.Frame(notebook)</span><br><span class="line">        notebook.add(service_frame, text=<span class="string">'Service Name'</span>)</span><br><span class="line">        show_dataframe_in_gui(df_result, service_frame)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第二页：计算机名称统计</span></span><br><span class="line">        computer_frame = ttk.Frame(notebook)</span><br><span class="line">        notebook.add(computer_frame, text=<span class="string">'Computer Name'</span>)</span><br><span class="line">        show_dataframe_in_gui(df_result_computer, computer_frame)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_computer_names_and_counts</span>(<span class="params">descriptions, time_list</span>):  </span><br><span class="line">    start_time, end_time = time_list  </span><br><span class="line">    <span class="comment"># 创建一个字典来记录每个计算机名称的linkdown次数  </span></span><br><span class="line">    computer_counts = {}  </span><br><span class="line">    sum_counts = <span class="number">0</span>  </span><br><span class="line">    pattern2 = re.<span class="built_in">compile</span>(<span class="string">r'\(Computer:([^)]+)\)'</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> desc <span class="keyword">in</span> descriptions:  </span><br><span class="line">        match2 = pattern2.search(desc)  </span><br><span class="line">        <span class="keyword">if</span> match2:  </span><br><span class="line">            computer_name = match2.group(<span class="number">1</span>)  </span><br><span class="line">            computer_counts[computer_name] = computer_counts.get(computer_name, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">            sum_counts += <span class="number">1</span>  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建不包含时间信息的DataFrame  </span></span><br><span class="line">    df_result_computer = pd.DataFrame.from_dict(computer_counts, orient=<span class="string">'index'</span>, columns=[<span class="string">'Count of Link is Down'</span>]).reset_index()  </span><br><span class="line">    df_result_computer.columns = [<span class="string">'Computer Name'</span>, <span class="string">'Count of Link is Down'</span>]  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个新行来保存时间信息  </span></span><br><span class="line">    time_info_row = pd.Series([<span class="string">'Start Time: '</span> + start_time, <span class="string">'End Time: '</span> + end_time], index=[<span class="string">'Computer Name'</span>, <span class="string">'Count of Link is Down'</span>])  </span><br><span class="line">    time_info_df = pd.DataFrame([time_info_row])  <span class="comment"># 将Series转换为DataFrame  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将时间信息DataFrame放在原始DataFrame的开始位置  </span></span><br><span class="line">    df_result_computer = pd.concat([time_info_df, df_result_computer]).reset_index(drop=<span class="literal">True</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在DataFrame的末尾添加一行总次数  </span></span><br><span class="line">    total_row = pd.DataFrame({<span class="string">'Computer Name'</span>: [<span class="string">'Total'</span>], <span class="string">'Count of Link is Down'</span>: [sum_counts]}, index=[<span class="built_in">len</span>(df_result_computer)])  </span><br><span class="line">    df_result_computer = pd.concat([df_result_computer.iloc[:-<span class="number">1</span>], total_row]).reset_index(drop=<span class="literal">True</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> df_result_computer </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_service_names_and_counts</span>(<span class="params">mac_list, mac_dict, time_list</span>):  </span><br><span class="line">    <span class="comment"># 假设time_list有两个元素: [开始时间, 结束时间]  </span></span><br><span class="line">    start_time, end_time = time_list  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个字典来记录每个服务名称的linkdown次数  </span></span><br><span class="line">    service_counts = {}  </span><br><span class="line">    sum_counts = <span class="number">0</span>  </span><br><span class="line">    <span class="comment"># 遍历mac_list中的每个MAC地址  </span></span><br><span class="line">    <span class="keyword">for</span> mac <span class="keyword">in</span> mac_list:  </span><br><span class="line">        <span class="comment"># 查找MAC地址在哪个服务名称的列表中  </span></span><br><span class="line">        <span class="keyword">for</span> service_name, macs <span class="keyword">in</span> mac_dict.items():  </span><br><span class="line">            <span class="keyword">if</span> mac <span class="keyword">in</span> macs:  </span><br><span class="line">                <span class="comment"># 如果找到，增加该服务名称的计数  </span></span><br><span class="line">                service_counts[service_name] = service_counts.get(service_name, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">                sum_counts += <span class="number">1</span>  </span><br><span class="line">                <span class="keyword">break</span>  <span class="comment"># 跳出内部循环，因为每个MAC地址只应对应一个服务名称  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建DataFrame  </span></span><br><span class="line">    df_result = pd.DataFrame.from_dict(service_counts, orient=<span class="string">'index'</span>, columns=[<span class="string">'Count of Link is Down'</span>]).reset_index()  </span><br><span class="line">    df_result.columns = [<span class="string">'Service Name'</span>, <span class="string">'Count of Link is Down'</span>]  </span><br><span class="line"></span><br><span class="line">    time_info_row = pd.Series([<span class="string">'Start Time: '</span> + start_time, <span class="string">'End Time: '</span> + end_time], index=[<span class="string">'Service Name'</span>, <span class="string">'Count of Link is Down'</span>])  </span><br><span class="line">    time_info_df = pd.DataFrame([time_info_row])  <span class="comment"># 将Series转换为DataFrame  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将时间信息DataFrame放在原始DataFrame的开始位置  </span></span><br><span class="line">    df_result = pd.concat([time_info_df, df_result]).reset_index(drop=<span class="literal">True</span>) </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在DataFrame的末尾添加一行总次数  </span></span><br><span class="line">    total_row = pd.DataFrame({<span class="string">'Service Name'</span>: [<span class="string">'Total'</span>], <span class="string">'Count of Link is Down'</span>: [sum_counts]}, index=[<span class="built_in">len</span>(df_result)-<span class="number">1</span>])  </span><br><span class="line">    df_result = pd.concat([df_result.iloc[:-<span class="number">1</span>], total_row]).reset_index(drop=<span class="literal">True</span>)  <span class="comment"># 重置索引，不包括最后一行（因为我们将在其后添加总次数）  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> df_result   </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_dataframe_in_gui</span>(<span class="params">df, frame_widget</span>):  </span><br><span class="line">    <span class="comment"># 清除之前的表格内容（如果有的话）  </span></span><br><span class="line">    <span class="keyword">for</span> widget <span class="keyword">in</span> frame_widget.winfo_children():  </span><br><span class="line">        widget.destroy()  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 注意这里：将df.columns转换为列表  </span></span><br><span class="line">    column_names = <span class="built_in">list</span>(df.columns)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个Treeview组件来显示数据  </span></span><br><span class="line">    tree = ttk.Treeview(frame_widget, columns=column_names, show=<span class="string">'headings'</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置列标题  </span></span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> column_names:  </span><br><span class="line">        tree.heading(col, text=col)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 插入数据到Treeview  </span></span><br><span class="line">    <span class="keyword">for</span> index, row <span class="keyword">in</span> df.iterrows():  </span><br><span class="line">        tree.insert(<span class="string">''</span>, <span class="string">'end'</span>, values=row.tolist())  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将Treeview添加到frame中（如果它之前没有被添加到frame中，这一步是必要的）  </span></span><br><span class="line">    tree.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    root = tk.Tk()</span><br><span class="line">    root.geometry(<span class="string">'400x500'</span>)</span><br><span class="line">    root.title(<span class="string">'Link Down Count'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个Frame来放置Treeview  </span></span><br><span class="line">    <span class="keyword">global</span> frame</span><br><span class="line">    frame = tk.Frame(root)  </span><br><span class="line">    frame.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>) </span><br><span class="line"></span><br><span class="line">    load_button = tk.Button(root, text=<span class="string">'选择CSV文件'</span>, command=load_csv_and_process)</span><br><span class="line">    load_button.pack()</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">'mac_dict.json'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">global</span> mac_dict</span><br><span class="line">            mac_dict = json.load(f)</span><br><span class="line"></span><br><span class="line">        root.mainloop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>导出为.exe 可执行文件命令</p>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">pyinstaller --onefile --icon=./icon/dog.ico --noconsole cld.py</span><br></pre></td></tr></tbody></table></figure>
-</li>
-<li><p>提前准备 json 文件，格式为:</p>
- <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"H800-1"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"H800-2"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
-
-<blockquote>
-<p>键为<code>机器的名称</code></p>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看机器名称</span></span><br><span class="line"><span class="built_in">uname</span> -n</span><br></pre></td></tr></tbody></table></figure>
-
-<p>值为 <code>MAC地址</code></p>
-<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看特定接口的MAC地址：</span></span><br><span class="line">ip <span class="built_in">link</span> show eth0</span><br></pre></td></tr></tbody></table></figure>
-
-<p>其中 <code>eth0</code> 可以替换为你要查询的网络接口名称。</p>
-</blockquote>
-</li>
-</ul>
-<h4 id="小工具下载地址"><a href="#小工具下载地址" class="headerlink" title="小工具下载地址"></a>小工具下载地址</h4><p><a href="https://sharrr.com/s#f5524aae-7492-47cc-be11-5d98b85afbfb/3bMQOBu6ZgwilavK69J%2FmA%3D%3D/5tLg2uk_z1omqApsxrV9BCcPd9XEUGs0mRf3jQk4xtQ">统计 Link Down 小工具</a></p>
-<p>过期联系我哦～</p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Ops</tag>
-        <tag>python</tag>
-        <tag>NVIDIA</tag>
       </tags>
   </entry>
   <entry>
@@ -2776,6 +2633,162 @@ https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvi
       </tags>
   </entry>
   <entry>
+    <title>自研工具 - 基于 Nvidia 驱动日志 (Events.log) 统计网络震荡次数</title>
+    <url>/2024/05/24/Python/20240524_%E5%BC%80%E5%8F%91%E5%88%86%E6%9E%90Nvidia%E9%A9%B1%E5%8A%A8%E9%97%AE%E9%A2%98%E6%97%A5%E5%BF%97%E5%B7%A5%E5%85%B7/</url>
+    <content><![CDATA[<p>统计 Link Down 的次数，并显示服务名称和计算机名称</p>
+<p><img src="/../../img/linkdown-1.png"></p>
+<span id="more"></span>
+
+<ul>
+<li><p>代码部分</p>
+  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment"># -*- encoding: utf-8 -*-</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"><span class="string">@File    :   count_dict-v3.py</span></span><br><span class="line"><span class="string">@Time    :   2024/05/13 09:19:02</span></span><br><span class="line"><span class="string">@Author  :   pan binghong </span></span><br><span class="line"><span class="string">@Email   :   19909442097@163.com</span></span><br><span class="line"><span class="string">@description   :   统计Link Down的次数，并显示服务名称和计算机名称</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> tkinter <span class="keyword">as</span> tk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> ttk</span><br><span class="line"><span class="keyword">from</span> tkinter <span class="keyword">import</span> filedialog</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_csv_and_process</span>():</span><br><span class="line">    file_path = filedialog.askopenfilename(filetypes=[(<span class="string">'CSV文件'</span>, <span class="string">'*.csv'</span>)])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> file_path:</span><br><span class="line">        df = pd.read_csv(file_path)</span><br><span class="line">        df_warning = df[(df[<span class="string">'Severity'</span>] == <span class="string">'Warning'</span>) &amp; (df[<span class="string">'Event Name'</span>] == <span class="string">'Link is Down'</span>)]</span><br><span class="line">        pattern1 = re.<span class="built_in">compile</span>(<span class="string">r'Source\s+([a-fA-F0-9]+)'</span>)</span><br><span class="line">        mac_list = []</span><br><span class="line">        <span class="keyword">for</span> source <span class="keyword">in</span> df_warning[<span class="string">'Source'</span>]:</span><br><span class="line">            match1 = pattern1.search(source)</span><br><span class="line">            <span class="keyword">if</span> match1:</span><br><span class="line">                mac_list.append(match1.group(<span class="number">1</span>))</span><br><span class="line">        time0 = df_warning[<span class="string">'Date/Time'</span>].iloc[-<span class="number">1</span>]</span><br><span class="line">        time1 = df_warning[<span class="string">'Date/Time'</span>].iloc[<span class="number">0</span>]</span><br><span class="line">        df_result = find_service_names_and_counts(mac_list, mac_dict, time_list=[time0, time1])</span><br><span class="line">        df_result_computer = find_computer_names_and_counts(df_warning[<span class="string">'Description'</span>], time_list=[time0, time1])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 清除之前的表格内容（如果有的话）</span></span><br><span class="line">        <span class="keyword">for</span> widget <span class="keyword">in</span> frame.winfo_children():</span><br><span class="line">            widget.destroy()</span><br><span class="line"></span><br><span class="line">        notebook = ttk.Notebook(frame)</span><br><span class="line">        notebook.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第一页：服务名称统计</span></span><br><span class="line">        service_frame = ttk.Frame(notebook)</span><br><span class="line">        notebook.add(service_frame, text=<span class="string">'Service Name'</span>)</span><br><span class="line">        show_dataframe_in_gui(df_result, service_frame)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 第二页：计算机名称统计</span></span><br><span class="line">        computer_frame = ttk.Frame(notebook)</span><br><span class="line">        notebook.add(computer_frame, text=<span class="string">'Computer Name'</span>)</span><br><span class="line">        show_dataframe_in_gui(df_result_computer, computer_frame)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_computer_names_and_counts</span>(<span class="params">descriptions, time_list</span>):  </span><br><span class="line">    start_time, end_time = time_list  </span><br><span class="line">    <span class="comment"># 创建一个字典来记录每个计算机名称的linkdown次数  </span></span><br><span class="line">    computer_counts = {}  </span><br><span class="line">    sum_counts = <span class="number">0</span>  </span><br><span class="line">    pattern2 = re.<span class="built_in">compile</span>(<span class="string">r'\(Computer:([^)]+)\)'</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> desc <span class="keyword">in</span> descriptions:  </span><br><span class="line">        match2 = pattern2.search(desc)  </span><br><span class="line">        <span class="keyword">if</span> match2:  </span><br><span class="line">            computer_name = match2.group(<span class="number">1</span>)  </span><br><span class="line">            computer_counts[computer_name] = computer_counts.get(computer_name, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">            sum_counts += <span class="number">1</span>  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建不包含时间信息的DataFrame  </span></span><br><span class="line">    df_result_computer = pd.DataFrame.from_dict(computer_counts, orient=<span class="string">'index'</span>, columns=[<span class="string">'Count of Link is Down'</span>]).reset_index()  </span><br><span class="line">    df_result_computer.columns = [<span class="string">'Computer Name'</span>, <span class="string">'Count of Link is Down'</span>]  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个新行来保存时间信息  </span></span><br><span class="line">    time_info_row = pd.Series([<span class="string">'Start Time: '</span> + start_time, <span class="string">'End Time: '</span> + end_time], index=[<span class="string">'Computer Name'</span>, <span class="string">'Count of Link is Down'</span>])  </span><br><span class="line">    time_info_df = pd.DataFrame([time_info_row])  <span class="comment"># 将Series转换为DataFrame  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将时间信息DataFrame放在原始DataFrame的开始位置  </span></span><br><span class="line">    df_result_computer = pd.concat([time_info_df, df_result_computer]).reset_index(drop=<span class="literal">True</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在DataFrame的末尾添加一行总次数  </span></span><br><span class="line">    total_row = pd.DataFrame({<span class="string">'Computer Name'</span>: [<span class="string">'Total'</span>], <span class="string">'Count of Link is Down'</span>: [sum_counts]}, index=[<span class="built_in">len</span>(df_result_computer)])  </span><br><span class="line">    df_result_computer = pd.concat([df_result_computer.iloc[:-<span class="number">1</span>], total_row]).reset_index(drop=<span class="literal">True</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> df_result_computer </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_service_names_and_counts</span>(<span class="params">mac_list, mac_dict, time_list</span>):  </span><br><span class="line">    <span class="comment"># 假设time_list有两个元素: [开始时间, 结束时间]  </span></span><br><span class="line">    start_time, end_time = time_list  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个字典来记录每个服务名称的linkdown次数  </span></span><br><span class="line">    service_counts = {}  </span><br><span class="line">    sum_counts = <span class="number">0</span>  </span><br><span class="line">    <span class="comment"># 遍历mac_list中的每个MAC地址  </span></span><br><span class="line">    <span class="keyword">for</span> mac <span class="keyword">in</span> mac_list:  </span><br><span class="line">        <span class="comment"># 查找MAC地址在哪个服务名称的列表中  </span></span><br><span class="line">        <span class="keyword">for</span> service_name, macs <span class="keyword">in</span> mac_dict.items():  </span><br><span class="line">            <span class="keyword">if</span> mac <span class="keyword">in</span> macs:  </span><br><span class="line">                <span class="comment"># 如果找到，增加该服务名称的计数  </span></span><br><span class="line">                service_counts[service_name] = service_counts.get(service_name, <span class="number">0</span>) + <span class="number">1</span>  </span><br><span class="line">                sum_counts += <span class="number">1</span>  </span><br><span class="line">                <span class="keyword">break</span>  <span class="comment"># 跳出内部循环，因为每个MAC地址只应对应一个服务名称  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建DataFrame  </span></span><br><span class="line">    df_result = pd.DataFrame.from_dict(service_counts, orient=<span class="string">'index'</span>, columns=[<span class="string">'Count of Link is Down'</span>]).reset_index()  </span><br><span class="line">    df_result.columns = [<span class="string">'Service Name'</span>, <span class="string">'Count of Link is Down'</span>]  </span><br><span class="line"></span><br><span class="line">    time_info_row = pd.Series([<span class="string">'Start Time: '</span> + start_time, <span class="string">'End Time: '</span> + end_time], index=[<span class="string">'Service Name'</span>, <span class="string">'Count of Link is Down'</span>])  </span><br><span class="line">    time_info_df = pd.DataFrame([time_info_row])  <span class="comment"># 将Series转换为DataFrame  </span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将时间信息DataFrame放在原始DataFrame的开始位置  </span></span><br><span class="line">    df_result = pd.concat([time_info_df, df_result]).reset_index(drop=<span class="literal">True</span>) </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 在DataFrame的末尾添加一行总次数  </span></span><br><span class="line">    total_row = pd.DataFrame({<span class="string">'Service Name'</span>: [<span class="string">'Total'</span>], <span class="string">'Count of Link is Down'</span>: [sum_counts]}, index=[<span class="built_in">len</span>(df_result)-<span class="number">1</span>])  </span><br><span class="line">    df_result = pd.concat([df_result.iloc[:-<span class="number">1</span>], total_row]).reset_index(drop=<span class="literal">True</span>)  <span class="comment"># 重置索引，不包括最后一行（因为我们将在其后添加总次数）  </span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> df_result   </span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">show_dataframe_in_gui</span>(<span class="params">df, frame_widget</span>):  </span><br><span class="line">    <span class="comment"># 清除之前的表格内容（如果有的话）  </span></span><br><span class="line">    <span class="keyword">for</span> widget <span class="keyword">in</span> frame_widget.winfo_children():  </span><br><span class="line">        widget.destroy()  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 注意这里：将df.columns转换为列表  </span></span><br><span class="line">    column_names = <span class="built_in">list</span>(df.columns)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个Treeview组件来显示数据  </span></span><br><span class="line">    tree = ttk.Treeview(frame_widget, columns=column_names, show=<span class="string">'headings'</span>)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 设置列标题  </span></span><br><span class="line">    <span class="keyword">for</span> col <span class="keyword">in</span> column_names:  </span><br><span class="line">        tree.heading(col, text=col)  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 插入数据到Treeview  </span></span><br><span class="line">    <span class="keyword">for</span> index, row <span class="keyword">in</span> df.iterrows():  </span><br><span class="line">        tree.insert(<span class="string">''</span>, <span class="string">'end'</span>, values=row.tolist())  </span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将Treeview添加到frame中（如果它之前没有被添加到frame中，这一步是必要的）  </span></span><br><span class="line">    tree.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    root = tk.Tk()</span><br><span class="line">    root.geometry(<span class="string">'400x500'</span>)</span><br><span class="line">    root.title(<span class="string">'Link Down Count'</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建一个Frame来放置Treeview  </span></span><br><span class="line">    <span class="keyword">global</span> frame</span><br><span class="line">    frame = tk.Frame(root)  </span><br><span class="line">    frame.pack(fill=<span class="string">'both'</span>, expand=<span class="literal">True</span>) </span><br><span class="line"></span><br><span class="line">    load_button = tk.Button(root, text=<span class="string">'选择CSV文件'</span>, command=load_csv_and_process)</span><br><span class="line">    load_button.pack()</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">'mac_dict.json'</span>, <span class="string">'r'</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">global</span> mac_dict</span><br><span class="line">            mac_dict = json.load(f)</span><br><span class="line"></span><br><span class="line">        root.mainloop()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br><span class="line"></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>导出为.exe 可执行文件命令</p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line">pyinstaller --onefile --icon=./icon/dog.ico --noconsole cld.py</span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>提前准备 json 文件，格式为:</p>
+ <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"H800-1"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"H800-2"</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">"a088cxxx"</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<blockquote>
+<p>键为<code>机器的名称</code></p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看机器名称</span></span><br><span class="line"><span class="built_in">uname</span> -n</span><br></pre></td></tr></tbody></table></figure>
+
+<p>值为 <code>MAC地址</code></p>
+<figure class="highlight sh"><table><tbody><tr><td class="code"><pre><span class="line"><span class="comment"># 查看特定接口的MAC地址：</span></span><br><span class="line">ip <span class="built_in">link</span> show eth0</span><br></pre></td></tr></tbody></table></figure>
+
+<p>其中 <code>eth0</code> 可以替换为你要查询的网络接口名称。</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="小工具下载地址"><a href="#小工具下载地址" class="headerlink" title="小工具下载地址"></a>小工具下载地址</h4><p><a href="https://sharrr.com/s#f5524aae-7492-47cc-be11-5d98b85afbfb/3bMQOBu6ZgwilavK69J%2FmA%3D%3D/5tLg2uk_z1omqApsxrV9BCcPd9XEUGs0mRf3jQk4xtQ">统计 Link Down 小工具</a></p>
+<p>过期联系我哦～</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Ops</tag>
+        <tag>python</tag>
+        <tag>NVIDIA</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于 Openai API 进行接口移植</title>
+    <url>/2024/07/25/Python/20240725_%E5%9F%BA%E4%BA%8EOpenai%E6%8E%A5%E5%8F%A3%E6%8B%93%E5%B1%95%E6%A8%A1%E5%9E%8B/</url>
+    <content><![CDATA[<p>记录一下 基于 Openai API 进行接口移植的过程，从引用 api 到测试到最后转接口使用</p>
+<span id="more"></span>
+
+
+
+<blockquote>
+<h3 id="注册Openai-API账号"><a href="#注册Openai-API账号" class="headerlink" title="注册Openai API账号"></a>注册 Openai API 账号</h3><ul>
+<li>老生常谈的问题 ，首先我们需要注册一个 Openai API 账号，并申请一个 API key，或者购买一个 API_KEY。</li>
+<li><strong>申请点击此链接:<a href="https://platform.openai.com/login?launch">openai API 官网链接</a></strong></li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1-调用openai的GPT-4o模型接口"><a href="#1-调用openai的GPT-4o模型接口" class="headerlink" title="1.调用openai的GPT-4o模型接口"></a>1. 调用 openai 的 GPT-4o 模型接口</h3><ul>
+<li><p>OK 还是最常见的 chat_generate，这里直接放代码了</p>
+ <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">client = OpenAI(</span><br><span class="line">    api_key=<span class="comment">#这里就放入刚刚购买到的key就可以啦</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">from</span> opneai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">gpt_generate_text</span>(<span class="params">prompt, messages_list</span>):</span><br><span class="line">    messages = <span class="string">''</span></span><br><span class="line">    <span class="keyword">if</span> messages_list:</span><br><span class="line">        messages = <span class="string">'以下是你和用户的当前会话消息：\n\n'</span> + <span class="string">'\n'</span>.join(messages_list)</span><br><span class="line">    stream = client.chat.completions.create(</span><br><span class="line">        <span class="comment"># model="gpt-4-turbo-preview",</span></span><br><span class="line">        model=<span class="string">"gpt-4o"</span>,</span><br><span class="line">        messages=[</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"system"</span>, <span class="string">"content"</span>: messages},</span><br><span class="line">            {<span class="string">"role"</span>: <span class="string">"user"</span>, <span class="string">"content"</span>: prompt},</span><br><span class="line">        ],</span><br><span class="line">        stream=<span class="literal">True</span></span><br><span class="line">    )</span><br><span class="line">    text = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> stream:</span><br><span class="line">        <span class="keyword">if</span> chunk.choices[<span class="number">0</span>].delta.content <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(chunk.choices[<span class="number">0</span>].delta.content, end=<span class="string">""</span>)</span><br><span class="line">            text += chunk.choices[<span class="number">0</span>].delta.content</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
+<li><p>这里是<strong>路由函数</strong>的撰写</p>
+<ul>
+<li><p>可以看到这里可以通过 GET 和 POST （GET 不可以用哦）, 这里调用我们的 gpt_generate_text 函数，传入 prompt 和 messages_list，然后返回生成的文本。</p>
+  <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/chatgpt"</span>, methods=[<span class="string">'GET'</span>, <span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">chat_with_gpt</span>():</span><br><span class="line">    <span class="keyword">if</span> request.method == <span class="string">'GET'</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'chatgpt GET 请求'</span></span><br><span class="line">    <span class="keyword">elif</span> request.method == <span class="string">'POST'</span>:</span><br><span class="line">        data = request.json</span><br><span class="line">        prompt = data[<span class="string">'prompt'</span>]</span><br><span class="line">        messages_list = data.get(<span class="string">'messages'</span>, [])</span><br><span class="line">        text = gpt_generate_text(prompt, messages_list)</span><br><span class="line"></span><br><span class="line">        timestamp = <span class="built_in">str</span>(time.time()).split(<span class="string">'.'</span>)[<span class="number">0</span>]</span><br><span class="line">        <span class="keyword">if</span> text:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">1</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成成功'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: text}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            response_data = {</span><br><span class="line">                <span class="string">'code'</span>: <span class="number">2</span>,</span><br><span class="line">                <span class="string">'message'</span>: <span class="string">'内容生成失败'</span>,</span><br><span class="line">                <span class="string">'time'</span>: timestamp,</span><br><span class="line">                <span class="string">'data'</span>: {<span class="string">'text'</span>: <span class="literal">None</span>}</span><br><span class="line">            }</span><br><span class="line">        <span class="keyword">return</span> jsonify(response_data)</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="2-调用Openai的whisper-1模型接口"><a href="#2-调用Openai的whisper-1模型接口" class="headerlink" title="2.调用Openai的whisper-1模型接口"></a>2. 调用 Openai 的 whisper-1 模型接口</h2><ul>
+<li>2.1 同理这里是调用的 openai 的 <strong>whisper-1</strong> 模型进行音频转文本的函数撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe_audio</span>(<span class="params">audio_file</span>):</span><br><span class="line">    audio=<span class="built_in">open</span>(audio_file, <span class="string">"rb"</span>)</span><br><span class="line">    transcription = client.audio.transcriptions.create(model=<span class="string">"whisper-1"</span>,file=audio)</span><br><span class="line">    text = transcription.text</span><br><span class="line">    <span class="keyword">return</span> text</span><br></pre></td></tr></tbody></table></figure></li>
+<li>2.2 这里是最后<strong>路由函数</strong>的撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">"/transcribe"</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transcribe</span>():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">'file'</span> <span class="keyword">not</span> <span class="keyword">in</span> request.files:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No file part"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    audio_file = request.files[<span class="string">'file'</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file.filename == <span class="string">''</span>:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"error"</span>: <span class="string">"No selected file"</span>}), <span class="number">400</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> audio_file:</span><br><span class="line">        <span class="comment"># 保存文件到临时位置</span></span><br><span class="line">        temp_file_path = os.path.join(<span class="string">"temp"</span>, audio_file.filename)</span><br><span class="line">        audio_file.save(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 调用转录函数</span></span><br><span class="line">        transcription_text = transcribe_audio(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 删除临时文件</span></span><br><span class="line">        os.remove(temp_file_path)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">"text"</span>: transcription_text})</span><br></pre></td></tr></tbody></table></figure></li>
+</ul>
+<blockquote>
+<ul>
+<li>首先我们要确定返回的请求中是否包含文件和文件名，如果没有，则返回错误信息和 400，</li>
+<li>其次，我们需要保存文件到临时位置，然后调用我们写好的转录函数进行转录，最后删除临时文件。</li>
+<li>最后返回转录后的文本给客户端 供使用。</li>
+</ul>
+</blockquote>
+<hr>
+<h2 id="3-调用Openai的TTS-1模型接口"><a href="#3-调用Openai的TTS-1模型接口" class="headerlink" title="3.调用Openai的TTS-1模型接口"></a>3. 调用 Openai 的 TTS-1 模型接口</h2><ul>
+<li>3.1 调用 openai 的 API，将文本转换为语音 <figure class="highlight plaintext"><table><tbody><tr><td class="code"><pre><span class="line">def text_to_speech(text, vocie, model, path):</span><br><span class="line">    </span><br><span class="line">    response = client.audio.speech.create(</span><br><span class="line">        model=model,</span><br><span class="line">        voice=vocie,</span><br><span class="line">        input=text</span><br><span class="line">    )</span><br><span class="line">    speech_file_path = Path(path)</span><br><span class="line">    with open(speech_file_path, 'wb') as file:</span><br><span class="line">        file.write(response.content)</span><br><span class="line"></span><br><span class="line">    print(f'文件已保存到: {speech_file_path}')</span><br><span class="line">    return speech_file_path</span><br></pre></td></tr></tbody></table></figure></li>
+<li>3.2 文本转语音 text-to-speech 路由撰写 <figure class="highlight python"><table><tbody><tr><td class="code"><pre><span class="line">app = Flask(__name__)</span><br><span class="line">server_ip = <span class="string">""</span>  <span class="comment"># 替换为你的服务器IP</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">'/text-to-speech'</span>, methods=[<span class="string">'POST'</span>]</span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">text_to_speech_endpoint</span>():</span><br><span class="line">    data = request.json</span><br><span class="line">    text = data.get(<span class="string">'text'</span>)</span><br><span class="line">    voice = data.get(<span class="string">'voice'</span>)</span><br><span class="line">    model = data.get(<span class="string">'model'</span>)</span><br><span class="line">    output_path = <span class="string">'./output.mp3'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> text <span class="keyword">or</span> <span class="keyword">not</span> voice <span class="keyword">or</span> <span class="keyword">not</span> model:</span><br><span class="line">        <span class="keyword">return</span> {<span class="string">'error'</span>: <span class="string">'Missing required parameters'</span>}, <span class="number">400</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># Define the directory where you want to save the files</span></span><br><span class="line">        output_dir = Path(<span class="string">'./audio_files'</span>)</span><br><span class="line">        output_dir.mkdir(exist_ok=<span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate a unique filename using UUID</span></span><br><span class="line">        unique_filename = <span class="string">f"<span class="subst">{uuid.uuid4()}</span>.mp3"</span></span><br><span class="line">        output_path = output_dir / unique_filename</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Generate the speech and save the file</span></span><br><span class="line">        speech_file_path = text_to_speech(text, voice, model, output_path)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Create the file URL</span></span><br><span class="line">        file_url = <span class="string">f"http://<span class="subst">{server_ip}</span>/root/xxx/<span class="subst">{speech_file_path}</span>"</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Return the file URL as a response</span></span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'file_url'</span>: file_url}), <span class="number">200</span></span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> jsonify({<span class="string">'error'</span>: <span class="built_in">str</span>(e)}), <span class="number">500</span></span><br></pre></td></tr></tbody></table></figure>
+<blockquote>
+<ul>
+<li>首先我们要在后端代码中写入 我们的服务器 ip 地址</li>
+<li>我们要确保我们的 json 数据存在 四个键 text ， voice ， model ， output_path ，</li>
+<li>其次我们调用 text_to_speech 函数，传入 text，voice，model，output_path，</li>
+<li>然后我们生成一个唯一的 filename，保存到 output_dir 目录下</li>
+<li>最后我们生成一个 file_url，然后返回给客户端。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<hr>
+<h2 id="4-测试使用"><a href="#4-测试使用" class="headerlink" title="4.测试使用"></a>4. 测试使用</h2><ul>
+<li>4.1 我们可以使用以下方式，这种方式在我们的 py 脚本下直接测试，传参切记</li>
+</ul>
+<p>​	 <code>if __name__ == "__main__":</code><br>​	    	<code>main()</code></p>
+<ul>
+<li><p>4.2 使用 命令行在我们的服务器上测试 GET <a href="http://xxxx/">http://xxxx</a> {“xx”:”xx”}</p>
+</li>
+<li><p>4.3 使用 postman 、apifox 等等工具测试</p>
+</li>
+</ul>
+<p>​	本人这里使用的是第三种方法 apifox 这个工具，本人良心推荐大家使用，附<a href="https://apifox.com/help/">官方文档链接</a></p>
+<ul>
+<li><p> 4.4 测试截图及测试数据</p>
+<h3 id="测试用例一-chatgpt"><a href="#测试用例一-chatgpt" class="headerlink" title="测试用例一: /chatgpt"></a>测试用例一: /chatgpt</h3><ul>
+<li>测试数据 </li>
+</ul>
+  <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">  <span class="attr">"code"</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"data"</span><span class="punctuation">:</span> <span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span> <span class="string">"你好！我是一个由人工智能驱动的助手，设计用于帮助回答问题、提供信息以及协助完成各种任务。有什么我可以帮你的吗？"</span></span><br><span class="line">  <span class="punctuation">}</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"message"</span><span class="punctuation">:</span> <span class="string">"内容生成成功"</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">"time"</span><span class="punctuation">:</span> <span class="string">"1721808765"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+
+<ul>
+<li>响应截图</li>
+</ul>
+<p>  <img src="/../../img/api-1.jpg" alt="gpt4o"></p>
+<hr>
+<h3 id="测试用例二-transcribe"><a href="#测试用例二-transcribe" class="headerlink" title="测试用例二: /transcribe"></a>测试用例二: /transcribe</h3><ul>
+<li>测试数据</li>
+</ul>
+<p>  <img src="/../../img/api-2-1.jpg" alt="音频文件截图"></p>
+<ul>
+<li>响应截图</li>
+</ul>
+<p>  <img src="/../../img/api-2.jpg" alt="gpt4o"></p>
+<hr>
+<h3 id="测试用例三-transcribe"><a href="#测试用例三-transcribe" class="headerlink" title="测试用例三: /transcribe"></a>测试用例三: /transcribe</h3><ul>
+<li><p>测试数据</p>
+   <figure class="highlight json"><table><tbody><tr><td class="code"><pre><span class="line"><span class="punctuation">{</span></span><br><span class="line">    <span class="attr">"model"</span><span class="punctuation">:</span><span class="string">"tts-1"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"voice"</span><span class="punctuation">:</span><span class="string">"echo"</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">"text"</span><span class="punctuation">:</span><span class="string">"今天中午吃什么?"</span></span><br><span class="line"><span class="punctuation">}</span></span><br></pre></td></tr></tbody></table></figure>
+</li>
+<li><p>响应截图</p>
+<p><img src="/../../img/api-3.jpg" alt="gpt4o"></p>
+</li>
+</ul>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>LLM</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>基于 Vue 构架创建移动端对话界面</title>
+    <url>/2024/09/09/%E5%89%8D%E7%AB%AF/20240909_%E5%9F%BA%E4%BA%8Evue%E6%9E%B6%E6%9E%84%E5%88%9B%E5%BB%BA%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%AF%B9%E8%AF%9D%E7%95%8C%E9%9D%A2/</url>
+    <content><![CDATA[]]></content>
+      <categories>
+        <category>前端</category>
+      </categories>
+      <tags>
+        <tag>LLM</tag>
+        <tag>vue</tag>
+        <tag>front end</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>使用 html 创建注册表单</title>
     <url>/2024/08/29/%E5%89%8D%E7%AB%AF/20240829_%E4%BD%BF%E7%94%A8html%E5%88%9B%E5%BB%BA%E6%B3%A8%E5%86%8C%E8%A1%A8%E5%8D%95/</url>
     <content><![CDATA[<p>使用 HTML 表单收集访问网页的用户的信息，html5 及 css3 详细说明</p>
@@ -2859,19 +2872,6 @@ https://github.com/NVIDIA/libnvidia-container/blob/gh-pages/stable/deb/amd64/nvi
       <tags>
         <tag>front end</tag>
         <tag>html</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>基于 Vue 构架创建移动端对话界面</title>
-    <url>/2024/09/09/%E5%89%8D%E7%AB%AF/20240909_%E5%9F%BA%E4%BA%8Evue%E6%9E%B6%E6%9E%84%E5%88%9B%E5%BB%BA%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%AF%B9%E8%AF%9D%E7%95%8C%E9%9D%A2/</url>
-    <content><![CDATA[]]></content>
-      <categories>
-        <category>前端</category>
-      </categories>
-      <tags>
-        <tag>LLM</tag>
-        <tag>front end</tag>
-        <tag>vue</tag>
       </tags>
   </entry>
 </search>
